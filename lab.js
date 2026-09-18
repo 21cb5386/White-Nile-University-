@@ -17,7 +17,6 @@ const db = getFirestore(app);
 document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
 
-    // 1. حماية لوحة التحكم
     if (currentPath.includes('dashboard.html')) {
         const loggedUser = localStorage.getItem('it_logged_user');
         if (!loggedUser) {
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadDashboardData();
     }
 
-    // 2. حماية صفحة الدخول لو مسجل مسبقاً
     if (currentPath.includes('login.html')) {
         const loggedUser = localStorage.getItem('it_logged_user');
         if (loggedUser) {
@@ -36,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // زر تسجيل الخروج
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -50,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // زر الرئيسية
     const homeBtn = document.getElementById('home-btn');
     if (homeBtn) {
         homeBtn.addEventListener('click', (e) => {
@@ -158,8 +154,22 @@ async function handleSubmit() {
         const semester = semesterInput ? semesterInput.value.trim() : '';
         const confirmPass = confirmPassInput ? confirmPassInput.value : '';
         
-        if (!name || !studentId || !semester || !confirmPass) { alert("الرجاء ملء جميع الحقول المطلوبة!"); return; }
-        if (pass !== confirmPass) { alert("كلمتا المرور غير متطابقتين!"); return; }
+        if (!name || !studentId || !semester || !confirmPass) { 
+            alert("الرجاء ملء جميع الحقول المطلوبة!"); 
+            return; 
+        }
+
+        // فحص قوة كلمة المرور (أقل شي 6 أحرف)
+        if (pass.length < 6) { 
+            alert("كلمة المرور ضعيفة جداً! يجب ألا تقل عن 6 أحرف."); 
+            return; 
+        }
+
+        // فحص تطابق كلمتي المرور بدقة وإيقاف التسجيل لو غير متطابقتين
+        if (pass !== confirmPass) { 
+            alert("عذراً، كلمتا المرور غير متطابقتين! يرجى التحقق وإعادة الإدخال."); 
+            return; 
+        }
 
         let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
         if (users[email]) { alert("هذا البريد مسجل مسبقاً!"); return; }
@@ -199,7 +209,6 @@ function startForgotPassword() {
     generateCaptcha();
 }
 
-// توليد رموز كابتشا حقيقية وعشوائية
 function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     currentCaptchaCode = "";
@@ -219,29 +228,27 @@ function generateCaptcha() {
         `;
         stepCaptcha.insertBefore(captchaBox, stepCaptcha.firstChild);
         
-        // إضافة خانة إدخال الكابتشا وزر تحقق حقيقي
         const inputField = document.createElement('input');
         inputField.type = 'text';
         inputField.id = 'captcha-input';
         inputField.placeholder = 'أدخل الرمز الظاهر بالأعلى';
-        inputField.style.cssText = 'width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px; font-weight:700;';
+        inputField.style.cssText = 'width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px; font-weight:700; background:var(--bg); color:var(--text);';
         stepCaptcha.insertBefore(inputField, stepCaptcha.children[1]);
     }
     captchaBox.innerText = currentCaptchaCode;
 }
 
-// التحقق من الكابتشا بفاعلية وتفعيل شاشة الـ Loading
 function triggerRealCaptcha() {
-    const userInput = document.getElementById('captcha-input').value.trim();
-    if (!userInput) {
+    const userInput = document.getElementById('captcha-input');
+    if (!userInput || !userInput.value.trim()) {
         alert("الرجاء إدخال رمز التحقق (الكابتشا) أولاً!");
         return;
     }
 
-    if (userInput !== currentCaptchaCode) {
+    if (userInput.value.trim() !== currentCaptchaCode) {
         alert("رمز التحقق غير صحيح! حاول مرة أخرى.");
         generateCaptcha();
-        document.getElementById('captcha-input').value = "";
+        userInput.value = "";
         return;
     }
 
@@ -287,7 +294,8 @@ function verifyOtpCode() {
 function saveNewPassword() {
     const newPass = document.getElementById('new-pass-input').value;
     const confirmNewPass = document.getElementById('confirm-new-pass-input').value;
-    if (newPass.length < 6) { alert("يجب ألا تقل كلمة المرور عن 6 أحرف!"); return; }
+    
+    if (newPass.length < 6) { alert("يجب ألا تقل كلمة المرور الجديدة عن 6 أحرف!"); return; }
     if (newPass !== confirmNewPass) { alert("كلمتا المرور غير متطابقتين!"); return; }
 
     let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
@@ -319,7 +327,7 @@ function loadDashboardData() {
     }
 }
 
-// ربط الدوال مع النوافذ العامة لتعمل بسلاسة داخل HTML
+// تصدير الدوال للنطاق العام
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.showPassword = showPassword;
