@@ -13,26 +13,32 @@ const firebaseConfig = {
   appId: "1:364361272352:web:56953086b49cb2e0a6c045"
 };
 
-// تهيئة Firebase و Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const loggedUser = localStorage.getItem('it_logged_user');
-    if (loggedUser && window.location.pathname.includes('login.html')) {
-        window.location.href = 'dashboard.html';
-    }
-    const savedTheme = localStorage.getItem('it_theme') || 'light';
-    const savedLang = localStorage.getItem('it_lang') || 'ar';
-    document.body.setAttribute('data-theme', savedTheme);
-    
-    const langSelect = document.getElementById('lang-select');
-    if(langSelect) {
-        langSelect.value = savedLang;
-        changeLanguage();
+    const currentPath = window.location.pathname;
+
+    // 1. حماية لوحة التحكم (إذا لم يسجل الدخول، يتم تحويله لصفحة الـ login)
+    if (currentPath.includes('dashboard.html')) {
+        const loggedUser = localStorage.getItem('it_logged_user');
+        if (!loggedUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+        // عرض بيانات الطالب الحقيقية في لوحة التحكم
+        loadDashboardData();
     }
 
-    // ربط زر الإرسال / تسجيل الدخول بـ EventListener لضمان استجابته المباشرة
+    // 2. إذا كان في صفحة الدخول وهو مسجل مسبقاً، حوله للوحة التحكم مباشرة
+    if (currentPath.includes('login.html')) {
+        const loggedUser = localStorage.getItem('it_logged_user');
+        if (loggedUser) {
+            window.location.href = 'dashboard.html';
+        }
+    }
+
+    // تهيئة الزر والمستمعات في صفحة تسجيل الدخول
     const submitBtn = document.getElementById('submit-btn');
     if (submitBtn) {
         submitBtn.addEventListener('click', (e) => {
@@ -41,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ربط رابط "نسيت كلمة المرور"
     const forgotLnk = document.getElementById('lnk-forgot');
     if (forgotLnk) {
         forgotLnk.addEventListener('click', (e) => {
@@ -58,9 +63,6 @@ let recoveryTargetEmail = "";
 
 const translationsLogin = {
     ar: {
-        miniTitle: "جامعة النيل الأبيض",
-        miniSub: "بوابة تقانة المعلومات",
-        home: "الرئيسية",
         loginTitle: "بوابة تقانة المعلومات",
         loginSub: "تسجيل الدخول الأكاديمي للطلاب.",
         signupTitle: "إنشاء حساب جامعي جديد",
@@ -87,37 +89,6 @@ const translationsLogin = {
         loadLogin: "جاري التحقق من الاعتماد الأكاديمي...",
         loadRedirect: "تم بنجاح! جاري تحويلك لوحة التحكم...",
         loadSignup: "جاري التحقق من الرقم الجامعي وإنشاء الحساب..."
-    },
-    en: {
-        miniTitle: "White Nile Univ",
-        miniSub: "IT Portal",
-        home: "Home",
-        loginTitle: "IT Student Portal",
-        loginSub: "Student Academic Sign In.",
-        signupTitle: "Create University Account",
-        signupSub: "Fill in your details to join the platform.",
-        name: "Full Name",
-        universityId: "University ID",
-        semester: "Current Semester",
-        email: "University Email",
-        password: "Password",
-        remember: "Remember me",
-        forgot: "Forgot Password?",
-        btnIn: "Sign In",
-        btnUp: "Create Account",
-        switchInText: "Don't have an account?",
-        switchUpText: "Already have an account?",
-        linkUp: "Sign Up",
-        linkIn: "Sign In",
-        errFields: "Please fill in all required fields!",
-        errNotFound: "Account not found, please sign up!",
-        errWrongPass: "Incorrect password!",
-        errAlreadyExists: "This email is already registered!",
-        errInvalidStudentId: "Sorry, this University ID is not registered in the official database!",
-        succSignup: "Account created successfully!",
-        loadLogin: "Verifying academic credentials...",
-        loadRedirect: "Success! Redirecting to dashboard...",
-        loadSignup: "Verifying student ID and creating account..."
     }
 };
 
@@ -128,7 +99,7 @@ function changeLanguage() {
     const container = document.getElementById('main-container');
     if(container) container.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
     
-    const t = translationsLogin[lang] || translationsLogin.ar;
+    const t = translationsLogin.ar;
     const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
     
     setTxt('form-title', isLogin ? t.loginTitle : t.signupTitle);
@@ -166,85 +137,8 @@ function toggleMode() {
     changeLanguage();
 }
 
-function showPassword(inputId, event) {
-    if(event) event.preventDefault();
-    const input = document.getElementById(inputId);
-    if(input) input.type = 'text';
-}
-
-function hidePassword(inputId, event) {
-    if(event) event.preventDefault();
-    const input = document.getElementById(inputId);
-    if(input) input.type = 'password';
-}
-
-function checkPasswordStrength(password) {
-    const bars = [
-        document.getElementById('s-bar-1'),
-        document.getElementById('s-bar-2'),
-        document.getElementById('s-bar-3'),
-        document.getElementById('s-bar-4')
-    ];
-    const textEl = document.getElementById('strength-text');
-    if (!bars[0]) return;
-
-    let score = 0;
-    if (password.length > 5) score++;
-    if (password.length >= 8) score++;
-    if (/[A-Z]/.test(password) && /[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-
-    const colors = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
-    const texts = ['ضعيفة جداً', 'ضعيفة', 'جيدة', 'قوية وممتازة'];
-
-    bars.forEach((bar, index) => {
-        if (index < score && password.length > 0) {
-            bar.style.background = colors[score - 1];
-        } else {
-            bar.style.background = '#e0e0e0';
-        }
-    });
-
-    if (password.length > 0) {
-        textEl.innerText = texts[score - 1] || 'ضعيفة جداً';
-        textEl.style.color = colors[score - 1] || '#ef4444';
-    } else {
-        textEl.innerText = 'قوة كلمة المرور';
-        textEl.style.color = '#777';
-    }
-}
-
-function checkPasswordMatch() {
-    const pass = document.getElementById('pass-input').value;
-    const confirmPass = document.getElementById('confirm-pass-input').value;
-    const feedback = document.getElementById('match-feedback');
-    
-    if (!feedback) return;
-
-    if (confirmPass.length === 0) {
-        feedback.innerText = "";
-        return;
-    }
-
-    if (pass === confirmPass) {
-        feedback.innerText = "✓ كلمتا المرور متطابقتان";
-        feedback.style.color = "#10b981";
-    } else {
-        feedback.innerText = "✗ كلمتا المرور غير متطابقتين";
-        feedback.style.color = "#ef4444";
-    }
-}
-
-const lottieElement = document.getElementById('lottie-animation');
-if(lottieElement && typeof lottie !== 'undefined') {
-    lottie.loadAnimation({
-        container: lottieElement,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
-    });
-}
+function showPassword(inputId, event) { if(event) event.preventDefault(); const input = document.getElementById(inputId); if(input) input.type = 'text'; }
+function hidePassword(inputId, event) { if(event) event.preventDefault(); const input = document.getElementById(inputId); if(input) input.type = 'password'; }
 
 function showLoadingOverlay(message) {
     let overlay = document.getElementById('loading-overlay');
@@ -279,25 +173,14 @@ async function handleSubmit() {
     
     const email = emailInput ? emailInput.value.trim() : '';
     const pass = passInput ? passInput.value : '';
-    
-    const lang = localStorage.getItem('it_lang') || 'ar';
-    const t = translationsLogin[lang] || translationsLogin.ar;
+    const t = translationsLogin.ar;
 
-    if (!email || !pass) {
-        alert(t.errFields);
-        return;
-    }
+    if (!email || !pass) { alert(t.errFields); return; }
 
     if (isLogin) {
         let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
-        if (!users[email]) {
-            alert(t.errNotFound);
-            return;
-        }
-        if (users[email].pass !== pass) {
-            alert(t.errWrongPass);
-            return;
-        }
+        if (!users[email]) { alert(t.errNotFound); return; }
+        if (users[email].pass !== pass) { alert(t.errWrongPass); return; }
 
         showLoadingOverlay(t.loadLogin);
         setTimeout(() => {
@@ -305,9 +188,7 @@ async function handleSubmit() {
             localStorage.setItem('it_logged_user', users[email].name);
             localStorage.setItem('it_logged_id', users[email].studentId || 'IT-2026-039');
             localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثالث');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 700);
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
         }, 800);
 
     } else {
@@ -325,10 +206,7 @@ async function handleSubmit() {
         if (pass !== confirmPass) { alert("كلمتا المرور غير متطابقتين!"); return; }
 
         let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
-        if (users[email]) {
-            alert(t.errAlreadyExists);
-            return;
-        }
+        if (users[email]) { alert(t.errAlreadyExists); return; }
 
         showLoadingOverlay(t.loadSignup);
 
@@ -352,13 +230,40 @@ async function handleSubmit() {
 
         } catch (error) {
             hideLoadingOverlay();
-            console.error("Firebase Error:", error);
             users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
             localStorage.setItem('it_platform_users', JSON.stringify(users));
             alert(t.succSignup);
             toggleMode();
         }
     }
+}
+
+// دالة جلب وعرض بيانات الطالب في لوحة التحكم
+function loadDashboardData() {
+    const userName = localStorage.getItem('it_logged_user') || 'طالب تقانة المعلومات';
+    const userId = localStorage.getItem('it_logged_id') || 'IT-2026-001';
+    const userSemester = localStorage.getItem('it_logged_semester') || 'السمستر الثالث';
+
+    const welcomeEl = document.getElementById('welcome-user');
+    const metaEl = document.getElementById('student-info-meta');
+    const waBtn = document.getElementById('whatsapp-btn');
+
+    if (welcomeEl) welcomeEl.innerText = `مرحباً بك، ${userName} 👋`;
+    if (metaEl) metaEl.innerText = `الرقم الجامعي: ${userId} | السمستر: ${userSemester}`;
+
+    // تفعيل ربط زر الواتساب برسالة تلقائية جاهزة
+    if (waBtn) {
+        const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
+        waBtn.href = `https://wa.me/249900000000?text=${waMessage}`; // استبدل الرقم برقم الواتساب الخاص بالكلية أو العمادة
+    }
+}
+
+// دالة تسجيل الخروج
+function logoutUser() {
+    localStorage.removeItem('it_logged_user');
+    localStorage.removeItem('it_logged_id');
+    localStorage.removeItem('it_logged_semester');
+    window.location.href = 'login.html';
 }
 
 function startForgotPassword() {
@@ -390,10 +295,7 @@ function sendVerificationCode() {
     const email = emailInput ? emailInput.value.trim() : '';
     let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
 
-    if (!email || !users[email]) {
-        alert("هذا البريد غير مسجل في النظام!");
-        return;
-    }
+    if (!email || !users[email]) { alert("هذا البريد غير مسجل في النظام!"); return; }
 
     showLoadingOverlay("جاري إرسال رمز الـ OTP لبريدك...");
     setTimeout(() => {
@@ -454,17 +356,16 @@ function backToLogin() {
     if(check) check.style.display = 'none';
 }
 
-// تصدير الدوال للنطاق العام لتعمل مع الأزرار مباشرة
+// تصدير الدوال للنطاق العام
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.changeLanguage = changeLanguage;
 window.showPassword = showPassword;
 window.hidePassword = hidePassword;
-window.checkPasswordStrength = checkPasswordStrength;
-window.checkPasswordMatch = checkPasswordMatch;
 window.startForgotPassword = startForgotPassword;
 window.triggerRealCaptcha = triggerRealCaptcha;
 window.sendVerificationCode = sendVerificationCode;
 window.verifyOtpCode = verifyOtpCode;
 window.saveNewPassword = saveNewPassword;
 window.backToLogin = backToLogin;
+window.logoutUser = logoutUser;
