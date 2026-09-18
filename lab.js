@@ -33,33 +33,55 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     }
-
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
-                localStorage.removeItem('it_logged_user');
-                localStorage.removeItem('it_logged_id');
-                localStorage.removeItem('it_logged_semester');
-                window.location.href = 'login.html';
-            }
-        });
-    }
-
-    const homeBtn = document.getElementById('home-btn');
-    if (homeBtn) {
-        homeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = 'index.html';
-        });
-    }
 });
 
 let isLogin = true;
 let generatedOtp = "";
 let recoveryTargetEmail = "";
 let currentCaptchaCode = "";
+
+// تتبع قوة كلمة المرور بصرياً
+window.checkPasswordStrength = function(password) {
+    const strengthText = document.getElementById('strength-text');
+    if (!strengthText) return;
+
+    if (password.length === 0) {
+        strengthText.innerText = "أدخل كلمة مرور قوية (6 أحرف على الأقل)";
+        strengthText.style.color = "#94a3b8";
+    } else if (password.length < 6) {
+        strengthText.innerText = "⚠️ كلمة المرور ضعيفة جداً (أقل من 6 أحرف)";
+        strengthText.style.color = "#ef4444";
+    } else if (password.length < 9) {
+        strengthText.innerText = "⚡ كلمة المرور متوسطة القوة";
+        strengthText.style.color = "#f59e0b";
+    } else {
+        strengthText.innerText = "✅ كلمة المرور قوية ممتازة";
+        strengthText.style.color = "#10b981";
+    }
+    checkPasswordMatch(); // التحقق التلقائي من التطابق أيضاً
+}
+
+// تتبع تطابق كلمتي المرور بصرياً
+window.checkPasswordMatch = function() {
+    const pass = document.getElementById('pass-input').value;
+    const confirmPass = document.getElementById('confirm-pass-input').value;
+    const matchText = document.getElementById('match-text');
+    
+    if (!matchText) return;
+    if (confirmPass.length === 0) {
+        matchText.innerText = "يرجى إعادة إدخال كلمة المرور للتأكيد";
+        matchText.style.color = "#94a3b8";
+        return;
+    }
+
+    if (pass === confirmPass) {
+        matchText.innerText = "✅ كلمتا المرور متطابقتان تماماً";
+        matchText.style.color = "#10b981";
+    } else {
+        matchText.innerText = "❌ كلمتا المرور غير متطابقتين!";
+        matchText.style.color = "#ef4444";
+    }
+}
 
 function toggleMode() {
     isLogin = !isLogin;
@@ -159,13 +181,11 @@ async function handleSubmit() {
             return; 
         }
 
-        // فحص قوة كلمة المرور (أقل شي 6 أحرف)
         if (pass.length < 6) { 
             alert("كلمة المرور ضعيفة جداً! يجب ألا تقل عن 6 أحرف."); 
             return; 
         }
 
-        // فحص تطابق كلمتي المرور بدقة وإيقاف التسجيل لو غير متطابقتين
         if (pass !== confirmPass) { 
             alert("عذراً، كلمتا المرور غير متطابقتين! يرجى التحقق وإعادة الإدخال."); 
             return; 
@@ -202,7 +222,7 @@ async function handleSubmit() {
     }
 }
 
-// === نظام استعادة كلمة المرور والكابتشا الحقيقية ===
+// === استعادة كلمة المرور ===
 function startForgotPassword() {
     document.getElementById('auth-form-container').classList.add('hidden-view');
     document.getElementById('forgot-flow-container').classList.remove('hidden-view');
@@ -320,18 +340,7 @@ function backToLogin() {
     document.getElementById('auth-form-container').classList.remove('hidden-view');
 }
 
-function loadDashboardData() {
-    const userName = localStorage.getItem('it_logged_user') || 'محمود عبدالله ادم محمد';
-    const userId = localStorage.getItem('it_logged_id') || '11086250-24';
-
-    const waBtn = document.querySelector('.whatsapp-action-btn');
-    if (waBtn) {
-        const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
-        waBtn.href = `https://wa.me/249900623733?text=${waMessage}`;
-    }
-}
-
-// تصدير جميع الدوال للنطاق العام لتعمل مع أحداث onclick في ملف HTML
+// تصدير الدوال للنطاق العام
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.showPassword = showPassword;
@@ -342,3 +351,5 @@ window.sendVerificationCode = sendVerificationCode;
 window.verifyOtpCode = verifyOtpCode;
 window.saveNewPassword = saveNewPassword;
 window.backToLogin = backToLogin;
+window.checkPasswordStrength = checkPasswordStrength;
+window.checkPasswordMatch = checkPasswordMatch;
