@@ -4,143 +4,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - جامعة النيل الأبيض</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- ربط ملف الـ CSS الخارجي -->
+    <!-- ربط ملف الـ CSS الخارجي حقك -->
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <script>
-        // حقن الثيم فوراً لمنع الوميض عند التحميل
+        // حقن الثيم فوراً لمنع وميض الشاشة الأبيض
         (function() {
             const savedTheme = localStorage.getItem('it_theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
 </head>
-<body data-theme="light">
+<body>
 
-    <div class="main-container" id="main-container">
-        <!-- شريط علوي مبسط -->
-        <header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-color); width: 100%;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 35px; height: 35px; background: #ff5722; color: white; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: bold;">IT</div>
-                <div>
-                    <h1 id="uni-mini-title" style="font-size: 0.95rem; font-weight: 800;">جامعة النيل الأبيض</h1>
-                    <span id="uni-mini-sub" style="font-size: 0.65rem; color: #ff5722; font-weight: 600;">بوابة تقانة المعلومات</span>
+    <div class="container" id="main-container" dir="rtl">
+        
+        <!-- شريط اختيار اللغة -->
+        <div class="language-bar">
+            <select id="lang-select" onchange="changeLanguage()">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <!-- جانب الرسوم المتحركة (Lottie) -->
+        <div class="animation-side">
+            <div id="lottie-animation"></div>
+        </div>
+
+        <!-- جانب النموذج (تسجيل الدخول / إنشاء حساب / استعادة كلمة المرور) -->
+        <div class="form-side">
+            
+            <!-- حاوية نموذج الدخول والتسجيل الأساسية -->
+            <div id="auth-form-container">
+                <div class="header-text">
+                    <h2 id="form-title">بوابة تقانة المعلومات</h2>
+                    <p id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
                 </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <select id="lang-select" onchange="changeLanguage()" style="padding: 5px 8px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 11px;">
-                    <option value="ar">العربية</option>
-                    <option value="en">English</option>
-                </select>
-                <button id="theme-toggle" onclick="toggleTheme()" style="padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); cursor: pointer;">🌙</button>
-                <a href="index.html" id="nav-home" style="padding: 6px 12px; background: #ff5722; color: white; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: bold;">الرئيسية</a>
-            </div>
-        </header>
 
-        <!-- منطقة نموذج الدخول أو التسجيل -->
-        <div style="display: flex; flex: 1; justify-content: center; align-items: center; padding: 20px; width: 100%;">
-            <div style="max-width: 420px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border-color);">
-                
-                <!-- حاوية تسجيل الدخول الأساسية -->
-                <div id="auth-form-container">
-                    <h2 id="form-title" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 5px; color: var(--text-main);">بوابة تقانة المعلومات</h2>
-                    <p id="form-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">تسجيل الدخول الأكاديمي للطلاب.</p>
-
-                    <div style="margin-bottom: 12px;" class="signup-field hidden-view">
-                        <label id="lbl-name" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">الاسم الكامل</label>
-                        <input type="text" id="fullname" placeholder="أدخل اسمك الكامل" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px;">
-                    </div>
-
-                    <div style="margin-bottom: 12px;" class="signup-field hidden-view">
-                        <label id="lbl-id" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">الرقم الجامعي (ID)</label>
-                        <input type="text" id="studentid" placeholder="IT-2026-XXXX" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px;">
-                    </div>
-
-                    <div style="margin-bottom: 12px;" class="signup-field hidden-view">
-                        <label id="lbl-semester" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">السمستر الحالي</label>
-                        <input type="text" id="semester" placeholder="السمستر الثالث" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px;">
-                    </div>
-
-                    <div style="margin-bottom: 12px;">
-                        <label id="lbl-email" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">البريد الإلكتروني الجامعي</label>
-                        <input type="email" id="email-input" placeholder="student@fit.edu" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px;">
-                    </div>
-
-                    <div style="margin-bottom: 15px;">
-                        <label id="lbl-password" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">كلمة المرور</label>
-                        <input type="password" id="pass-input" placeholder="••••••••" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px;">
-                    </div>
-
-                    <div id="login-extras" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; margin-bottom: 18px;">
-                        <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                            <input type="checkbox"> <span id="lbl-remember">تذكرني</span>
-                        </label>
-                        <a href="#" id="lnk-forgot" onclick="startForgotPassword()" style="color: #ff5722; text-decoration: none; font-weight: 600;">نسيت كلمة المرور؟</a>
-                    </div>
-
-                    <button id="submit-btn" onclick="handleSubmit()" style="width: 100%; padding: 11px; background: #ff5722; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 12px rgba(255,87,34,0.3);">تسجيل الدخول</button>
-
-                    <div style="text-align: center; margin-top: 15px; font-size: 0.78rem;">
-                        <span id="switch-text">ليس لديك حساب؟</span> 
-                        <a href="#" id="switch-btn" onclick="toggleMode()" style="color: #ff5722; font-weight: bold; text-decoration: none; margin-right: 4px;">سجل الآن</a>
+                <!-- حقول إضافية لإنشاء الحساب (تظهر وتختفي ديناميكياً) -->
+                <div class="input-group signup-field hidden-view">
+                    <label id="lbl-name">الاسم الكامل</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
                     </div>
                 </div>
 
-                <!-- تدفق استعادة كلمة المرور (مخفي افتراضياً) -->
-                <div id="forgot-flow-container" class="hidden-view">
-                    <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 10px; color: var(--text-main);">استعادة كلمة المرور</h3>
-                    
-                    <!-- خطوة الكابتشا -->
-                    <div id="step-captcha" style="margin-bottom: 15px;">
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">الرجاء تأكيد أنك لست روبوت:</p>
-                        <div onclick="triggerRealCaptcha()" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; background: rgba(0,0,0,0.01);">
-                            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.8rem;">
-                                <div style="width: 20px; height: 20px; border: 2px solid #ccc; border-radius: 4px; display: flex; justify-content: center; align-items: center;">
-                                    <span id="captcha-check" style="display:none; color: green; font-weight: bold;">✓</span>
-                                    <div id="captcha-spinner" style="display:none; width: 12px; height: 12px; border: 2px solid #ff5722; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
-                                </div>
-                                <span>أنا لست روبوت (I'm not a robot)</span>
+                <div class="input-group signup-field hidden-view">
+                    <label id="lbl-id">الرقم الجامعي (ID)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🆔</span>
+                        <input type="text" id="studentid" placeholder="IT-2026-XXXX">
+                    </div>
+                </div>
+
+                <div class="input-group signup-field hidden-view">
+                    <label id="lbl-semester">السمستر الحالي</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📚</span>
+                        <input type="text" id="semester" placeholder="السمستر الثالث">
+                    </div>
+                </div>
+
+                <!-- حقل البريد الإلكتروني -->
+                <div class="input-group">
+                    <label id="lbl-email">البريد الإلكتروني الجامعي</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" id="email-input" placeholder="student@fit.edu">
+                    </div>
+                </div>
+
+                <!-- حقل كلمة المرور -->
+                <div class="input-group">
+                    <label id="lbl-password">كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="pass-input" placeholder="••••••••">
+                        <!-- أيقونة إظهار وإخفاء كلمة المرور -->
+                        <svg class="toggle-password" viewBox="0 0 24 24" onmousedown="showPassword('pass-input', event)" onmouseup="hidePassword('pass-input', event)" ontouchstart="showPassword('pass-input', event)" ontouchend="hidePassword('pass-input', event)" title="اضغط مع الاستمرار لعرض كلمة المرور">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- خيارات إضافية (تذكرني + نسيت كلمة المرور) -->
+                <div class="extras" id="login-extras">
+                    <label>
+                        <input type="checkbox"> <span id="lbl-remember">تذكرني</span>
+                    </label>
+                    <a href="#" id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
+                </div>
+
+                <!-- زر الإرسال الأساسي -->
+                <button class="action-btn" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
+
+                <!-- زر التبديل بين تسجيل الدخول وإنشاء حساب -->
+                <div class="switch-mode">
+                    <span id="switch-text">ليس لديك حساب؟</span> 
+                    <a id="switch-btn" onclick="toggleMode()">سجل الآن</a>
+                </div>
+
+                <!-- رابط سريع للعودة للرئيسية -->
+                <div style="text-align: center; margin-top: 10px;">
+                    <a href="index.html" id="nav-home" style="font-size: 12px; color: #777; text-decoration: none;">← العودة للصفحة الرئيسية</a>
+                </div>
+            </div>
+
+            <!-- تدفق استعادة كلمة المرور (مخفي افتراضياً ويظهر عند النقر على نسيت كلمة المرور) -->
+            <div id="forgot-flow-container" class="hidden-view">
+                <div class="header-text">
+                    <h2>استعادة كلمة المرور</h2>
+                    <p>اتبع الخطوات أدناه لاستعادة حسابك الجامعي.</p>
+                </div>
+
+                <!-- خطوة الكابتشا -->
+                <div id="step-captcha">
+                    <p style="font-size: 12px; color: #555; margin-bottom: 8px;">الرجاء تأكيد التحقق:</p>
+                    <div class="recaptcha-box-real" onclick="triggerRealCaptcha()">
+                        <div class="recaptcha-left">
+                            <div class="recaptcha-checkbox">
+                                <div class="recaptcha-spinner" id="captcha-spinner"></div>
+                                <span class="recaptcha-check-icon" id="captcha-check">✓</span>
                             </div>
-                            <span style="font-size: 0.65rem; color: #888;">reCAPTCHA</span>
+                            <span class="recaptcha-text">أنا لست روبوت</span>
+                        </div>
+                        <div class="recaptcha-brand">
+                            <span class="logo-icon">🛡️</span>
+                            <span>reCAPTCHA</span>
                         </div>
                     </div>
-
-                    <!-- خطوة إدخال البريد -->
-                    <div id="step-email" class="hidden-view" style="margin-bottom: 15px;">
-                        <label style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">البريد الإلكتروني المرتبط بالحساب</label>
-                        <input type="email" id="recovery-email-input" placeholder="student@fit.edu" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px; margin-bottom: 10px;">
-                        <button onclick="sendVerificationCode()" style="width: 100%; padding: 10px; background: #ff5722; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">إرسال رمز التحقق</button>
-                    </div>
-
-                    <!-- خطوة إدخال رمز الـ OTP -->
-                    <div id="step-otp" class="hidden-view" style="margin-bottom: 15px;">
-                        <label style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">أدخل رمز التحقق المكون من 4 أرقام</label>
-                        <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px; text-align: center; letter-spacing: 5px; margin-bottom: 10px;">
-                        <button onclick="verifyOtpCode()" style="width: 100%; padding: 10px; background: #ff5722; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">التحقق من الرمز</button>
-                    </div>
-
-                    <!-- خطوة كلمة المرور الجديدة -->
-                    <div id="step-newpass" class="hidden-view" style="margin-bottom: 15px;">
-                        <label style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">كلمة المرور الجديدة</label>
-                        <input type="password" id="new-pass-input" placeholder="••••••••" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px; margin-bottom: 8px;">
-                        
-                        <label style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 5px;">تأكيد كلمة المرور الجديدة</label>
-                        <input type="password" id="confirm-new-pass-input" placeholder="••••••••" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-main); font-size: 12px; margin-bottom: 10px;">
-                        
-                        <button onclick="saveNewPassword()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">حفظ وتحديث كلمة المرور</button>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 15px;">
-                        <a href="#" onclick="backToLogin()" style="font-size: 0.78rem; color: var(--text-muted); text-decoration: none;">← العودة لصفحة تسجيل الدخول</a>
-                    </div>
                 </div>
 
+                <!-- خطوة إدخال البريد الإلكتروني -->
+                <div id="step-email" class="hidden-view" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <label>البريد الإلكتروني الجامعي</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">✉️</span>
+                            <input type="email" id="recovery-email-input" placeholder="student@fit.edu">
+                        </div>
+                    </div>
+                    <button class="action-btn" onclick="sendVerificationCode()" style="margin-top: 12px; width: 100%;">إرسال رمز التحقق</button>
+                </div>
+
+                <!-- خطوة رمز الـ OTP -->
+                <div id="step-otp" class="hidden-view" style="margin-top: 10px;">
+                    <div class="input-group">
+                        <label>أدخل رمز التحقق المكون من 4 أرقام</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔑</span>
+                            <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="text-align: center; letter-spacing: 5px;">
+                        </div>
+                    </div>
+                    <button class="action-btn" onclick="verifyOtpCode()" style="margin-top: 12px; width: 100%;">التحقق من الرمز</button>
+                </div>
+
+                <!-- خطوة كلمة المرور الجديدة -->
+                <div id="step-newpass" class="hidden-view" style="margin-top: 10px;">
+                    <div class="input-group" style="margin-bottom: 10px;">
+                        <label>كلمة المرور الجديدة</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="new-pass-input" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>تأكيد كلمة المرور الجديدة</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="confirm-new-pass-input" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button class="action-btn" onclick="saveNewPassword()" style="margin-top: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">حفظ وتحديث كلمة المرور</button>
+                </div>
+
+                <div class="switch-mode" style="margin-top: 15px;">
+                    <a onclick="backToLogin()">← العودة لصفحة تسجيل الدخول</a>
+                </div>
             </div>
+
         </div>
     </div>
 
-    <!-- ربط ملف الجافاسكريبت الخارجي الخاص بك (lab.js) -->
+    <!-- ربط ملف الجافاسكريبت الخارجي (lab.js) -->
     <script src="lab.js"></script>
 </body>
 </html>
