@@ -16,7 +16,6 @@
             --text-muted: #64748b;
             --border: #e2e8f0;
         }
-
         .dark-mode {
             --bg: #0b0f19;
             --card-bg: #1f2937;
@@ -26,33 +25,11 @@
             --primary: #14b8a6;
             --primary-dark: #0d9488;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: 0.3s; }
         body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .top-nav-bar {
-            width: 100%;
-            max-width: 420px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .btn-back-home {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            transition: 0.2s;
-        }
+        .top-nav-bar { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-back-home { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .btn-back-home:hover { border-color: var(--primary); color: var(--primary); }
 
         .login-card { background: var(--card-bg); width: 100%; max-width: 420px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border); }
@@ -65,33 +42,32 @@
         .input-wrapper { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); overflow: hidden; padding: 0 12px; }
         .input-wrapper i { color: var(--text-muted); margin-left: 10px; font-size: 1rem; }
         .input-wrapper input { width: 100%; padding: 12px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; color: var(--text); }
-        .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; }
+        .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; user-select: none; }
         
-        .password-strength-indicator, .password-match-indicator {
-            font-size: 0.78rem;
-            margin-top: 5px;
-            font-weight: 700;
-            display: block;
-        }
+        .password-strength-indicator, .password-match-indicator { font-size: 0.78rem; margin-top: 5px; font-weight: 700; display: block; }
 
-        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
         .btn-submit:hover { background: var(--primary-dark); }
         .switch-mode { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
         .switch-mode a { color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; }
         .hidden-view { display: none !important; }
         .extras-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-top: 10px; }
         .extras-row a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
+
+        /* تصميم رسائل الـ Toast العصرية */
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
+        .toast-message { background: #0f766e; color: white; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeInOut 3s ease forwards; display: flex; align-items: center; gap: 10px; }
+        @keyframes fadeInOut { 0% { opacity: 0; transform: translateY(-20px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
     </style>
     <script>
         (function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark-mode');
-            }
+            if (localStorage.getItem('theme') !== 'light') { document.documentElement.classList.add('dark-mode'); }
         })();
     </script>
 </head>
 <body class="dark-mode" style="background-color: var(--bg);">
+
+    <div id="toast-container"></div>
 
     <div class="top-nav-bar">
         <a href="index.html" class="btn-back-home">
@@ -102,9 +78,7 @@
     <div class="login-card" id="main-container">
         <div class="header-top">
             <h1 id="form-title">بوابة تقانة المعلومات</h1>
-            <select id="lang-select">
-                <option value="ar">العربية</option>
-            </select>
+            <select id="lang-select"><option value="ar">العربية</option></select>
         </div>
         <p class="subtitle" id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
 
@@ -146,7 +120,12 @@
                 <div class="input-wrapper">
                     <i class="fa-solid fa-lock"></i>
                     <input type="password" id="pass-input" placeholder="********" oninput="checkPasswordStrength(this.value)">
-                    <i class="fa-solid fa-eye eye-icon" onmousedown="showPassword('pass-input')" onmouseup="hidePassword('pass-input')"></i>
+                    <!-- زر عين فعال للضغط والإفلات -->
+                    <i class="fa-solid fa-eye eye-icon" 
+                       onmousedown="showPassword('pass-input')" 
+                       onmouseup="hidePassword('pass-input')" 
+                       ontouchstart="showPassword('pass-input')" 
+                       ontouchend="hidePassword('pass-input')"></i>
                 </div>
                 <span id="strength-text" class="password-strength-indicator" style="color: #94a3b8;">أدخل كلمة مرور قوية (6 أحرف على الأقل)</span>
             </div>
@@ -156,7 +135,11 @@
                 <div class="input-wrapper">
                     <i class="fa-solid fa-lock"></i>
                     <input type="password" id="confirm-pass-input" placeholder="********" oninput="checkPasswordMatch()">
-                    <i class="fa-solid fa-eye eye-icon" onmousedown="showPassword('confirm-pass-input')" onmouseup="hidePassword('confirm-pass-input')"></i>
+                    <i class="fa-solid fa-eye eye-icon" 
+                       onmousedown="showPassword('confirm-pass-input')" 
+                       onmouseup="hidePassword('confirm-pass-input')" 
+                       ontouchstart="showPassword('confirm-pass-input')" 
+                       ontouchend="hidePassword('confirm-pass-input')"></i>
                 </div>
                 <span id="match-text" class="password-match-indicator" style="color: #94a3b8;">يرجى إعادة إدخال كلمة المرور للتأكيد</span>
             </div>
@@ -204,11 +187,7 @@
     </div>
 
     <script>
-        if (localStorage.getItem('theme') !== 'light') {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-        }
+        if (localStorage.getItem('theme') !== 'light') { document.body.classList.add('dark-mode'); }
     </script>
     <script type="module" src="lab.js"></script>
 </body>
