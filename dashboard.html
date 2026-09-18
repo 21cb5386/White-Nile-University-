@@ -19,7 +19,7 @@
 
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --card-bg: rgba(30, 41, 59, 0.85);
+            --card-bg: rgba(30, 41, 59, 0.9);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #ff5722;
@@ -27,7 +27,7 @@
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; margin: 0; padding: 0; }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
         
         body {
             background: var(--bg-gradient);
@@ -53,24 +53,24 @@
             gap: 20px;
         }
 
-        /* الهيدر العلوي المترتب */
+        /* الهيدر العلوي المترتب باحترافية */
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 12px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .university-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .brand-logo {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             background: var(--primary-gradient);
             color: white;
             border-radius: 12px;
@@ -78,27 +78,29 @@
             justify-content: center;
             align-items: center;
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+            flex-shrink: 0;
         }
 
         .brand-info h1 {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: var(--text-main);
             line-height: 1.2;
         }
 
         .brand-info span {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--primary);
             font-weight: 600;
         }
 
+        /* مجموعة الأزرار العلوية */
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .icon-btn {
@@ -114,29 +116,28 @@
             cursor: pointer;
             font-size: 0.9rem;
             text-decoration: none;
-            outline: none;
         }
         [data-theme="dark"] .icon-btn { background: rgba(255, 255, 255, 0.05); }
         .icon-btn:hover { border-color: var(--primary); }
 
+        /* زر خروج بتصميم واضح ومريح للمس */
         .logout-btn {
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 6px 12px;
+            padding: 7px 12px;
             border-radius: 10px;
             font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
             outline: none;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
         .logout-btn:hover { background: rgba(239, 68, 68, 0.2); }
 
-        /* كارت الترحيب الفاخر */
+        /* كارت الترحيب */
         .welcome-card {
             background: var(--primary-gradient);
             border-radius: 20px;
@@ -183,7 +184,7 @@
             font-weight: 800;
         }
 
-        /* قسم المقررات */
+        /* المقررات الأكاديمية */
         .section-title {
             display: flex;
             align-items: center;
@@ -224,16 +225,13 @@
             background: rgba(16, 185, 129, 0.1);
             padding: 4px 10px;
             border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
     </style>
 </head>
 <body data-theme="light">
 
     <div class="dashboard-container">
-        <!-- الهيدر العلوي -->
+        <!-- الهيدر العلوي المُعدل -->
         <header class="top-nav">
             <div class="university-brand">
                 <div class="brand-logo">IT</div>
@@ -243,9 +241,9 @@
                 </div>
             </div>
             <div class="nav-actions">
+                <button class="logout-btn" id="logout-btn" type="button">خروج</button>
+                <button class="icon-btn" id="theme-toggle" type="button" title="الوضع الليلي">🌙</button>
                 <a href="index.html" class="icon-btn" title="الرئيسية">🏠</a>
-                <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
-                <button class="logout-btn" onclick="logout(event)">خروج</button>
             </div>
         </header>
 
@@ -283,24 +281,28 @@
     </div>
 
     <script>
-        function toggleTheme() {
-            const body = document.body;
-            const themeBtn = document.getElementById('theme-toggle');
-            if (body.getAttribute('data-theme') === 'light') {
-                body.setAttribute('data-theme', 'dark');
+        // زر التبديل بين الوضع المضيء والداكن
+        const themeBtn = document.getElementById('theme-toggle');
+        const bodyTag = document.body;
+
+        themeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (bodyTag.getAttribute('data-theme') === 'light') {
+                bodyTag.setAttribute('data-theme', 'dark');
                 themeBtn.textContent = '☀️';
             } else {
-                body.setAttribute('data-theme', 'light');
+                bodyTag.setAttribute('data-theme', 'light');
                 themeBtn.textContent = '🌙';
             }
-        }
+        });
 
-        function logout(event) {
-            event.stopPropagation(); // منع انتقال الحدث للناصر العام وتغيير الثيم بالخطأ
-            // يمكنك هنا مسح بيانات الجلسة إذا كنت تستخدم localStorage
-            // localStorage.clear();
+        // زر تسجيل الخروج المباشر
+        const logoutBtn = document.getElementById('logout-btn');
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             window.location.href = 'login.html';
-        }
+        });
     </script>
 </body>
 </html>
