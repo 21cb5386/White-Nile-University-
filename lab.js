@@ -186,8 +186,8 @@ async function handleSubmit() {
         setTimeout(() => {
             showLoadingOverlay(t.loadRedirect);
             localStorage.setItem('it_logged_user', users[email].name);
-            localStorage.setItem('it_logged_id', users[email].studentId || 'IT-2026-039');
-            localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثالث');
+            localStorage.setItem('it_logged_id', users[email].studentId || '11086250-24');
+            localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثاني');
             setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
         }, 800);
 
@@ -238,23 +238,17 @@ async function handleSubmit() {
     }
 }
 
-// دالة جلب وعرض بيانات الطالب في لوحة التحكم
+// دالة جلب وعرض بيانات الطالب في لوحة التحكم وزر الواتساب بالرقم المطلوب
 function loadDashboardData() {
-    const userName = localStorage.getItem('it_logged_user') || 'طالب تقانة المعلومات';
-    const userId = localStorage.getItem('it_logged_id') || 'IT-2026-001';
-    const userSemester = localStorage.getItem('it_logged_semester') || 'السمستر الثالث';
+    const userName = localStorage.getItem('it_logged_user') || 'محمود عبدالله ادم محمد';
+    const userId = localStorage.getItem('it_logged_id') || '11086250-24';
+    const userSemester = localStorage.getItem('it_logged_semester') || 'السمستر الثاني';
 
-    const welcomeEl = document.getElementById('welcome-user');
-    const metaEl = document.getElementById('student-info-meta');
-    const waBtn = document.getElementById('whatsapp-btn');
-
-    if (welcomeEl) welcomeEl.innerText = `مرحباً بك، ${userName} 👋`;
-    if (metaEl) metaEl.innerText = `الرقم الجامعي: ${userId} | السمستر: ${userSemester}`;
-
-    // تفعيل ربط زر الواتساب برسالة تلقائية جاهزة
+    // تحديث بيانات واتساب المباشرة للرقم 249900623733+
+    const waBtn = document.querySelector('.glow-whatsapp-btn');
     if (waBtn) {
         const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
-        waBtn.href = `https://wa.me/249900000000?text=${waMessage}`; // استبدل الرقم برقم الواتساب الخاص بالكلية أو العمادة
+        waBtn.href = `https://wa.me/249900623733?text=${waMessage}`;
     }
 }
 
@@ -355,6 +349,30 @@ function backToLogin() {
     const check = document.getElementById('captcha-check');
     if(check) check.style.display = 'none';
 }
+
+// دالة الوضع الليلي / الفاتح المضافة خصيصاً لتتكامل مع الأزرار الجديدة
+window.toggleThemeMode = function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('it_theme', newTheme);
+    
+    showToast(newTheme === 'dark' ? 'تم تفعيل الوضع الليلي 🌙' : 'تم تفعيل الوضع النهاري ☀️');
+};
+
+// إشعار Toast التفاعلي السريع
+window.showToast = function(message) {
+    const toast = document.getElementById('toast-notification');
+    if (toast) {
+        const textEl = document.getElementById('toast-text') || toast.querySelector('span');
+        if(textEl) textEl.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+};
 
 // تصدير الدوال للنطاق العام
 window.handleSubmit = handleSubmit;
