@@ -40,7 +40,28 @@ let generatedOtp = "";
 let recoveryTargetEmail = "";
 let currentCaptchaCode = "";
 
-// تتبع قوة كلمة المرور بصرياً
+// دالة عرض رسائل Toast العصرية
+window.showToast = function(message) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.innerHTML = `<i class="fa-solid fa-circle-check fa-lg"></i> ${message}`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 3000);
+}
+
+// كشف كلمة المرور مؤقتاً عند الضغط والإفلات
+window.showPassword = function(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) input.type = 'text';
+}
+
+window.hidePassword = function(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) input.type = 'password';
+}
+
 window.checkPasswordStrength = function(password) {
     const strengthText = document.getElementById('strength-text');
     if (!strengthText) return;
@@ -58,10 +79,9 @@ window.checkPasswordStrength = function(password) {
         strengthText.innerText = "✅ كلمة المرور قوية ممتازة";
         strengthText.style.color = "#10b981";
     }
-    checkPasswordMatch(); // التحقق التلقائي من التطابق أيضاً
+    checkPasswordMatch();
 }
 
-// تتبع تطابق كلمتي المرور بصرياً
 window.checkPasswordMatch = function() {
     const pass = document.getElementById('pass-input').value;
     const confirmPass = document.getElementById('confirm-pass-input').value;
@@ -113,9 +133,6 @@ function toggleMode() {
     }
 }
 
-function showPassword(inputId) { const input = document.getElementById(inputId); if(input) input.type = 'text'; }
-function hidePassword(inputId) { const input = document.getElementById(inputId); if(input) input.type = 'password'; }
-
 function showLoadingOverlay(message) {
     let overlay = document.getElementById('loading-overlay');
     if (!overlay) {
@@ -159,10 +176,13 @@ async function handleSubmit() {
 
         showLoadingOverlay("جاري التحقق وتسجيل الدخول...");
         setTimeout(() => {
+            hideLoadingOverlay();
             localStorage.setItem('it_logged_user', users[email].name);
-            localStorage.setItem('it_logged_id', users[email].studentId || '11086250-24');
+            localStorage.setItem('it_logged_id', users[email].studentId || '24-110000');
             localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثاني');
-            window.location.href = 'dashboard.html';
+            
+            showToast("تم تسجيل الدخول بنجاح! جاري تحويلك...");
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
         }, 800);
 
     } else {
@@ -176,20 +196,9 @@ async function handleSubmit() {
         const semester = semesterInput ? semesterInput.value.trim() : '';
         const confirmPass = confirmPassInput ? confirmPassInput.value : '';
         
-        if (!name || !studentId || !semester || !confirmPass) { 
-            alert("الرجاء ملء جميع الحقول المطلوبة!"); 
-            return; 
-        }
-
-        if (pass.length < 6) { 
-            alert("كلمة المرور ضعيفة جداً! يجب ألا تقل عن 6 أحرف."); 
-            return; 
-        }
-
-        if (pass !== confirmPass) { 
-            alert("عذراً، كلمتا المرور غير متطابقتين! يرجى التحقق وإعادة الإدخال."); 
-            return; 
-        }
+        if (!name || !studentId || !semester || !confirmPass) { alert("الرجاء ملء جميع الحقول المطلوبة!"); return; }
+        if (pass.length < 6) { alert("كلمة المرور ضعيفة جداً! يجب ألا تقل عن 6 أحرف."); return; }
+        if (pass !== confirmPass) { alert("عذراً، كلمتا المرور غير متطابقتين!"); return; }
 
         let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
         if (users[email]) { alert("هذا البريد مسجل مسبقاً!"); return; }
@@ -209,15 +218,17 @@ async function handleSubmit() {
             users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
             localStorage.setItem('it_platform_users', JSON.stringify(users));
             hideLoadingOverlay();
-            alert("تم إنشاء الحساب الأكاديمي بنجاح!");
-            toggleMode();
+            
+            showToast("تم إنشاء الحساب الأكاديمي بنجاح! يمكنك الدخول الآن.");
+            setTimeout(() => { toggleMode(); }, 1200);
 
         } catch (error) {
             hideLoadingOverlay();
             users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
             localStorage.setItem('it_platform_users', JSON.stringify(users));
-            alert("تم إنشاء الحساب الأكاديمي بنجاح!");
-            toggleMode();
+            
+            showToast("تم إنشاء الحساب الأكاديمي بنجاح!");
+            setTimeout(() => { toggleMode(); }, 1200);
         }
     }
 }
@@ -264,17 +275,8 @@ function generateCaptcha() {
 
 function triggerRealCaptcha() {
     const userInput = document.getElementById('captcha-input');
-    if (!userInput || !userInput.value.trim()) {
-        alert("الرجاء إدخال رمز التحقق (الكابتشا) أولاً!");
-        return;
-    }
-
-    if (userInput.value.trim() !== currentCaptchaCode) {
-        alert("رمز التحقق غير صحيح! حاول مرة أخرى.");
-        generateCaptcha();
-        userInput.value = "";
-        return;
-    }
+    if (!userInput || !userInput.value.trim()) { alert("الرجاء إدخال رمز التحقق (الكابتشا) أولاً!"); return; }
+    if (userInput.value.trim() !== currentCaptchaCode) { alert("رمز التحقق غير صحيح! حاول مرة أخرى."); generateCaptcha(); userInput.value = ""; return; }
 
     showLoadingOverlay("جاري التحقق الأمني من أنك لست روبوت...");
     setTimeout(() => {
@@ -329,7 +331,7 @@ function saveNewPassword() {
         showLoadingOverlay("جاري تحديث كلمة المرور...");
         setTimeout(() => {
             hideLoadingOverlay();
-            alert("تم تغيير كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.");
+            showToast("تم تغيير كلمة المرور بنجاح!");
             backToLogin();
         }, 1000);
     }
@@ -340,7 +342,18 @@ function backToLogin() {
     document.getElementById('auth-form-container').classList.remove('hidden-view');
 }
 
-// تصدير الدوال للنطاق العام
+function loadDashboardData() {
+    const userName = localStorage.getItem('it_logged_user') || 'طالب تقانة المعلومات';
+    const userId = localStorage.getItem('it_logged_id') || '24-110000';
+
+    const waBtn = document.querySelector('.whatsapp-action-btn');
+    if (waBtn) {
+        const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
+        waBtn.href = `https://wa.me/249900623733?text=${waMessage}`;
+    }
+}
+
+// تصدير جميع الدوال للنطاق العام
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.showPassword = showPassword;
