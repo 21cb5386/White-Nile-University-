@@ -217,8 +217,9 @@ function generateCaptcha() {
     }
     
     let captchaBox = document.getElementById('captcha-display-box');
+    const stepCaptcha = document.getElementById('step-captcha');
+
     if (!captchaBox) {
-        const stepCaptcha = document.getElementById('step-captcha');
         captchaBox = document.createElement('div');
         captchaBox.id = 'captcha-display-box';
         captchaBox.style.cssText = `
@@ -228,12 +229,15 @@ function generateCaptcha() {
         `;
         stepCaptcha.insertBefore(captchaBox, stepCaptcha.firstChild);
         
-        const inputField = document.createElement('input');
-        inputField.type = 'text';
-        inputField.id = 'captcha-input';
-        inputField.placeholder = 'أدخل الرمز الظاهر بالأعلى';
-        inputField.style.cssText = 'width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px; font-weight:700; background:var(--bg); color:var(--text);';
-        stepCaptcha.insertBefore(inputField, stepCaptcha.children[1]);
+        let inputField = document.getElementById('captcha-input');
+        if (!inputField) {
+            inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.id = 'captcha-input';
+            inputField.placeholder = 'أدخل الرمز الظاهر بالأعلى';
+            inputField.style.cssText = 'width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); margin-bottom:10px; font-weight:700; background:var(--bg); color:var(--text); outline:none;';
+            stepCaptcha.insertBefore(inputField, stepCaptcha.children[1]);
+        }
     }
     captchaBox.innerText = currentCaptchaCode;
 }
@@ -327,7 +331,7 @@ function loadDashboardData() {
     }
 }
 
-// تصدير الدوال للنطاق العام
+// تصدير جميع الدوال للنطاق العام لتعمل مع أحداث onclick في ملف HTML
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.showPassword = showPassword;
