@@ -138,8 +138,6 @@ function changeLanguage() {
     document.getElementById('lbl-otp').innerText = t.lblOtpText;
     document.getElementById('lbl-new-pass').innerText = t.lblNewPass;
     document.getElementById('lbl-confirm-new-pass').innerText = t.lblConfirmNewPass;
-    document.getElementById('dash-welcome').innerText = t.dashWelcome;
-    document.getElementById('btn-logout').innerText = t.dashLogout;
 }
 
 function toggleMode() {
@@ -258,7 +256,8 @@ function handleSubmit() {
             return;
         }
         alert(t.succLogin);
-        // التحويل التلقائي لصفحة المنصة الرئيسية بعد لحظات قليلة من تسجيل الدخول
+        // حفظ حالة تسجيل الدخول واسم المستخدم وتحويله التلقائي للمنصة
+        localStorage.setItem('it_logged_user', users[email].name);
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 1000);
@@ -280,13 +279,6 @@ function handleSubmit() {
         alert(t.succSignup);
         toggleMode();
     }
-}
-
-function handleLogout() {
-    document.getElementById('dashboard-view').classList.add('hidden-view');
-    document.getElementById('auth-form-container').classList.remove('hidden-view');
-    document.getElementById('email-input').value = '';
-    document.getElementById('pass-input').value = '';
 }
 
 function startForgotPassword() {
