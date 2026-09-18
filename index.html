@@ -98,7 +98,6 @@
         .hero-text h1 { font-size: 1.5rem; font-weight: 900; color: var(--text-color); margin-bottom: 8px; }
         .hero-text p { color: var(--text-muted); font-size: 0.95rem; }
 
-        /* تصميم موحد ومتناسق لجميع الأزرار */
         .action-buttons-group { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .btn-control {
             padding: 10px 16px; border-radius: 10px; font-size: 0.88rem; font-weight: 700; cursor: pointer;
@@ -160,7 +159,6 @@
                 <a href="login.html" class="btn-control btn-primary-custom" id="auth-nav-btn">
                     <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
                 </a>
-                <!-- زر تسجيل الخروج الثابت يظهر فقط لو مسجل دخول -->
                 <button class="btn-control btn-danger-custom hidden-element" id="global-logout-btn">
                     <i class="fa-solid fa-right-from-bracket"></i> خروج
                 </button>
@@ -183,7 +181,6 @@
                 </div>
             </div>
 
-            <!-- بطاقة الخدمات والسريع: تختفي تماماً عند تسجيل الدخول لعدم التكرار -->
             <div class="card" id="quick-services-card">
                 <div class="card-title">
                     <i class="fa-solid fa-circle-info"></i> الخدمات والوصول السريع
@@ -206,19 +203,14 @@
             const sidebarAuthLink = document.getElementById('sidebar-auth-link');
 
             if (loggedUser) {
-                // إذا مسجل دخول: إخفاء زر تسجيل الدخول وبطاقة الخدمات السريعة المتكررة
                 if (authNavBtn) authNavBtn.style.display = 'none';
                 if (quickServicesCard) quickServicesCard.style.display = 'none';
-                
-                // إظهار زر تسجيل الخروج الثابت
                 if (globalLogoutBtn) globalLogoutBtn.classList.remove('hidden-element');
 
-                // تعديل زر لوحة التحكم ليظهر اسم الطالب وتوجيهه للوحة
                 if (dashboardNavBtn) {
                     dashboardNavBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${loggedUser}`;
                 }
 
-                // تحديث القائمة الجانبية
                 if (sidebarAuthLink) {
                     sidebarAuthLink.innerHTML = `<a href="#" id="side-logout"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>`;
                     document.getElementById('side-logout').addEventListener('click', (e) => {
@@ -227,13 +219,11 @@
                     });
                 }
             } else {
-                // إذا غير مسجل دخول: إخفاء زر لوحة التحكم وزر الخروج
                 if (dashboardNavBtn) dashboardNavBtn.style.display = 'none';
                 if (globalLogoutBtn) globalLogoutBtn.classList.add('hidden-element');
             }
         });
 
-        // وظيفة تسجيل الخروج الموحدة
         function performLogout() {
             if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
                 localStorage.removeItem('it_logged_user');
@@ -248,7 +238,6 @@
             globalLogoutBtn.addEventListener('click', performLogout);
         }
 
-        // تفاعل الوضع الداكن والفاتح
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const themeText = document.getElementById('theme-text');
