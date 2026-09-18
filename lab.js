@@ -17,7 +17,7 @@ const db = getFirestore(app);
 document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
 
-    // 1. حماية لوحة التحكم: إذا لم يكن مسجلاً للدخول، يحول مباشرة لصفحة login.html
+    // 1. حماية لوحة التحكم
     if (currentPath.includes('dashboard.html')) {
         const loggedUser = localStorage.getItem('it_logged_user');
         if (!loggedUser) {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadDashboardData();
     }
 
-    // 2. إذا كان في صفحة الدخول وهو مسجل مسبقاً، يوجهه للوحة التحكم فوراً
+    // 2. حماية صفحة الدخول لو مسجل مسبقاً
     if (currentPath.includes('login.html')) {
         const loggedUser = localStorage.getItem('it_logged_user');
         if (loggedUser) {
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ربط زر تسجيل الخروج الحقيقي في لوحة التحكم
+    // زر تسجيل الخروج
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -50,12 +50,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ربط زر الرئيسية في لوحة التحكم ليعود للمنصة أو الصفحة الرئيسية
+    // زر الرئيسية
     const homeBtn = document.getElementById('home-btn');
     if (homeBtn) {
         homeBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            window.location.href = 'index.html'; // أو اسم صفحة الرئيسية عندك
+            window.location.href = 'index.html';
         });
     }
 });
@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let isLogin = true;
 let generatedOtp = "";
 let recoveryTargetEmail = "";
+let currentCaptchaCode = "";
 
 function toggleMode() {
     isLogin = !isLogin;
@@ -109,7 +110,7 @@ function showLoadingOverlay(message) {
             z-index: 9999; color: white; font-family: 'Cairo', sans-serif;
         `;
         overlay.innerHTML = `
-            <div style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #f59e0b; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+            <div style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #14b8a6; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
             <p id="loading-text" style="margin-top: 15px; font-size: 1.05rem; font-weight: 700;">${message}</p>
         `;
         document.body.appendChild(overlay);
@@ -191,42 +192,93 @@ async function handleSubmit() {
     }
 }
 
-function loadDashboardData() {
-    const userName = localStorage.getItem('it_logged_user') || 'محمود عبدالله ادم محمد';
-    const userId = localStorage.getItem('it_logged_id') || '11086250-24';
-
-    const waBtn = document.querySelector('.whatsapp-action-btn');
-    if (waBtn) {
-        const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
-        waBtn.href = `https://wa.me/249900623733?text=${waMessage}`;
-    }
-}
-
+// === نظام استعادة كلمة المرور والكابتشا الحقيقية ===
 function startForgotPassword() {
     document.getElementById('auth-form-container').classList.add('hidden-view');
     document.getElementById('forgot-flow-container').classList.remove('hidden-view');
+    generateCaptcha();
 }
 
+// توليد رموز كابتشا حقيقية وعشوائية
+function generateCaptcha() {
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    currentCaptchaCode = "";
+    for (let i = 0; i < 5; i++) {
+        currentCaptchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    let captchaBox = document.getElementById('captcha-display-box');
+    if (!captchaBox) {
+        const stepCaptcha = document.getElementById('step-captcha');
+        captchaBox = document.createElement('div');
+        captchaBox.id = 'captcha-display-box';
+        captchaBox.style.cssText = `
+            background: #e2e8f0; color: #0f766e; font-size: 1.4rem; font-weight: 900;
+            letter-spacing: 5px; text-align: center; padding: 12px; border-radius: 8px;
+            margin-bottom: 12px; user-select: none; text-decoration: line-through;
+        `;
+        stepCaptcha.insertBefore(captchaBox, stepCaptcha.firstChild);
+        
+        // إضافة خانة إدخال الكابتشا وزر تحقق حقيقي
+        const inputField = document.createElement('input');
+        inputField.type = 'text';
+        inputField.id = 'captcha-input';
+        inputField.placeholder = 'أدخل الرمز الظاهر بالأعلى';
+        inputField.style.cssText = 'width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px; font-weight:700;';
+        stepCaptcha.insertBefore(inputField, stepCaptcha.children[1]);
+    }
+    captchaBox.innerText = currentCaptchaCode;
+}
+
+// التحقق من الكابتشا بفاعلية وتفعيل شاشة الـ Loading
 function triggerRealCaptcha() {
-    document.getElementById('step-captcha').classList.add('hidden-view');
-    document.getElementById('step-email').classList.remove('hidden-view');
+    const userInput = document.getElementById('captcha-input').value.trim();
+    if (!userInput) {
+        alert("الرجاء إدخال رمز التحقق (الكابتشا) أولاً!");
+        return;
+    }
+
+    if (userInput !== currentCaptchaCode) {
+        alert("رمز التحقق غير صحيح! حاول مرة أخرى.");
+        generateCaptcha();
+        document.getElementById('captcha-input').value = "";
+        return;
+    }
+
+    showLoadingOverlay("جاري التحقق الأمني من أنك لست روبوت...");
+    setTimeout(() => {
+        hideLoadingOverlay();
+        document.getElementById('step-captcha').classList.add('hidden-view');
+        document.getElementById('step-email').classList.remove('hidden-view');
+    }, 1000);
 }
 
 function sendVerificationCode() {
     const email = document.getElementById('recovery-email-input').value.trim();
     let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
     if (!email || !users[email]) { alert("هذا البريد غير مسجل في النظام!"); return; }
+    
     recoveryTargetEmail = email;
     generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-    alert("رمز التحقق التجريبي الخاص بك هو: " + generatedOtp);
-    document.getElementById('step-email').classList.add('hidden-view');
-    document.getElementById('step-otp').classList.remove('hidden-view');
+    
+    showLoadingOverlay("جاري إرسال رمز التحقق إلى بريدك الإلكتروني...");
+    setTimeout(() => {
+        hideLoadingOverlay();
+        alert("تم إرسال رمز التحقق بنجاح. رمز الـ OTP التجريبي الخاص بك هو: " + generatedOtp);
+        document.getElementById('step-email').classList.add('hidden-view');
+        document.getElementById('step-otp').classList.remove('hidden-view');
+    }, 1000);
 }
 
 function verifyOtpCode() {
-    if (document.getElementById('otp-input').value.trim() === generatedOtp) {
-        document.getElementById('step-otp').classList.add('hidden-view');
-        document.getElementById('step-newpass').classList.remove('hidden-view');
+    const userOtp = document.getElementById('otp-input').value.trim();
+    if (userOtp === generatedOtp) {
+        showLoadingOverlay("جاري مطابقة الرمز...");
+        setTimeout(() => {
+            hideLoadingOverlay();
+            document.getElementById('step-otp').classList.add('hidden-view');
+            document.getElementById('step-newpass').classList.remove('hidden-view');
+        }, 800);
     } else {
         alert("رمز التحقق غير صحيح!");
     }
@@ -242,8 +294,12 @@ function saveNewPassword() {
     if (users[recoveryTargetEmail]) {
         users[recoveryTargetEmail].pass = newPass;
         localStorage.setItem('it_platform_users', JSON.stringify(users));
-        alert("تم تغيير كلمة المرور بنجاح!");
-        backToLogin();
+        showLoadingOverlay("جاري تحديث كلمة المرور...");
+        setTimeout(() => {
+            hideLoadingOverlay();
+            alert("تم تغيير كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.");
+            backToLogin();
+        }, 1000);
     }
 }
 
@@ -252,10 +308,23 @@ function backToLogin() {
     document.getElementById('auth-form-container').classList.remove('hidden-view');
 }
 
+function loadDashboardData() {
+    const userName = localStorage.getItem('it_logged_user') || 'محمود عبدالله ادم محمد';
+    const userId = localStorage.getItem('it_logged_id') || '11086250-24';
+
+    const waBtn = document.querySelector('.whatsapp-action-btn');
+    if (waBtn) {
+        const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
+        waBtn.href = `https://wa.me/249900623733?text=${waMessage}`;
+    }
+}
+
+// ربط الدوال مع النوافذ العامة لتعمل بسلاسة داخل HTML
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.showPassword = showPassword;
 window.hidePassword = hidePassword;
+window.startForgotPassword = startForgotPassword;
 window.triggerRealCaptcha = triggerRealCaptcha;
 window.sendVerificationCode = sendVerificationCode;
 window.verifyOtpCode = verifyOtpCode;
