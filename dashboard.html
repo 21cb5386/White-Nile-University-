@@ -15,17 +15,16 @@
             --primary-gradient: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
             --border-color: #f1f5f9;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            --radius: 20px;
         }
 
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-bg: rgba(30, 41, 59, 0.85);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #ff5722;
             --border-color: rgba(255, 255, 255, 0.08);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; margin: 0; padding: 0; }
@@ -54,7 +53,7 @@
             gap: 20px;
         }
 
-        /* الهيدر العلوي المطور */
+        /* الهيدر العلوي المترتب */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -115,6 +114,7 @@
             cursor: pointer;
             font-size: 0.9rem;
             text-decoration: none;
+            outline: none;
         }
         [data-theme="dark"] .icon-btn { background: rgba(255, 255, 255, 0.05); }
         .icon-btn:hover { border-color: var(--primary); }
@@ -129,7 +129,12 @@
             font-weight: 700;
             cursor: pointer;
             text-decoration: none;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
+        .logout-btn:hover { background: rgba(239, 68, 68, 0.2); }
 
         /* كارت الترحيب الفاخر */
         .welcome-card {
@@ -142,22 +147,11 @@
             box-shadow: 0 12px 25px rgba(255, 87, 34, 0.25);
         }
 
-        .welcome-card::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 150px;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
         .welcome-header h2 {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 800;
             margin-bottom: 4px;
+            line-height: 1.4;
         }
 
         .welcome-header p {
@@ -251,7 +245,7 @@
             <div class="nav-actions">
                 <a href="index.html" class="icon-btn" title="الرئيسية">🏠</a>
                 <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
-                <a href="login.html" class="logout-btn">خروج</a>
+                <button class="logout-btn" onclick="logout(event)">خروج</button>
             </div>
         </header>
 
@@ -269,7 +263,7 @@
 
         <!-- المقررات الأكاديمية -->
         <div class="section-title">
-            <span>📚</span> مقررَاتك الأكاديمية الحالية
+            <span>📚</span> مقرّراتك الأكاديمية الحالية
         </div>
 
         <div class="courses-list">
@@ -299,6 +293,13 @@
                 body.setAttribute('data-theme', 'light');
                 themeBtn.textContent = '🌙';
             }
+        }
+
+        function logout(event) {
+            event.stopPropagation(); // منع انتقال الحدث للناصر العام وتغيير الثيم بالخطأ
+            // يمكنك هنا مسح بيانات الجلسة إذا كنت تستخدم localStorage
+            // localStorage.clear();
+            window.location.href = 'login.html';
         }
     </script>
 </body>
