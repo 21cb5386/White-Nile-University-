@@ -35,7 +35,7 @@
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s; }
         body { background-color: var(--bg-color); color: var(--text-color); display: flex; min-height: 100vh; }
 
         aside {
@@ -98,14 +98,19 @@
         .hero-text h1 { font-size: 1.5rem; font-weight: 900; color: var(--text-color); margin-bottom: 8px; }
         .hero-text p { color: var(--text-muted); font-size: 0.95rem; }
 
-        .action-buttons-group { display: flex; gap: 12px; flex-wrap: wrap; }
+        /* تصميم موحد ومتناسق لجميع الأزرار */
+        .action-buttons-group { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .btn-control {
-            padding: 10px 18px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; gap: 8px; border: 1px solid var(--border-color);
-            text-decoration: none; background: var(--card-bg); color: var(--text-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 10px 16px; border-radius: 10px; font-size: 0.88rem; font-weight: 700; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--border-color);
+            text-decoration: none; background: var(--card-bg); color: var(--text-color); box-shadow: var(--shadow);
+            min-height: 42px;
         }
-        .btn-control:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .btn-control:hover { border-color: var(--primary-color); color: var(--primary-color); transform: translateY(-2px); }
         .btn-primary-custom { background: var(--primary-gradient); color: white !important; border: none; }
+        .btn-danger-custom { background-color: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+        .dark-mode .btn-danger-custom { background-color: rgba(220, 38, 38, 0.15); color: #fca5a5; border-color: #7f1d1d; }
+        .btn-danger-custom:hover { background-color: #dc2626; color: white; }
 
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         .card { background-color: var(--card-bg); border-radius: 16px; padding: 25px; box-shadow: var(--shadow); border: 1px solid var(--border-color); }
@@ -117,6 +122,8 @@
             padding: 14px; background: rgba(0,0,0,0.01); border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 12px; font-size: 0.9rem; line-height: 1.6;
         }
         .dark-mode .announcement-item { background: rgba(255,255,255,0.01); }
+
+        .hidden-element { display: none !important; }
 
         @media (max-width: 992px) {
             aside { display: none; }
@@ -133,7 +140,7 @@
         <ul class="sidebar-menu">
             <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
             <li><a href="dashboard.html"><i class="fa-solid fa-gauge"></i> لوحة التحكم</a></li>
-            <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> بوابة الدخول</a></li>
+            <li id="sidebar-auth-link"><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> بوابة الدخول</a></li>
         </ul>
     </aside>
 
@@ -144,15 +151,19 @@
                 <p>المنصة الأكاديمية والخدمات الإلكترونية الموحدة لطلاب قسم تقانة المعلومات بكوستي.</p>
             </div>
             <div class="action-buttons-group">
-                <button class="btn-control" id="theme-toggle">
+                <button class="btn-control" id="theme-toggle" title="تغيير المظهر">
                     <i class="fa-solid fa-moon" id="theme-icon"></i> <span id="theme-text">الوضع الداكن</span>
                 </button>
-                <a href="dashboard.html" class="btn-control btn-primary-custom">
+                <a href="dashboard.html" class="btn-control btn-primary-custom" id="dashboard-nav-btn">
                     <i class="fa-solid fa-gauge"></i> لوحة التحكم
                 </a>
-                <a href="login.html" class="btn-control" id="auth-nav-btn">
+                <a href="login.html" class="btn-control btn-primary-custom" id="auth-nav-btn">
                     <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
                 </a>
+                <!-- زر تسجيل الخروج الثابت يظهر فقط لو مسجل دخول -->
+                <button class="btn-control btn-danger-custom hidden-element" id="global-logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> خروج
+                </button>
             </div>
         </div>
 
@@ -172,12 +183,13 @@
                 </div>
             </div>
 
-            <div class="card">
+            <!-- بطاقة الخدمات والسريع: تختفي تماماً عند تسجيل الدخول لعدم التكرار -->
+            <div class="card" id="quick-services-card">
                 <div class="card-title">
                     <i class="fa-solid fa-circle-info"></i> الخدمات والوصول السريع
                 </div>
                 <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">تتيح لك البوابة متابعة مقرراتك الأكاديمية، طلب الإفادات، والتواصل الفوري مع شؤون الطلاب.</p>
-                <a href="login.html" class="btn-control btn-primary-custom" style="justify-content: center; width: 100%; padding: 12px;">
+                <a href="login.html" class="btn-control btn-primary-custom" style="justify-content: center; width: 100%;">
                     تسجيل الدخول إلى حساب الطالب
                 </a>
             </div>
@@ -188,12 +200,55 @@
         document.addEventListener('DOMContentLoaded', () => {
             const loggedUser = localStorage.getItem('it_logged_user');
             const authNavBtn = document.getElementById('auth-nav-btn');
-            if (loggedUser && authNavBtn) {
-                authNavBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${loggedUser}`;
-                authNavBtn.href = 'dashboard.html';
+            const dashboardNavBtn = document.getElementById('dashboard-nav-btn');
+            const globalLogoutBtn = document.getElementById('global-logout-btn');
+            const quickServicesCard = document.getElementById('quick-services-card');
+            const sidebarAuthLink = document.getElementById('sidebar-auth-link');
+
+            if (loggedUser) {
+                // إذا مسجل دخول: إخفاء زر تسجيل الدخول وبطاقة الخدمات السريعة المتكررة
+                if (authNavBtn) authNavBtn.style.display = 'none';
+                if (quickServicesCard) quickServicesCard.style.display = 'none';
+                
+                // إظهار زر تسجيل الخروج الثابت
+                if (globalLogoutBtn) globalLogoutBtn.classList.remove('hidden-element');
+
+                // تعديل زر لوحة التحكم ليظهر اسم الطالب وتوجيهه للوحة
+                if (dashboardNavBtn) {
+                    dashboardNavBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${loggedUser}`;
+                }
+
+                // تحديث القائمة الجانبية
+                if (sidebarAuthLink) {
+                    sidebarAuthLink.innerHTML = `<a href="#" id="side-logout"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</a>`;
+                    document.getElementById('side-logout').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        performLogout();
+                    });
+                }
+            } else {
+                // إذا غير مسجل دخول: إخفاء زر لوحة التحكم وزر الخروج
+                if (dashboardNavBtn) dashboardNavBtn.style.display = 'none';
+                if (globalLogoutBtn) globalLogoutBtn.classList.add('hidden-element');
             }
         });
 
+        // وظيفة تسجيل الخروج الموحدة
+        function performLogout() {
+            if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
+                localStorage.removeItem('it_logged_user');
+                localStorage.removeItem('it_logged_id');
+                localStorage.removeItem('it_logged_semester');
+                window.location.href = 'login.html';
+            }
+        }
+
+        const globalLogoutBtn = document.getElementById('global-logout-btn');
+        if (globalLogoutBtn) {
+            globalLogoutBtn.addEventListener('click', performLogout);
+        }
+
+        // تفاعل الوضع الداكن والفاتح
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const themeText = document.getElementById('theme-text');
