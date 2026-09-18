@@ -3,68 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تقانة المعلومات - جامعة النيل الأبيض</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>بوابة طلاب تقانة المعلومات - جامعة النيل الأبيض</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #0f2c59;
+            --secondary: #1a56db;
+            --accent: #f59e0b;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: #f8f9fa; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
-        header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header .logo-area h1 { font-size: 1.1rem; font-weight: 700; }
-        header .logo-area span { font-size: 0.8rem; color: #ffd700; }
-        .main-container { flex: 1; max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; width: 100%; }
-        .hero-section { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; margin-bottom: 1.5rem; }
-        .hero-section h2 { font-size: 1.6rem; color: #1e3c72; margin-bottom: 0.8rem; }
-        .hero-section p { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.2rem; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
-        .feature-card { background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid #2a5298; position: relative; overflow: hidden; }
-        .feature-card.locked::after { content: '🔒 تتطلب تسجيل دخول'; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; color: #e53935; font-weight: bold; font-size: 0.9rem; }
-        .feature-card h3 { font-size: 1.1rem; color: #1e3c72; margin-bottom: 0.4rem; }
-        .feature-card p { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
-        .btn { display: inline-block; background: #2a5298; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: background 0.3s; cursor: pointer; border: none; }
-        .btn:hover { background: #1e3c72; }
-        footer { text-align: center; padding: 1rem; background: #fff; color: #777; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: auto; }
-        .user-welcome { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.9rem; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* شريط التنقل الأكاديمي الفاخر */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(15, 44, 89, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .university-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .university-logo {
+            width: 45px;
+            height: 45px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-size: 1.1rem;
+        }
+
+        .logo-area h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; }
+        .logo-area span { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+
+        .main-container { flex: 1; max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; width: 100%; }
+
+        /* واجهة الـ Hero الأكاديمية الجذابة */
+        .hero-section {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(26, 86, 219, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 6px; height: 100%;
+            background: var(--accent);
+        }
+
+        .hero-section h2 { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; font-weight: 800; }
+        .hero-section p { color: #4b5563; font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.8rem; max-width: 800px; margin-left: auto; margin-right: auto; }
+
+        /* شبكة الخدمات والأقسام */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        
+        .feature-card {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+            border-top: 5px solid var(--secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(26, 86, 219, 0.08);
+        }
+
+        .feature-card h3 { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.6rem; font-weight: 700; }
+        .feature-card p { font-size: 0.9rem; color: #6b7280; margin-bottom: 1.5rem; line-height: 1.5; }
+
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.65rem 1.4rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+        }
+
+        .btn:hover { background: var(--primary); box-shadow: 0 5px 15px rgba(15, 44, 89, 0.2); }
+
+        footer { text-align: center; padding: 1.5rem; background: #ffffff; color: #6b7280; font-size: 0.85rem; border-top: 1px solid #e5e7eb; margin-top: auto; font-weight: 600; }
+        
+        .user-welcome { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 0.95rem; font-weight: 600; }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo-area">
-            <h1>جامعة النيل الأبيض - كوستي</h1>
-            <span>كلية علوم الحاسوب وتقانة المعلومات (IT)</span>
+        <div class="university-brand">
+            <div class="university-logo">WNU</div>
+            <div class="logo-area">
+                <h1>جامعة النيل الأبيض</h1>
+                <span>كلية علوم الحاسوب وتقانة المعلومات</span>
+            </div>
         </div>
         <div id="auth-nav-area">
-            <!-- يتم تحديثه تلقائياً بواسطة الجافاسكريبت بناءً على حالة تسجيل الدخول -->
-            <a href="login.html" class="btn" style="background: #ffd700; color: #1e3c72;">تسجيل الدخول</a>
+            <a href="login.html" class="btn" style="background: var(--accent); color: var(--primary);">تسجيل الدخول الأكاديمي</a>
         </div>
     </header>
 
     <div class="main-container">
         <div class="hero-section">
-            <h2 id="main-welcome-title">مرحباً بك في البوابة الذكية لطلاب الـ IT</h2>
-            <p id="main-welcome-desc">منصة طلابية متكاملة تهدف لتسهيل الوصول إلى المحاضرات الأكاديمية، الجداول الدراسية، ومتابعة المشاريع والابتكارات التقنية الخاصة بطلاب السمستر الثالث والمستويات المختلفة.</p>
-            <a href="#services" class="btn">استعرض الخدمات</a>
+            <h2 id="main-welcome-title">البوابة الذكية لطلاب تقانة المعلومات</h2>
+            <p id="main-welcome-desc">منصة أكاديمية متكاملة مصممة خصيصاً لتسهيل الوصول للمقررات، الجداول الدراسية، وعرض مشاريع التخرج وابتكارات الطلاب بجودة عالية.</p>
+            <a href="#services" class="btn">استعراض الخدمات الأكاديمية</a>
         </div>
 
         <div class="features-grid" id="services">
-            <!-- قسم المحاضرات (عادي) -->
             <div class="feature-card">
-                <h3>المحاضرات والمقررات</h3>
-                <p>تصفح مواد السمستر الثالث، وملخصات المحاضرات بصيغة PDF لتسهيل التحصيل الأكاديمي.</p>
-                <a href="#" class="btn" onclick="alert('تصفح المقررات العامة متاح للجميع.')">عرض المواد</a>
+                <div>
+                    <h3>المقررات والمحاضرات</h3>
+                    <p>تصفح مواد السمستر الثالث، وملخصات المحاضرات الأكاديمية بصيغة PDF لدعم التحصيل العلمي.</p>
+                </div>
+                <a href="#" class="btn" onclick="alert('قسم المقررات الدراسية متاح للجميع.')">استعراض المواد</a>
             </div>
 
-            <!-- قسم الجداول (مقفل للزوار، يفتح للمسجلين) -->
-            <div class="feature-card" id="card-schedules">
-                <h3>الجداول وقاعات المحاضرات</h3>
-                <p>متابعة جداول المحاضرات اليومية، قاعات المحاضرات، ومواعيد الامتحانات الفصلية بدقة.</p>
-                <button class="btn" id="btn-schedules" onclick="checkAccess('سجّل دخولك أولاً لعرض الجداول وقاعات المحاضرات الخاصة بالسمستر الثالث.')">عرض الجداول</button>
+            <div class="feature-card">
+                <div>
+                    <h3>جداول المحاضرات وقاعات التدريس</h3>
+                    <p>متابعة جداول المحاضرات اليومية، توزيع القاعات، والمواعيد الرسمية للامتحانات الفصلية.</p>
+                </div>
+                <button class="btn" id="btn-schedules" onclick="checkAccess('يرجى تسجيل الدخول بحسابك الجامعي لعرض الجداول وقاعات المحاضرات.')">عرض الجداول الرسمية</button>
             </div>
 
-            <!-- قسم مشاريع الطلاب (مقفل للزوار، يفتح للمسجلين) -->
-            <div class="feature-card" id="card-projects">
-                <h3>مشاريع وابتكارات الطلاب</h3>
-                <p>نافذة حصرية لعرض ومشاركة التطبيقات، مشاريع الـ Web، وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.</p>
-                <button class="btn" id="btn-projects" onclick="checkAccess('هذا القسم خاص بالطلاب المسجلين لرفع واستعراض مشاريع التخرج.')">استعرض المشاريع</button>
+            <div class="feature-card">
+                <div>
+                    <h3>معرض مشاريع الطلاب المبتكرة</h3>
+                    <p>منصة حصرية لعرض تطبيقات الـ Web، الـ Mobile، ومشاريع التخرج التقنية لأبناء الكلية.</p>
+                </div>
+                <button class="btn" id="btn-projects" onclick="checkAccess('معرض المشاريع مخصص للطلاب المسجلين في المنصة فقط.')">استعراض المشاريع</button>
             </div>
         </div>
     </div>
@@ -84,23 +188,21 @@
             const btnProjects = document.getElementById('btn-projects');
 
             if (currentUser) {
-                // حالة الطالب مسجل دخول
                 authNavArea.innerHTML = `
                     <div class="user-welcome">
-                        <span>أهلاً، <b>${currentUser}</b></span>
-                        <button onclick="logoutUser()" class="btn" style="background: #e53935; padding: 4px 10px; font-size: 0.75rem;">خروج</button>
+                        <span>مرحباً، <b>${currentUser}</b></span>
+                        <button onclick="logoutUser()" class="btn" style="background: #ef4444; padding: 5px 12px; font-size: 0.8rem;">تسجيل الخروج</button>
                     </div>
                 `;
-                mainTitle.innerText = `مرحباً بك مجدداً في بوابة الـ IT، ${currentUser}!`;
-                mainDesc.innerText = `تم تفعيل حسابك الأكاديمي بنجاح. يمكنك الآن الاطلاع على الجداول الحصرية، قاعات المحاضرات، والمشاركة في لوحة مشاريع السمستر الثالث.`;
+                mainTitle.innerText = `أهلاً بك يا بشمهندس / ${currentUser}`;
+                mainDesc.innerText = `تم التحقق من هويتك الأكاديمية بنجاح. كافة الأقسام الحصرية، جداول السمستر الثالث، ولوحة رفع المشاريع متاحة لك الآن.`;
 
-                // فتح الصلاحيات للأقسام المحمية
-                btnSchedules.setAttribute("onclick", "alert('جاري فتح جداول المحاضرات وقاعات السمستر الثالث...')");
-                btnSchedules.style.background = "#0f9d58";
+                btnSchedules.setAttribute("onclick", "alert('جاري فتح الجداول الرسمية وقاعات السمستر الثالث...')");
+                btnSchedules.style.background = "#10b981";
                 btnSchedules.innerText = "عرض الجداول الرسمية ✓";
 
-                btnProjects.setAttribute("onclick", "alert('جاري فتح معرض الابتكارات البرمجية وتطبيقات الـ APK...')");
-                btnProjects.style.background = "#0f9d58";
+                btnProjects.setAttribute("onclick", "alert('جاري فتح لوحة معرض المشاريع والابتكارات...')");
+                btnProjects.style.background = "#10b981";
                 btnProjects.innerText = "معرض المشاريع الحصري ✓";
             }
         });
@@ -112,7 +214,6 @@
 
         function logoutUser() {
             localStorage.removeItem('it_logged_user');
-            alert('تم تسجيل الخروج بنجاح.');
             window.location.reload();
         }
     </script>
