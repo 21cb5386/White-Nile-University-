@@ -501,14 +501,29 @@
         </div>
     </main>
 
-    <!-- الأكواد البرمجية التفاعلية المحدثة والمنسقة -->
+    <!-- الأكواد البرمجية التفاعلية المربوطة بنظام المنصة الحقيقي -->
     <script>
-        // 1. تفعيل وحفظ الوضع الداكن تلقائياً
+        // 1. التحقق من حالة تسجيل الدخول وحماية الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedUser = localStorage.getItem('it_logged_user');
+            if (!loggedUser) {
+                // إذا لم يتم تسجيل الدخول، يتم تحويله لصفحة الـ login تلقائياً
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // عرض اسم الطالب الحقيقي المسجل في النظام
+            const userNameElement = document.querySelector('.text-info h1');
+            if (userNameElement && loggedUser) {
+                userNameElement.textContent = `مرحباً، ${loggedUser}`;
+            }
+        });
+
+        // 2. تفعيل وحفظ الوضع الداكن تلقائياً
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const themeText = document.getElementById('theme-text');
 
-        // التحقق من حالة الوضع المفظلة مسبقاً
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             themeIcon.className = 'fa-solid fa-sun';
@@ -531,43 +546,44 @@
             }
         });
 
-        // 2. زر الرئيسية (يعيد تحميل الصفحة أو التمرير للأعلى بسلاسة)
+        // 3. زر الرئيسية (يعيدك لصفحة المنصة الرئيسية الفعلية index.html)
         const homeBtn = document.getElementById('home-btn');
-        homeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        if (homeBtn) {
+            homeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'index.html'; // غيرها باسم صفحة رئيسيتك إذا كانت مختلفة
+            });
+        }
 
-        // 3. تفعيل زر تسجيل الخروج بكفاءة
+        // 4. زر تسجيل الخروج الحقيقي (يحذف الجلسة ويحولك لصفحة login.html)
         const logoutBtn = document.getElementById('logout-btn');
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
-                alert('تم تسجيل الخروج بنجاح');
-                // يمكنك هنا توجيه المستخدم لصفحة تسجيل الدخول، مثال:
-                // window.location.href = 'login.html';
-            }
-        });
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
+                    // مسح جلسة المستخدم المسجل
+                    localStorage.removeItem('it_logged_user');
+                    localStorage.removeItem('it_logged_id');
+                    localStorage.removeItem('it_logged_semester');
+                    
+                    // التحويل الفعلي لصفحة تسجيل الدخول
+                    window.location.href = 'login.html';
+                }
+            });
+        }
 
-        // 4. تفاعل أزرار القائمة الجانبية (Sidebar Active State)
+        // 5. تفاعل أزرار القائمة الجانبية
         const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
         sidebarLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 sidebarLinks.forEach(item => item.classList.remove('active'));
                 this.classList.add('active');
-                
-                const pageName = this.getAttribute('data-page');
-                // يمكنك تخصيص إجراء لكل صفحة عند الضغط عليها
-                if(pageName !== 'home') {
-                    console.text || console.log('تم الانتقال إلى قسم: ' + this.textContent.trim());
-                }
             });
         });
 
-        // 5. دالة معالجة الخدمات السريعة بكفاءة واحترافية
+        // 6. دالة معالجة الخدمات الأكاديمية السريعة
         function handleServiceRequest(serviceName) {
-            // يمكن ربطها لاحقاً بـ API أو قاعدة بيانات حقيقية
             if (confirm(`هل أنت متأكد من إرسال طلب (${serviceName})؟`)) {
                 setTimeout(() => {
                     alert(`تم إرسال طلب (${serviceName}) بنجاح إلى شؤون الطلاب.`);
