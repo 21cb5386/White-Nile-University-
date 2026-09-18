@@ -12,7 +12,6 @@
             --text-main: #1a1a1a;
             --text-muted: #777;
             --primary-color: #ff5722;
-            --primary-hover: #f4511e;
             --border-color: #eee;
             --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
@@ -23,7 +22,6 @@
             --text-main: #f3f4f6;
             --text-muted: #aaa;
             --primary-color: #ff5722;
-            --primary-hover: #ff7043;
             --border-color: #333;
             --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
@@ -39,7 +37,6 @@
             padding: 20px;
         }
 
-        /* شريط التنبيهات الأكاديمية العاجلة */
         .notice-ticker {
             background: #ff5722;
             color: white;
@@ -56,170 +53,75 @@
             margin-right: auto;
             width: 100%;
         }
-        .notice-ticker span {
-            display: inline-block;
-            animation: ticker 25s linear infinite;
-        }
-        @keyframes ticker {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
+        .notice-ticker span { display: inline-block; animation: ticker 25s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* الحاوية الرئيسية بنفس تصميم واجهة تسجيل الدخول */
         .main-wrapper {
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-            flex: 1;
+            max-width: 1100px; width: 100%; margin: 0 auto;
+            background: var(--card-bg); backdrop-filter: blur(10px);
+            border-radius: 24px; box-shadow: var(--shadow); overflow: hidden;
+            display: flex; flex-direction: column; border: 1px solid var(--border-color); flex: 1;
         }
 
-        /* شريط التنقل العلوي المتناسق */
         header {
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.02);
+            padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);
         }
 
         .university-brand { display: flex; align-items: center; gap: 12px; }
         .university-logo {
-            width: 45px; height: 45px;
-            background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            color: white; border-radius: 12px;
-            display: flex; justify-content: center; align-items: center;
-            font-weight: 900; font-size: 1.1rem;
-            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+            width: 45px; height: 45px; background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            color: white; border-radius: 12px; display: flex; justify-content: center; align-items: center;
+            font-weight: 900; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
         }
         .logo-area h1 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
         .logo-area span { font-size: 0.75rem; color: var(--primary-color); font-weight: 600; display: block; }
 
         .nav-actions { display: flex; align-items: center; gap: 15px; }
-
-        /* زر الوضع الليلي بالايقونة الشائعة */
         .theme-toggle-btn {
-            background: transparent;
-            border: 2px solid var(--border-color);
-            color: var(--text-main);
-            width: 40px; height: 40px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem;
-            transition: all 0.2s ease;
-        }
-        .theme-toggle-btn:hover {
-            border-color: var(--primary-color);
-            transform: scale(1.05);
+            background: transparent; border: 2px solid var(--border-color); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 12px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
         }
 
-        /* أزرار الحجم والشكل الشائع */
         .action-btn {
             background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.3);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            color: white; border: none; padding: 10px 22px; border-radius: 12px;
+            font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.25s ease;
+            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.3); text-decoration: none;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 87, 34, 0.4);
-        }
-        .action-btn.secondary {
-            background: #eef2f7;
-            color: #333;
-            box-shadow: none;
-        }
-        [data-theme="dark"] .action-btn.secondary {
-            background: #2d2d2d;
-            color: #f3f4f6;
-        }
-        .action-btn.danger {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
-        }
+        .action-btn.secondary { background: #eef2f7; color: #333; box-shadow: none; }
+        [data-theme="dark"] .action-btn.secondary { background: #2d2d2d; color: #f3f4f6; }
+        .action-btn.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3); }
 
-        /* محتوى الصفحة */
         .content-body { padding: 35px; }
-
         .hero-section {
-            text-align: center;
-            margin-bottom: 35px;
-            padding: 25px;
-            background: rgba(255, 167, 38, 0.05);
-            border-radius: 16px;
-            border: 1px dashed rgba(255, 87, 34, 0.2);
+            text-align: center; margin-bottom: 35px; padding: 25px;
+            background: rgba(255, 167, 38, 0.05); border-radius: 16px; border: 1px dashed rgba(255, 87, 34, 0.2);
         }
         .hero-section h2 { font-size: 1.8rem; color: var(--text-main); margin-bottom: 10px; font-weight: 800; }
         .hero-section p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
 
-        /* شبكة الأقسام المتناسقة */
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        
         .feature-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            padding: 25px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            background: var(--card-bg); border: 2px solid var(--border-color); padding: 25px;
+            border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;
         }
         .feature-card h3 { font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px; font-weight: 700; }
         .feature-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .user-welcome-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
+        footer { text-align: center; padding: 20px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+        .user-welcome-box { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 600; }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- شريط الإعلانات الأكاديمية العاجلة -->
     <div class="notice-ticker">
         <span>📢 إعلان أكاديمي هام: تم فتح بوابة رفع مشاريع السمستر الثالث وتحديث جداول قاعات المحاضرات رسمياً. يرجى مراجعة لوحة التحكم.</span>
     </div>
 
     <div class="main-wrapper">
-        <!-- شريط التنقل العلوي -->
         <header>
             <div class="university-brand">
                 <div class="university-logo">IT</div>
@@ -230,17 +132,13 @@
             </div>
             
             <div class="nav-actions">
-                <!-- زر الوضع الليلي بالأيقونة الشائعة -->
                 <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي">🌙</button>
-                
-                <!-- منطقة تسجيل الدخول / حساب الطالب -->
                 <div id="auth-nav-area">
                     <a href="login.html" class="action-btn">تسجيل الدخول</a>
                 </div>
             </div>
         </header>
 
-        <!-- المحتوى الأساسي -->
         <div class="content-body">
             <div class="hero-section">
                 <h2 id="main-welcome-title">البوابة الذكية لطلاب تقانة المعلومات</h2>
@@ -289,7 +187,6 @@
             const btnSchedules = document.getElementById('btn-schedules');
             const btnProjects = document.getElementById('btn-projects');
 
-            // تفعيل الثيم المحفوظ
             const savedTheme = localStorage.getItem('it_theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
@@ -320,6 +217,8 @@
 
         function logoutUser() {
             localStorage.removeItem('it_logged_user');
+            localStorage.removeItem('it_logged_id');
+            localStorage.removeItem('it_logged_semester');
             window.location.reload();
         }
 
@@ -333,9 +232,7 @@
 
         function updateThemeIcon(theme) {
             const btn = document.getElementById('theme-toggle');
-            if (btn) {
-                btn.innerText = theme === 'dark' ? '☀️' : '🌙';
-            }
+            if (btn) { btn.innerText = theme === 'dark' ? '☀️' : '🌙'; }
         }
     </script>
 </body>
