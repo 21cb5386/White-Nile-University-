@@ -139,8 +139,13 @@
         footer { text-align: center; padding: 15px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; font-weight: 600; }
         .user-welcome-box { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; flex-wrap: wrap; }
     </style>
+    <script>
+        // ضبط الثيم مباشرة قبل تحميل الصفحة لمنع أي وميض
+        const savedThemeInit = localStorage.getItem('it_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedThemeInit);
+    </script>
 </head>
-<body data-theme="light">
+<body>
 
     <div class="notice-ticker">
         <span id="ticker-text">📢 تنبيه أكاديمي رسمي: تم تفعيل نظام الإرشاد الأكاديمي الذكي ورفع أحدث ملخصات مقررات السمستر الثالث. استعرض لوحة التحكم الخاصة بك الآن.</span>
@@ -315,6 +320,7 @@
             const savedLang = localStorage.getItem('it_lang') || 'ar';
             
             document.body.setAttribute('data-theme', savedTheme);
+            document.documentElement.setAttribute('data-theme', savedTheme);
             document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
             document.getElementById('lang-select').value = savedLang;
             applyMainLang(savedLang);
@@ -341,6 +347,7 @@
             const currentTheme = document.body.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.body.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('it_theme', newTheme);
             document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '☀️' : '🌙';
         }
