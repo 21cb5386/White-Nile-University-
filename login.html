@@ -16,7 +16,18 @@
             --text-muted: #64748b;
             --border: #e2e8f0;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
+        .dark-mode {
+            --bg: #0b0f19;
+            --card-bg: #1f2937;
+            --text: #f9fafb;
+            --text-muted: #9ca3af;
+            --border: #374151;
+            --primary: #14b8a6;
+            --primary-dark: #0d9488;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
         body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
         .top-nav-bar {
@@ -49,7 +60,7 @@
 
         .login-card { background: var(--card-bg); width: 100%; max-width: 420px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border); }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .header-top select { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); font-weight: 600; cursor: pointer; }
+        .header-top select { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-weight: 600; cursor: pointer; }
         h1 { font-size: 1.4rem; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
         p.subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; }
         .form-group { margin-bottom: 18px; position: relative; }
@@ -66,10 +77,19 @@
         .extras-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-top: 10px; }
         .extras-row a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
     </style>
+    <script>
+        // تطبيق الثيم المحفوظ مسبقاً لمنع الوميض
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
 </head>
-<body>
+<body class="dark-mode" style="background-color: var(--bg);">
 
-    <!-- شريط علوي صغير للرجوع للرئيسية -->
+    <!-- شريط التنقل العلوي -->
     <div class="top-nav-bar">
         <a href="index.html" class="btn-back-home">
             <i class="fa-solid fa-arrow-right"></i> الرئيسية
@@ -85,6 +105,7 @@
         </div>
         <p class="subtitle" id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
 
+        <!-- نموذج تسجيل الدخول / إنشاء الحساب -->
         <div id="auth-form-container">
             <div class="form-group signup-field hidden-view">
                 <label id="lbl-name">الاسم الكامل</label>
@@ -98,7 +119,7 @@
                 <label id="lbl-id">الرقم الجامعي (ID)</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-id-card"></i>
-                    <input type="text" id="studentid" placeholder="IT-2026-XXXX">
+                    <input type="text" id="studentid" placeholder="11086250-24">
                 </div>
             </div>
 
@@ -148,31 +169,50 @@
             </div>
         </div>
 
+        <!-- تدفق استعادة كلمة المرور والكابتشا الحقيقية -->
         <div id="forgot-flow-container" class="hidden-view">
             <h3 style="margin-bottom: 15px; color: var(--primary);">استعادة كلمة المرور</h3>
+            
             <div id="step-captcha">
-                <p style="font-size: 0.85rem; margin-bottom: 10px;">يرجى التحقق من أنك لست روبوت:</p>
-                <button class="btn-submit" onclick="triggerRealCaptcha()">تحقق من الكابتشا</button>
+                <p style="font-size: 0.85rem; margin-bottom: 8px;">أدخل رموز التحقق لتأكيد أنك لست روبوت:</p>
+                <!-- خانة الكابتشا الحقيقية سيتم توليدها برمجياً عبر lab.js -->
+                <button class="btn-submit" onclick="triggerRealCaptcha()" style="margin-top: 5px;">تحقق من الرمز</button>
             </div>
-            <div id="step-email" class="hidden-view" style="margin-top: 15px;">
-                <input type="email" id="recovery-email-input" placeholder="أدخل بريدك الإلكتروني" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
+
+            <div id="step-email" class="hidden-view" style="margin-top: 5px;">
+                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">البريد الإلكتروني المسجل:</label>
+                <input type="email" id="recovery-email-input" placeholder="student@fit.edu" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
                 <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
             </div>
-            <div id="step-otp" class="hidden-view" style="margin-top: 15px;">
-                <input type="text" id="otp-input" placeholder="أدخل رمز OTP المرسل" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
-                <button class="btn-submit" onclick="verifyOtpCode()">تحقق من الرمز</button>
+
+            <div id="step-otp" class="hidden-view" style="margin-top: 5px;">
+                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">أدخل رمز التحقق المرسل (OTP):</label>
+                <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); text-align:center; letter-spacing:5px; margin-bottom:10px; outline:none;">
+                <button class="btn-submit" onclick="verifyOtpCode()">التحقق من الرمز</button>
             </div>
-            <div id="step-newpass" class="hidden-view" style="margin-top: 15px;">
-                <input type="password" id="new-pass-input" placeholder="كلمة المرور الجديدة" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
-                <input type="password" id="confirm-new-pass-input" placeholder="تأكيد كلمة المرور" style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px;">
-                <button class="btn-submit" onclick="saveNewPassword()">حفظ كلمة المرور</button>
+
+            <div id="step-newpass" class="hidden-view" style="margin-top: 5px;">
+                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">كلمة المرور الجديدة:</label>
+                <input type="password" id="new-pass-input" placeholder="********" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
+                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">تأكيد كلمة المرور:</label>
+                <input type="password" id="confirm-new-pass-input" placeholder="********" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
+                <button class="btn-submit" onclick="saveNewPassword()">حفظ وتحديث كلمة المرور</button>
             </div>
+
             <div class="switch-mode" style="margin-top: 15px;">
                 <a onclick="backToLogin()">العودة لتسجيل الدخول</a>
             </div>
         </div>
     </div>
 
+    <script>
+        // تفعيل الثيم الفوري في الصفحة
+        if (localStorage.getItem('theme') !== 'light') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    </script>
     <script type="module" src="lab.js"></script>
 </body>
 </html>
