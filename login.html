@@ -69,6 +69,15 @@
         .input-wrapper i { color: var(--text-muted); margin-left: 10px; font-size: 1rem; }
         .input-wrapper input { width: 100%; padding: 12px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; color: var(--text); }
         .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; }
+        
+        /* مؤشرات التتبع الحقيقي للقوة والتطابق */
+        .password-strength-indicator, .password-match-indicator {
+            font-size: 0.78rem;
+            margin-top: 5px;
+            font-weight: 700;
+            display: block;
+        }
+
         .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
         .btn-submit:hover { background: var(--primary-dark); }
         .switch-mode { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
@@ -78,7 +87,6 @@
         .extras-row a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
     </style>
     <script>
-        // تطبيق الثيم المحفوظ مسبقاً لمنع الوميض
         (function() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
@@ -89,7 +97,6 @@
 </head>
 <body class="dark-mode" style="background-color: var(--bg);">
 
-    <!-- شريط التنقل العلوي -->
     <div class="top-nav-bar">
         <a href="index.html" class="btn-back-home">
             <i class="fa-solid fa-arrow-right"></i> الرئيسية
@@ -105,7 +112,6 @@
         </div>
         <p class="subtitle" id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
 
-        <!-- نموذج تسجيل الدخول / إنشاء الحساب -->
         <div id="auth-form-container">
             <div class="form-group signup-field hidden-view">
                 <label id="lbl-name">الاسم الكامل</label>
@@ -143,17 +149,22 @@
                 <label id="lbl-password">كلمة المرور</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="pass-input" placeholder="********">
+                    <input type="password" id="pass-input" placeholder="********" oninput="checkPasswordStrength(this.value)">
                     <i class="fa-solid fa-eye eye-icon" onmousedown="showPassword('pass-input')" onmouseup="hidePassword('pass-input')"></i>
                 </div>
+                <!-- مؤشر القوة الفوري -->
+                <span id="strength-text" class="password-strength-indicator" style="color: #94a3b8;">أدخل كلمة مرور قوية (6 أحرف على الأقل)</span>
             </div>
 
             <div class="form-group signup-field hidden-view">
                 <label>تأكيد كلمة المرور</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="confirm-pass-input" placeholder="********">
+                    <input type="password" id="confirm-pass-input" placeholder="********" oninput="checkPasswordMatch()">
+                    <i class="fa-solid fa-eye eye-icon" onmousedown="showPassword('confirm-pass-input')" onmouseup="hidePassword('confirm-pass-input')"></i>
                 </div>
+                <!-- مؤشر التطابق الفوري -->
+                <span id="match-text" class="password-match-indicator" style="color: #94a3b8;">يرجى إعادة إدخال كلمة المرور للتأكيد</span>
             </div>
 
             <div class="extras-row" id="login-extras">
@@ -169,28 +180,22 @@
             </div>
         </div>
 
-        <!-- تدفق استعادة كلمة المرور والكابتشا الحقيقية -->
         <div id="forgot-flow-container" class="hidden-view">
             <h3 style="margin-bottom: 15px; color: var(--primary);">استعادة كلمة المرور</h3>
-            
             <div id="step-captcha">
                 <p style="font-size: 0.85rem; margin-bottom: 8px;">أدخل رموز التحقق لتأكيد أنك لست روبوت:</p>
-                <!-- خانة الكابتشا الحقيقية سيتم توليدها برمجياً عبر lab.js -->
                 <button class="btn-submit" onclick="triggerRealCaptcha()" style="margin-top: 5px;">تحقق من الرمز</button>
             </div>
-
             <div id="step-email" class="hidden-view" style="margin-top: 5px;">
                 <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">البريد الإلكتروني المسجل:</label>
                 <input type="email" id="recovery-email-input" placeholder="student@fit.edu" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
                 <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
             </div>
-
             <div id="step-otp" class="hidden-view" style="margin-top: 5px;">
                 <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">أدخل رمز التحقق المرسل (OTP):</label>
                 <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); text-align:center; letter-spacing:5px; margin-bottom:10px; outline:none;">
                 <button class="btn-submit" onclick="verifyOtpCode()">التحقق من الرمز</button>
             </div>
-
             <div id="step-newpass" class="hidden-view" style="margin-top: 5px;">
                 <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">كلمة المرور الجديدة:</label>
                 <input type="password" id="new-pass-input" placeholder="********" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
@@ -198,7 +203,6 @@
                 <input type="password" id="confirm-new-pass-input" placeholder="********" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
                 <button class="btn-submit" onclick="saveNewPassword()">حفظ وتحديث كلمة المرور</button>
             </div>
-
             <div class="switch-mode" style="margin-top: 15px;">
                 <a onclick="backToLogin()">العودة لتسجيل الدخول</a>
             </div>
@@ -206,7 +210,6 @@
     </div>
 
     <script>
-        // تفعيل الثيم الفوري في الصفحة
         if (localStorage.getItem('theme') !== 'light') {
             document.body.classList.add('dark-mode');
         } else {
