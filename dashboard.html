@@ -19,7 +19,7 @@
 
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --card-bg: rgba(30, 41, 59, 0.9);
+            --card-bg: rgba(30, 41, 59, 0.95);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #ff5722;
@@ -37,6 +37,7 @@
             align-items: center;
             padding: 15px;
             color: var(--text-main);
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .dashboard-container {
@@ -53,13 +54,18 @@
             gap: 20px;
         }
 
-        /* الهيدر العلوي المترتب باحترافية */
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-bottom: 14px;
             border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .university-brand {
@@ -96,13 +102,6 @@
             font-weight: 600;
         }
 
-        /* مجموعة الأزرار العلوية */
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
         .icon-btn {
             background: rgba(0, 0, 0, 0.03);
             border: 1px solid var(--border-color);
@@ -116,11 +115,11 @@
             cursor: pointer;
             font-size: 0.9rem;
             text-decoration: none;
+            transition: 0.2s;
         }
         [data-theme="dark"] .icon-btn { background: rgba(255, 255, 255, 0.05); }
         .icon-btn:hover { border-color: var(--primary); }
 
-        /* زر خروج بتصميم واضح ومريح للمس */
         .logout-btn {
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
@@ -134,10 +133,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: 0.2s;
         }
-        .logout-btn:hover { background: rgba(239, 68, 68, 0.2); }
+        .logout-btn:hover { background: rgba(239, 68, 68, 0.25); }
 
-        /* كارت الترحيب */
         .welcome-card {
             background: var(--primary-gradient);
             border-radius: 20px;
@@ -173,18 +172,9 @@
             align-items: center;
         }
 
-        .student-badge-box span {
-            font-size: 0.75rem;
-            opacity: 0.9;
-        }
+        .student-badge-box span { font-size: 0.75rem; opacity: 0.9; }
+        .student-badge-box strong { font-size: 0.9rem; letter-spacing: 0.5px; font-weight: 800; }
 
-        .student-badge-box strong {
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            font-weight: 800;
-        }
-
-        /* المقررات الأكاديمية */
         .section-title {
             display: flex;
             align-items: center;
@@ -228,26 +218,31 @@
         }
     </style>
 </head>
-<body data-theme="light">
+<body>
+
+    <script>
+        // تحميل الوضع المحفوظ مسبقاً لمنع أي لخبطة بين الصفحات
+        const savedTheme = localStorage.getItem('site_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
+    </script>
 
     <div class="dashboard-container">
-        <!-- الهيدر العلوي المُعدل -->
         <header class="top-nav">
-            <div class="university-brand">
-                <div class="brand-logo">IT</div>
-                <div class="brand-info">
-                    <h1>جامعة النيل الأبيض</h1>
-                    <span>لوحة التحكم الأكاديمية</span>
-                </div>
-            </div>
             <div class="nav-actions">
                 <button class="logout-btn" id="logout-btn" type="button">خروج</button>
                 <button class="icon-btn" id="theme-toggle" type="button" title="الوضع الليلي">🌙</button>
                 <a href="index.html" class="icon-btn" title="الرئيسية">🏠</a>
             </div>
+            <div class="university-brand">
+                <div class="brand-info">
+                    <h1>جامعة النيل الأبيض</h1>
+                    <span>لوحة التحكم الأكاديمية</span>
+                </div>
+                <div class="brand-logo">IT</div>
+            </div>
         </header>
 
-        <!-- كارت الترحيب -->
         <div class="welcome-card">
             <div class="welcome-header">
                 <h2>مرحباً بك، محمود عبدالله آدم محمد</h2>
@@ -259,7 +254,6 @@
             </div>
         </div>
 
-        <!-- المقررات الأكاديمية -->
         <div class="section-title">
             <span>📚</span> مقرّراتك الأكاديمية الحالية
         </div>
@@ -281,26 +275,37 @@
     </div>
 
     <script>
-        // زر التبديل بين الوضع المضيء والداكن
         const themeBtn = document.getElementById('theme-toggle');
         const bodyTag = document.body;
 
+        // تحديث أيقونة الزر بناءً على الوضع الحالي
+        if (bodyTag.getAttribute('data-theme') === 'dark') {
+            themeBtn.textContent = '☀️';
+        } else {
+            themeBtn.textContent = '🌙';
+        }
+
+        // تبديل وحفظ الوضع في ذاكرة التخزين (localStorage)
         themeBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            if (bodyTag.getAttribute('data-theme') === 'light') {
+            let currentTheme = bodyTag.getAttribute('data-theme');
+            if (currentTheme === 'light') {
                 bodyTag.setAttribute('data-theme', 'dark');
+                localStorage.setItem('site_theme', 'dark');
                 themeBtn.textContent = '☀️';
             } else {
                 bodyTag.setAttribute('data-theme', 'light');
+                localStorage.setItem('site_theme', 'light');
                 themeBtn.textContent = '🌙';
             }
         });
 
-        // زر تسجيل الخروج المباشر
+        // تفعيل زر تسجيل الخروج بصورة مؤكدة
         const logoutBtn = document.getElementById('logout-btn');
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            // لو صفحة الدخول باسم مختلف غير login.html غيرها هنا
             window.location.href = 'login.html';
         });
     </script>
