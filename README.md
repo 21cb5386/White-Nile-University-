@@ -1,4 +1,4 @@
-# White-Nile-University-
+
 <div align="center">
 
 # 🎓 بوابة تقانة المعلومات - جامعة النيل الأبيض
