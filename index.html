@@ -16,12 +16,14 @@
         .hero-section h2 { font-size: 1.6rem; color: #1e3c72; margin-bottom: 0.8rem; }
         .hero-section p { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.2rem; }
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
-        .feature-card { background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid #2a5298; }
+        .feature-card { background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid #2a5298; position: relative; overflow: hidden; }
+        .feature-card.locked::after { content: '🔒 تتطلب تسجيل دخول'; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; color: #e53935; font-weight: bold; font-size: 0.9rem; }
         .feature-card h3 { font-size: 1.1rem; color: #1e3c72; margin-bottom: 0.4rem; }
         .feature-card p { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
-        .btn { display: inline-block; background: #2a5298; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: background 0.3s; }
+        .btn { display: inline-block; background: #2a5298; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: background 0.3s; cursor: pointer; border: none; }
         .btn:hover { background: #1e3c72; }
         footer { text-align: center; padding: 1rem; background: #fff; color: #777; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: auto; }
+        .user-welcome { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -30,35 +32,39 @@
             <h1>جامعة النيل الأبيض - كوستي</h1>
             <span>كلية علوم الحاسوب وتقانة المعلومات (IT)</span>
         </div>
-        <div>
+        <div id="auth-nav-area">
+            <!-- يتم تحديثه تلقائياً بواسطة الجافاسكريبت بناءً على حالة تسجيل الدخول -->
             <a href="login.html" class="btn" style="background: #ffd700; color: #1e3c72;">تسجيل الدخول</a>
         </div>
     </header>
 
     <div class="main-container">
         <div class="hero-section">
-            <h2>مرحباً بك في البوابة الذكية لطلاب الـ IT</h2>
-            <p>منصة طلابية متكاملة تهدف لتسهيل الوصول إلى المحاضرات الأكاديمية، الجداول الدراسية، ومتابعة المشاريع والابتكارات التقنية الخاصة بطلاب السمستر الثالث والمستويات المختلفة.</p>
+            <h2 id="main-welcome-title">مرحباً بك في البوابة الذكية لطلاب الـ IT</h2>
+            <p id="main-welcome-desc">منصة طلابية متكاملة تهدف لتسهيل الوصول إلى المحاضرات الأكاديمية، الجداول الدراسية، ومتابعة المشاريع والابتكارات التقنية الخاصة بطلاب السمستر الثالث والمستويات المختلفة.</p>
             <a href="#services" class="btn">استعرض الخدمات</a>
         </div>
 
         <div class="features-grid" id="services">
+            <!-- قسم المحاضرات (عادي) -->
             <div class="feature-card">
                 <h3>المحاضرات والمقررات</h3>
                 <p>تصفح مواد السمستر الثالث، وملخصات المحاضرات بصيغة PDF لتسهيل التحصيل الأكاديمي.</p>
-                <a href="#" class="btn" onclick="alert('قريباً: قسم المقررات الدراسية')">عرض المواد</a>
+                <a href="#" class="btn" onclick="alert('تصفح المقررات العامة متاح للجميع.')">عرض المواد</a>
             </div>
 
-            <div class="feature-card">
-                <h3>الجداول والامتحانات</h3>
+            <!-- قسم الجداول (مقفل للزوار، يفتح للمسجلين) -->
+            <div class="feature-card" id="card-schedules">
+                <h3>الجداول وقاعات المحاضرات</h3>
                 <p>متابعة جداول المحاضرات اليومية، قاعات المحاضرات، ومواعيد الامتحانات الفصلية بدقة.</p>
-                <a href="#" class="btn" onclick="alert('قريباً: جدول المحاضرات')">عرض الجداول</a>
+                <button class="btn" id="btn-schedules" onclick="checkAccess('سجّل دخولك أولاً لعرض الجداول وقاعات المحاضرات الخاصة بالسمستر الثالث.')">عرض الجداول</button>
             </div>
 
-            <div class="feature-card">
-                <h3>معرض مشاريع الطلاب</h3>
-                <p>نافذة لعرض ومشاركة التطبيقات، مشاريع الـ Web، وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.</p>
-                <a href="#" class="btn" onclick="alert('قريباً: مشاريع الطلاب المبتكرة')">استعرض المشاريع</a>
+            <!-- قسم مشاريع الطلاب (مقفل للزوار، يفتح للمسجلين) -->
+            <div class="feature-card" id="card-projects">
+                <h3>مشاريع وابتكارات الطلاب</h3>
+                <p>نافذة حصرية لعرض ومشاركة التطبيقات، مشاريع الـ Web، وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.</p>
+                <button class="btn" id="btn-projects" onclick="checkAccess('هذا القسم خاص بالطلاب المسجلين لرفع واستعراض مشاريع التخرج.')">استعرض المشاريع</button>
             </div>
         </div>
     </div>
@@ -66,5 +72,49 @@
     <footer>
         <p>جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي | قسم تقانة المعلومات 2026</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('it_logged_user');
+            const authNavArea = document.getElementById('auth-nav-area');
+            const mainTitle = document.getElementById('main-welcome-title');
+            const mainDesc = document.getElementById('main-welcome-desc');
+            
+            const btnSchedules = document.getElementById('btn-schedules');
+            const btnProjects = document.getElementById('btn-projects');
+
+            if (currentUser) {
+                // حالة الطالب مسجل دخول
+                authNavArea.innerHTML = `
+                    <div class="user-welcome">
+                        <span>أهلاً، <b>${currentUser}</b></span>
+                        <button onclick="logoutUser()" class="btn" style="background: #e53935; padding: 4px 10px; font-size: 0.75rem;">خروج</button>
+                    </div>
+                `;
+                mainTitle.innerText = `مرحباً بك مجدداً في بوابة الـ IT، ${currentUser}!`;
+                mainDesc.innerText = `تم تفعيل حسابك الأكاديمي بنجاح. يمكنك الآن الاطلاع على الجداول الحصرية، قاعات المحاضرات، والمشاركة في لوحة مشاريع السمستر الثالث.`;
+
+                // فتح الصلاحيات للأقسام المحمية
+                btnSchedules.setAttribute("onclick", "alert('جاري فتح جداول المحاضرات وقاعات السمستر الثالث...')");
+                btnSchedules.style.background = "#0f9d58";
+                btnSchedules.innerText = "عرض الجداول الرسمية ✓";
+
+                btnProjects.setAttribute("onclick", "alert('جاري فتح معرض الابتكارات البرمجية وتطبيقات الـ APK...')");
+                btnProjects.style.background = "#0f9d58";
+                btnProjects.innerText = "معرض المشاريع الحصري ✓";
+            }
+        });
+
+        function checkAccess(msg) {
+            alert(msg);
+            window.location.href = 'login.html';
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('it_logged_user');
+            alert('تم تسجيل الخروج بنجاح.');
+            window.location.reload();
+        }
+    </script>
 </body>
 </html>
