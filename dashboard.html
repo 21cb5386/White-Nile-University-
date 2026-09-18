@@ -4,229 +4,301 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم الأكاديمية - جامعة النيل الأبيض</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #fdf6f0 0%, #faedcd 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #1a1a1a;
-            --text-muted: #777;
-            --primary-color: #ff5722;
-            --border-color: #eee;
-            --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #ff5722;
+            --primary-gradient: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            --border-color: #f1f5f9;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --radius: 20px;
         }
 
         [data-theme="dark"] {
-            --bg-gradient: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
-            --card-bg: rgba(30, 30, 30, 0.95);
-            --text-main: #f3f4f6;
-            --text-muted: #aaa;
-            --primary-color: #ff5722;
-            --border-color: #333;
-            --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #ff5722;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; margin: 0; padding: 0; }
         
         body {
             background: var(--bg-gradient);
-            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            padding: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: var(--text-main);
         }
 
-        .main-wrapper {
-            max-width: 1100px; width: 100%; margin: 0 auto;
-            background: var(--card-bg); backdrop-filter: blur(10px);
-            border-radius: 24px; box-shadow: var(--shadow); overflow: hidden;
-            display: flex; flex-direction: column; border: 1px solid var(--border-color); flex: 1;
-        }
-
-        /* شريط لوحة التحكم العلوي: الشعار يمين، والأزرار والأدوات يسار */
-        header {
-            padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);
+        .dashboard-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
             width: 100%;
+            max-width: 480px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .university-brand { display: flex; align-items: center; gap: 12px; }
-        .university-logo {
-            width: 45px; height: 45px; background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            color: white; border-radius: 12px; display: flex; justify-content: center; align-items: center;
-            font-weight: 900; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
-        }
-        .logo-area h1 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
-        .logo-area span { font-size: 0.75rem; color: var(--primary-color); font-weight: 600; display: block; }
-
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .theme-toggle-btn {
-            background: transparent; border: 2px solid var(--border-color); color: var(--text-main);
-            width: 40px; height: 40px; border-radius: 12px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+        /* الهيدر العلوي المطور */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .action-btn {
-            background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            color: white; border: none; padding: 10px 20px; border-radius: 12px;
-            font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.25s ease;
-            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.3); text-decoration: none;
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        .university-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .action-btn.secondary { background: #eef2f7; color: #333; box-shadow: none; }
-        [data-theme="dark"] .action-btn.secondary { background: #2d2d2d; color: #f3f4f6; }
-        .action-btn.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3); }
 
-        .content-body { padding: 35px; flex: 1; }
-
-        .welcome-banner {
-            background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%); color: white;
-            padding: 25px; border-radius: 18px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 25px rgba(255, 87, 34, 0.25); flex-wrap: wrap; gap: 15px;
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
         }
-        .welcome-banner h2 { font-size: 1.6rem; margin-bottom: 5px; font-weight: 800; }
-        .welcome-banner p { font-size: 0.9rem; opacity: 0.95; }
 
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .dash-card {
-            background: var(--card-bg); border: 2px solid var(--border-color); padding: 25px; border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+        .brand-info h1 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
         }
-        .dash-card h3 { font-size: 1.15rem; color: var(--text-main); margin-bottom: 15px; font-weight: 700; }
 
-        .course-list { list-style: none; }
-        .course-list li {
-            padding: 12px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-main);
+        .brand-info span {
+            font-size: 0.72rem;
+            color: var(--primary);
+            font-weight: 600;
         }
-        .course-list li:last-child { border-bottom: none; }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); }
-        .form-group input {
-            width: 100%; padding: 11px; border: 2px solid var(--border-color); border-radius: 12px;
-            outline: none; font-size: 0.9rem; background: rgba(0,0,0,0.02); color: var(--text-main);
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        [data-theme="dark"] .form-group input { background: #252525; }
-        .form-group input:focus { border-color: var(--primary-color); }
 
-        footer { text-align: center; padding: 20px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+        .icon-btn {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        [data-theme="dark"] .icon-btn { background: rgba(255, 255, 255, 0.05); }
+        .icon-btn:hover { border-color: var(--primary); }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* كارت الترحيب الفاخر */
+        .welcome-card {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 25px rgba(255, 87, 34, 0.25);
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .welcome-header h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .welcome-header p {
+            font-size: 0.82rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .student-badge-box {
+            margin-top: 18px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 16px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .student-badge-box span {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .student-badge-box strong {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            font-weight: 800;
+        }
+
+        /* قسم المقررات */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 4px;
+        }
+
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .course-item {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        [data-theme="dark"] .course-item { background: rgba(255, 255, 255, 0.02); }
+
+        .course-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .course-status {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
     </style>
 </head>
 <body data-theme="light">
 
-    <div class="main-wrapper">
-        <!-- شريط لوحة التحكم: اللوجو والشعار يمين، الأدوات وأزرار الخروج يسار -->
-        <header>
+    <div class="dashboard-container">
+        <!-- الهيدر العلوي -->
+        <header class="top-nav">
             <div class="university-brand">
-                <div class="university-logo">IT</div>
-                <div class="logo-area">
+                <div class="brand-logo">IT</div>
+                <div class="brand-info">
                     <h1>جامعة النيل الأبيض</h1>
                     <span>لوحة التحكم الأكاديمية</span>
                 </div>
             </div>
-            
             <div class="nav-actions">
-                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي">🌙</button>
-                <a href="index.html" class="action-btn secondary">الرئيسية</a>
-                <button onclick="logout()" class="action-btn danger">خروج</button>
+                <a href="index.html" class="icon-btn" title="الرئيسية">🏠</a>
+                <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
+                <a href="login.html" class="logout-btn">خروج</a>
             </div>
         </header>
 
-        <div class="content-body">
-            <div class="welcome-banner">
-                <div>
-                    <h2 id="student-name-display">مرحباً بك، بشمهندس</h2>
-                    <p id="student-semester-display">قسم تقانة المعلومات - جاري تحميل البيانات...</p>
-                </div>
-                <div style="background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 12px; text-align: center; backdrop-filter: blur(5px);">
-                    <span style="font-size: 0.75rem; display: block; opacity: 0.9;">الرقم الجامعي</span>
-                    <b id="student-id-display" style="font-size: 1.05rem; color: #fff;">IT-2026-XXXX</b>
-                </div>
+        <!-- كارت الترحيب -->
+        <div class="welcome-card">
+            <div class="welcome-header">
+                <h2>مرحباً بك، محمود عبدالله آدم محمد</h2>
+                <p>قسم تقانة المعلومات - السمستر الثاني</p>
             </div>
-
-            <div class="dashboard-grid">
-                <div class="dash-card">
-                    <h3>📚 مقرراتك الأكاديمية الحالية</h3>
-                    <ul class="course-list">
-                        <li><span>هيكل البيانات والخوارزميات</span> <b style="color: #10b981;">نشط ✓</b></li>
-                        <li><span>تطوير وتصميم الويب المتقدم</span> <b style="color: #10b981;">نشط ✓</b></li>
-                        <li><span>الشبكات وأنظمة الاتصالات</span> <b style="color: #10b981;">نشط ✓</b></li>
-                        <li><span>قواعد البيانات المتقدمة</span> <b style="color: #10b981;">نشط ✓</b></li>
-                    </ul>
-                </div>
-
-                <div class="dash-card">
-                    <h3>🚀 رفع وتقديم مشاريع الطلاب (APK / Web)</h3>
-                    <div class="form-group">
-                        <label>اسم المشروع أو تطبيق الـ APK</label>
-                        <input type="text" id="proj-title" placeholder="مثال: نظام إدارة القاعات الذكي">
-                    </div>
-                    <div class="form-group">
-                        <label>رابط المشروع (GitHub / Live URL)</label>
-                        <input type="url" id="proj-url" placeholder="https://github.com/username/project">
-                    </div>
-                    <button class="action-btn" onclick="submitProject()" style="width: 100%;">نشر المشروع في المعرض</button>
-                </div>
+            <div class="student-badge-box">
+                <span>الرقم الجامعي</span>
+                <strong>7273688-2025</strong>
             </div>
         </div>
 
-        <footer>
-            <p>جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026</p>
-        </footer>
+        <!-- المقررات الأكاديمية -->
+        <div class="section-title">
+            <span>📚</span> مقررَاتك الأكاديمية الحالية
+        </div>
+
+        <div class="courses-list">
+            <div class="course-item">
+                <span class="course-name">هيكل البيانات والخوارزميات</span>
+                <span class="course-status">✓ نشط</span>
+            </div>
+            <div class="course-item">
+                <span class="course-name">تطوير وتصميم الويب المتقدم</span>
+                <span class="course-status">✓ نشط</span>
+            </div>
+            <div class="course-item">
+                <span class="course-name">الشبكات وأنظمة الاتصالات</span>
+                <span class="course-status">✓ نشط</span>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const user = localStorage.getItem('it_logged_user');
-            const studentId = localStorage.getItem('it_logged_id') || 'IT-2026-039';
-            const semester = localStorage.getItem('it_logged_semester') || 'السمستر الثالث';
-
-            if (!user) {
-                alert('عذراً، يجب تسجيل الدخول أولاً للوصول إلى لوحة التحكم.');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            document.getElementById('student-name-display').innerText = `مرحباً بك، ${user}`;
-            document.getElementById('student-id-display').innerText = studentId;
-            document.getElementById('student-semester-display').innerText = `قسم تقانة المعلومات - ${semester}`;
-
-            const savedTheme = localStorage.getItem('it_theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        });
-
-        function submitProject() {
-            const title = document.getElementById('proj-title').value.trim();
-            const url = document.getElementById('proj-url').value.trim();
-            if (!title || !url) {
-                alert('الرجاء إدخال اسم المشروع ورابطه بشكل صحيح!');
-                return;
-            }
-            alert(`تم رفع مشروع "${title}" بنجاح وإرساله للجنة التقييم بالكلية!`);
-            document.getElementById('proj-title').value = '';
-            document.getElementById('proj-url').value = '';
-        }
-
-        function logout() {
-            localStorage.removeItem('it_logged_user');
-            localStorage.removeItem('it_logged_id');
-            localStorage.removeItem('it_logged_semester');
-            window.location.href = 'index.html';
-        }
-
         function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('it_theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
-
-        function updateThemeIcon(theme) {
-            const btn = document.getElementById('theme-toggle');
-            if (btn) { btn.innerText = theme === 'dark' ? '☀️' : '🌙'; }
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-toggle');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeBtn.textContent = '☀️';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeBtn.textContent = '🌙';
+            }
         }
     </script>
 </body>
