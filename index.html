@@ -34,17 +34,18 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 10px;
         }
 
+        /* شريط التنبيهات يتحرك بانسيابية من اليسار لليمين */
         .notice-ticker {
             background: #ff5722;
             color: white;
-            padding: 10px 20px;
-            font-size: 0.85rem;
+            padding: 10px 15px;
+            font-size: 0.8rem;
             font-weight: 700;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 8px 20px rgba(255, 87, 34, 0.2);
             overflow: hidden;
             white-space: nowrap;
@@ -53,89 +54,96 @@
             margin-right: auto;
             width: 100%;
         }
-        .notice-ticker span { display: inline-block; animation: ticker 25s linear infinite; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .notice-ticker span { 
+            display: inline-block; 
+            animation: smoothTicker 20s linear infinite; 
+        }
+        @keyframes smoothTicker { 
+            0% { transform: translateX(100%); } 
+            100% { transform: translateX(-100%); } 
+        }
 
         .main-wrapper {
             max-width: 1100px; width: 100%; margin: 0 auto;
             background: var(--card-bg); backdrop-filter: blur(10px);
-            border-radius: 24px; box-shadow: var(--shadow); overflow: hidden;
+            border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
             display: flex; flex-direction: column; border: 1px solid var(--border-color); flex: 1;
         }
 
-        /* شريط التنقل العلوي المتناسق (اللوجو يمين، الأدوات يسار) */
         header {
-            padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);
+            flex-wrap: wrap; gap: 10px;
         }
 
-        .university-brand { display: flex; align-items: center; gap: 12px; }
+        .university-brand { display: flex; align-items: center; gap: 10px; }
         .university-logo {
-            width: 45px; height: 45px; background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            color: white; border-radius: 12px; display: flex; justify-content: center; align-items: center;
-            font-weight: 900; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+            width: 40px; height: 40px; background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            color: white; border-radius: 10px; display: flex; justify-content: center; align-items: center;
+            font-weight: 900; font-size: 1rem; box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
         }
-        .logo-area h1 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
-        .logo-area span { font-size: 0.75rem; color: var(--primary-color); font-weight: 600; display: block; }
+        .logo-area h1 { font-size: 1rem; font-weight: 800; color: var(--text-main); }
+        .logo-area span { font-size: 0.7rem; color: var(--primary-color); font-weight: 600; display: block; }
 
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .theme-toggle-btn {
-            background: transparent; border: 2px solid var(--border-color); color: var(--text-main);
-            width: 40px; height: 40px; border-radius: 12px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+        .nav-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        
+        .theme-toggle-btn, .language-bar select {
+            padding: 6px 10px; border-radius: 10px; border: 2px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-main); font-size: 12px; cursor: pointer; outline: none;
         }
 
         .action-btn {
             background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            color: white; border: none; padding: 10px 22px; border-radius: 12px;
-            font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.25s ease;
+            color: white; border: none; padding: 9px 18px; border-radius: 12px;
+            font-size: 13px; font-weight: bold; cursor: pointer; 
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
             box-shadow: 0 6px 15px rgba(255, 87, 34, 0.3); text-decoration: none;
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
         }
+        .action-btn:active { transform: scale(0.95); }
+        .action-btn:hover { box-shadow: 0 10px 20px rgba(255, 87, 34, 0.4); }
+        
         .action-btn.secondary { background: #eef2f7; color: #333; box-shadow: none; }
         [data-theme="dark"] .action-btn.secondary { background: #2d2d2d; color: #f3f4f6; }
-        .action-btn.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3); }
+        .action-btn.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
 
-        .content-body { padding: 35px; }
+        .content-body { padding: 20px; }
         
         .hero-section {
-            text-align: center; margin-bottom: 30px; padding: 30px;
+            text-align: center; margin-bottom: 25px; padding: 20px;
             background: rgba(255, 167, 38, 0.05); border-radius: 16px; border: 1px dashed rgba(255, 87, 34, 0.3);
         }
-        .hero-section h2 { font-size: 1.9rem; color: var(--text-main); margin-bottom: 10px; font-weight: 800; }
-        .hero-section p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 750px; margin: 0 auto; }
+        .hero-section h2 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 8px; font-weight: 800; }
+        .hero-section p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; max-width: 750px; margin: 0 auto; }
 
-        /* الأقسام الجديدة المبتكرة */
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 20px; }
         
         .feature-card {
-            background: var(--card-bg); border: 2px solid var(--border-color); padding: 25px;
+            background: var(--card-bg); border: 2px solid var(--border-color); padding: 20px;
             border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;
             position: relative; overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s;
         }
-        .feature-card::after {
-            content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: var(--primary-color);
-        }
-        .feature-card h3 { font-size: 1.15rem; color: var(--text-main); margin-bottom: 8px; font-weight: 700; }
-        .feature-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+        .feature-card:hover { border-color: var(--primary-color); transform: translateY(-3px); }
+        .feature-card h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px; font-weight: 700; }
+        .feature-card p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5; }
 
-        /* شريط إحصائيات حية مبهر للدكاترة */
         .stats-bar {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;
-            background: rgba(255, 87, 34, 0.03); padding: 20px; border-radius: 16px; border: 1px solid var(--border-color);
-            text-align: center; margin-top: 10px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            background: rgba(255, 87, 34, 0.03); padding: 15px; border-radius: 14px; border: 1px solid var(--border-color);
+            text-align: center;
         }
-        .stat-item h4 { font-size: 1.4rem; color: var(--primary-color); font-weight: 900; }
-        .stat-item span { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .stat-item h4 { font-size: 1.2rem; color: var(--primary-color); font-weight: 900; }
+        .stat-item span { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
 
-        footer { text-align: center; padding: 20px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
-        .user-welcome-box { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 600; }
+        footer { text-align: center; padding: 15px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; font-weight: 600; }
+        .user-welcome-box { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; flex-wrap: wrap; }
     </style>
 </head>
 <body data-theme="light">
 
     <div class="notice-ticker">
-        <span>📢 تنبيه أكاديمي رسمي: تم تفعيل نظام الإرشاد الأكاديمي الذكي ورفع أحدث ملخصات مقررات السمستر الثالث. استعرض لوحة التحكم الخاصة بك الآن.</span>
+        <span id="ticker-text">📢 تنبيه أكاديمي رسمي: تم تفعيل نظام الإرشاد الأكاديمي الذكي ورفع أحدث ملخصات مقررات السمستر الثالث. استعرض لوحة التحكم الخاصة بك الآن.</span>
     </div>
 
     <div class="main-wrapper">
@@ -143,15 +151,19 @@
             <div class="university-brand">
                 <div class="university-logo">IT</div>
                 <div class="logo-area">
-                    <h1>جامعة النيل الأبيض</h1>
-                    <span>كلية علوم الحاسوب وتقانة المعلومات</span>
+                    <h1 id="uni-title">جامعة النيل الأبيض</h1>
+                    <span id="uni-sub">كلية علوم الحاسوب وتقانة المعلومات</span>
                 </div>
             </div>
             
             <div class="nav-actions">
-                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع الليلي">🌙</button>
+                <select id="lang-select" onchange="changeLanguageMain()">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع">🌙</button>
                 <div id="auth-nav-area">
-                    <a href="login.html" class="action-btn">تسجيل الدخول</a>
+                    <a href="login.html" class="action-btn" id="login-btn-text">تسجيل الدخول</a>
                 </div>
             </div>
         </header>
@@ -162,80 +174,154 @@
                 <p id="main-welcome-desc">منصة أكاديمية متكاملة مصممة لإدارة المقررات، تتبع الجداول الدراسية، وعرض مشاريع الـ Web وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.</p>
             </div>
 
-            <!-- الأقسام الحصرية الجديدة -->
             <div class="features-grid" id="services">
                 <div class="feature-card">
                     <div>
-                        <h3>🤖 الإرشاد الأكاديمي الذكي</h3>
-                        <p>نظام مساعد ذكي لمراجعة السجل الأكاديمي، توجيه الطالب للمواد المتبقية، وتجنب التعارضات.</p>
+                        <h3 id="feat-1-title">🤖 الإرشاد الأكاديمي الذكي</h3>
+                        <p id="feat-1-desc">نظام مساعد ذكي لمراجعة السجل الأكاديمي، توجيه الطالب للمواد المتبقية، وتجنب التعارضات.</p>
                     </div>
-                    <button class="action-btn secondary" onclick="alert('خاصية المرشد الأكاديمي متاحة فور تسجيل الدخول.')">بدء الاستشارة</button>
+                    <button class="action-btn secondary" id="feat-1-btn" onclick="alert('خاصية المرشد الأكاديمي متاحة فور تسجيل الدخول.')">بدء الاستشارة</button>
                 </div>
 
                 <div class="feature-card">
                     <div>
-                        <h3>📂 المستودع الرقمي للمراجع</h3>
-                        <p>مكتبة مركزية تضم شروحات مرئية، كتب مرجعية لـ السمستر الثالث، ومشاريع تخرج سابقة.</p>
+                        <h3 id="feat-2-title">📂 المستودع الرقمي للمراجع</h3>
+                        <p id="feat-2-desc">مكتبة مركزية تضم شروحات مرئية، كتب مرجعية لـ السمستر الثالث، ومشاريع تخرج سابقة.</p>
                     </div>
-                    <button class="action-btn secondary" onclick="alert('المستودع الرقمي مفتوح للتصفح الأكاديمي.')">تصفح المكتبة</button>
+                    <button class="action-btn secondary" id="feat-2-btn" onclick="alert('المستودع الرقمي مفتوح للتصفح الأكاديمي.')">تصفح المكتبة</button>
                 </div>
 
                 <div class="feature-card">
                     <div>
-                        <h3>🚀 معرض مشاريع الـ IT والـ APK</h3>
-                        <p>منصة حصرية لعرض ومشاركة التطبيقات البرمجية ومشاريع التخرج البرمجية للطلاب بفاعلية.</p>
+                        <h3 id="feat-3-title">🚀 معرض مشاريع الـ IT والـ APK</h3>
+                        <p id="feat-3-desc">منصة حصرية لعرض ومشاركة التطبيقات البرمجية ومشاريع التخرج البرمجية للطلاب بفاعلية.</p>
                     </div>
                     <button class="action-btn" id="btn-projects" onclick="checkAccess()">استعراض المعرض</button>
                 </div>
             </div>
 
-            <!-- إحصائيات حية تلفت انتباه الدكاترة -->
             <div class="stats-bar">
                 <div class="stat-item">
                     <h4>+450</h4>
-                    <span>طالب وطالبة مسجلون</span>
+                    <span id="stat-1">طالب وطالبة</span>
                 </div>
                 <div class="stat-item">
-                    <h4>24 مقرراً</h4>
-                    <span>أكاديمياً فعالاً في النظام</span>
+                    <h4>24</h4>
+                    <span id="stat-2">مقرراً أكاديمياً</span>
                 </div>
                 <div class="stat-item">
                     <h4>100%</h4>
-                    <span>استقرار السيرفر والجلسات</span>
+                    <span id="stat-3">استقرار النظام</span>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026</p>
+            <p id="footer-text">جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026</p>
         </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        const translationsMain = {
+            ar: {
+                ticker: "📢 تنبيه أكاديمي رسمي: تم تفعيل نظام الإرشاد الأكاديمي الذكي ورفع أحدث ملخصات مقررات السمستر الثالث. استعرض لوحة التحكم الخاصة بك الآن.",
+                title: "جامعة النيل الأبيض",
+                sub: "كلية علوم الحاسوب وتقانة المعلومات",
+                login: "تسجيل الدخول",
+                heroTitle: "البوابة الذكية لطلاب تقانة المعلومات",
+                heroDesc: "منصة أكاديمية متكاملة مصممة لإدارة المقررات، تتبع الجداول الدراسية، وعرض مشاريع الـ Web وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.",
+                f1Title: "🤖 الإرشاد الأكاديمي الذكي",
+                f1Desc: "نظام مساعد ذكي لمراجعة السجل الأكاديمي، توجيه الطالب للمواد المتبقية، وتجنب التعارضات.",
+                f1Btn: "بدء الاستشارة",
+                f2Title: "📂 المستودع الرقمي للمراجع",
+                f2Desc: "مكتبة مركزية تضم شروحات مرئية، كتب مرجعية لـ السمستر الثالث، ومشاريع تخرج سابقة.",
+                f2Btn: "تصفح المكتبة",
+                f3Title: "🚀 معرض مشاريع الـ IT والـ APK",
+                f3Desc: "منصة حصرية لعرض ومشاركة التطبيقات البرمجية ومشاريع التخرج البرمجية للطلاب بفاعلية.",
+                f3Btn: "استعراض المعرض",
+                s1: "طالب وطالبة", s2: "مقرراً أكاديمياً", s3: "استقرار النظام",
+                footer: "جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026",
+                dashboard: "لوحة التحكم",
+                logout: "خروج"
+            },
+            en: {
+                ticker: "📢 Official Academic Notice: Smart Academic Guidance system activated. Check your dashboard now.",
+                title: "White Nile University",
+                sub: "Faculty of Computer Science & IT",
+                login: "Sign In",
+                heroTitle: "Smart Portal for IT Students",
+                heroDesc: "An integrated academic platform designed for managing courses, tracking schedules, and showcasing student web and APK projects.",
+                f1Title: "🤖 Smart Academic Advisor",
+                f1Desc: "An intelligent assistant system to review academic records and guide students effectively.",
+                f1Btn: "Start Consultation",
+                f2Title: "📂 Digital Repository",
+                f2Desc: "A central library including visual tutorials, reference books, and graduation projects.",
+                f2Btn: "Browse Library",
+                f3Title: "🚀 IT & APK Projects Gallery",
+                f3Desc: "An exclusive platform for showcasing software applications and student projects.",
+                f3Btn: "Explore Gallery",
+                s1: "Active Students", s2: "Courses", s3: "System Uptime",
+                footer: "All Rights Reserved © White Nile University - Kosti 2026",
+                dashboard: "Dashboard",
+                logout: "Logout"
+            }
+        };
+
+        function changeLanguageMain() {
+            const lang = document.getElementById('lang-select').value;
+            localStorage.setItem('it_lang', lang);
+            applyMainLang(lang);
+        }
+
+        function applyMainLang(lang) {
+            const t = translationsMain[lang] || translationsMain.ar;
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('ticker-text').innerText = t.ticker;
+            document.getElementById('uni-title').innerText = t.title;
+            document.getElementById('uni-sub').innerText = t.sub;
+            document.getElementById('main-welcome-title').innerText = t.heroTitle;
+            document.getElementById('main-welcome-desc').innerText = t.heroDesc;
+            document.getElementById('feat-1-title').innerText = t.f1Title;
+            document.getElementById('feat-1-desc').innerText = t.f1Desc;
+            document.getElementById('feat-1-btn').innerText = t.f1Btn;
+            document.getElementById('feat-2-title').innerText = t.f2Title;
+            document.getElementById('feat-2-desc').innerText = t.f2Desc;
+            document.getElementById('feat-2-btn').innerText = t.f2Btn;
+            document.getElementById('feat-3-title').innerText = t.f3Title;
+            document.getElementById('feat-3-desc').innerText = t.f3Desc;
+            document.getElementById('footer-text').innerText = t.footer;
+            document.getElementById('stat-1').innerText = t.s1;
+            document.getElementById('stat-2').innerText = t.s2;
+            document.getElementById('stat-3').innerText = t.s3;
+
             const currentUser = localStorage.getItem('it_logged_user');
             const authNavArea = document.getElementById('auth-nav-area');
-            const mainTitle = document.getElementById('main-welcome-title');
-            const mainDesc = document.getElementById('main-welcome-desc');
-            const btnProjects = document.getElementById('btn-projects');
-
-            const savedTheme = localStorage.getItem('it_theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-
-            if (currentUser) {
+            if (!currentUser) {
+                document.getElementById('login-btn-text').innerText = t.login;
+            } else {
                 authNavArea.innerHTML = `
                     <div class="user-welcome-box">
-                        <span>أهلاً، <b>${currentUser}</b></span>
-                        <a href="dashboard.html" class="action-btn secondary" style="padding: 8px 14px; font-size: 13px;">لوحة التحكم</a>
-                        <button onclick="logoutUser()" class="action-btn danger" style="padding: 8px 14px; font-size: 13px;">خروج</button>
+                        <span>${lang === 'ar' ? 'أهلاً،' : 'Hello,'} <b>${currentUser}</b></span>
+                        <a href="dashboard.html" class="action-btn secondary" style="padding: 6px 10px; font-size: 11px;">${t.dashboard}</a>
+                        <button onclick="logoutUser()" class="action-btn danger" style="padding: 6px 10px; font-size: 11px;">${t.logout}</button>
                     </div>
                 `;
-                mainTitle.innerText = `أهلاً بك يا بشمهندس / ${currentUser}`;
-                mainDesc.innerText = `تم التحقق من هويتك الأكاديمية بنجاح. يمكنك الانتقال الفوري لـ "لوحة التحكم" لمتابعة مقرراتك ورفع مشاريعك.`;
+            }
+        }
 
-                btnProjects.onclick = () => window.location.href = 'dashboard.html';
-                btnProjects.innerText = "معرض مشاريع الكلية الحصري ✓";
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('it_logged_user');
+            const savedTheme = localStorage.getItem('it_theme') || 'light';
+            const savedLang = localStorage.getItem('it_lang') || 'ar';
+            
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+            document.getElementById('lang-select').value = savedLang;
+            applyMainLang(savedLang);
+
+            if (currentUser) {
+                document.getElementById('btn-projects').onclick = () => window.location.href = 'dashboard.html';
+                document.getElementById('btn-projects').innerText = savedLang === 'ar' ? "معرض المشاريع الحصري ✓" : "Exclusive Gallery ✓";
             }
         });
 
@@ -256,12 +342,7 @@
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.body.setAttribute('data-theme', newTheme);
             localStorage.setItem('it_theme', newTheme);
-            updateThemeIcon(newTheme);
-        }
-
-        function updateThemeIcon(theme) {
-            const btn = document.getElementById('theme-toggle');
-            if (btn) { btn.innerText = theme === 'dark' ? '☀️' : '🌙'; }
+            document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '☀️' : '🌙';
         }
     </script>
 </body>
