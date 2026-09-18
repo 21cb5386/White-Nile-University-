@@ -7,28 +7,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --primary: #ff5722;
-            --primary-gradient: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            --border-color: #f1f5f9;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        }
-
-        [data-theme="dark"] {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --card-bg: rgba(30, 41, 59, 0.95);
+            --bg-gradient: radial-gradient(circle at top right, #1e293b, #0f172a);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #ff5722;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --primary-gradient: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            --accent-glow: rgba(255, 87, 34, 0.25);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(0, 0, 0, 0.06);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #ff5722;
+            --primary-gradient: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            --accent-glow: rgba(255, 87, 34, 0.2);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
-        
+
         body {
             background: var(--bg-gradient);
             min-height: 100vh;
@@ -37,201 +40,287 @@
             align-items: center;
             padding: 15px;
             color: var(--text-main);
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
         .dashboard-container {
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 28px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
             box-shadow: var(--shadow);
             width: 100%;
             max-width: 480px;
             padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* شريط التنقل العلوي */
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--card-border);
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .university-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .brand-logo {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: var(--primary-gradient);
             color: white;
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 900;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+            font-size: 1rem;
+            box-shadow: 0 6px 16px var(--accent-glow);
             flex-shrink: 0;
+            animation: pulseGlow 3s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 var(--accent-glow); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 87, 34, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 87, 34, 0); }
         }
 
         .brand-info h1 {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 800;
             color: var(--text-main);
-            line-height: 1.2;
+            line-name: 1.2;
         }
 
         .brand-info span {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             color: var(--primary);
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .icon-btn {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
             color: var(--text-main);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-decoration: none;
-            transition: 0.2s;
+            transition: all 0.3s ease;
         }
-        [data-theme="dark"] .icon-btn { background: rgba(255, 255, 255, 0.05); }
-        .icon-btn:hover { border-color: var(--primary); }
+        [data-theme="light"] .icon-btn { background: rgba(0, 0, 0, 0.03); }
+        .icon-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
 
         .logout-btn {
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 7px 12px;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             outline: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.2s;
+            transition: all 0.3s ease;
         }
-        .logout-btn:hover { background: rgba(239, 68, 68, 0.25); }
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
 
+        /* كارت الترحيب وبطاقة الطالب الاحترافية */
         .welcome-card {
             background: var(--primary-gradient);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 24px;
             color: white;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 12px 25px rgba(255, 87, 34, 0.25);
+            box-shadow: 0 15px 35px var(--accent-glow);
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
         .welcome-header h2 {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 800;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             line-height: 1.4;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .welcome-header p {
-            font-size: 0.82rem;
-            opacity: 0.9;
-            font-weight: 500;
+            font-size: 0.85rem;
+            opacity: 0.95;
+            font-weight: 600;
         }
 
         .student-badge-box {
-            margin-top: 18px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 16px;
-            border-radius: 12px;
+            padding: 12px 18px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .student-badge-box span { font-size: 0.75rem; opacity: 0.9; }
-        .student-badge-box strong { font-size: 0.9rem; letter-spacing: 0.5px; font-weight: 800; }
+        .student-badge-box span {
+            font-size: 0.78rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
+        .student-badge-box strong {
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            font-weight: 900;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        /* قسم المقررات الأكاديمية */
         .section-title {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
+            gap: 10px;
+            font-size: 1rem;
             font-weight: 800;
             color: var(--text-main);
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .courses-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .course-item {
-            background: rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--border-color);
-            padding: 14px 16px;
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            padding: 16px 18px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        [data-theme="dark"] .course-item { background: rgba(255, 255, 255, 0.02); }
+        [data-theme="light"] .course-item { background: rgba(0, 0, 0, 0.02); }
+
+        .course-item:hover {
+            border-color: var(--primary);
+            transform: translateX(-4px);
+            background: rgba(255, 87, 34, 0.03);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .course-info-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .course-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 87, 34, 0.1);
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
 
         .course-name {
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .course-status {
-            font-size: 0.72rem;
-            font-weight: 700;
+            font-size: 0.75rem;
+            font-weight: 800;
             color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.12);
+            padding: 5px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
     </style>
 </head>
 <body>
 
     <script>
-        // تحميل الوضع المحفوظ مسبقاً لمنع أي لخبطة بين الصفحات
-        const savedTheme = localStorage.getItem('site_theme') || 'light';
+        const savedTheme = localStorage.getItem('site_theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.body.setAttribute('data-theme', savedTheme);
     </script>
 
     <div class="dashboard-container">
+        <!-- شريط التنقل -->
         <header class="top-nav">
             <div class="nav-actions">
                 <button class="logout-btn" id="logout-btn" type="button">خروج</button>
-                <button class="icon-btn" id="theme-toggle" type="button" title="الوضع الليلي">🌙</button>
+                <button class="icon-btn" id="theme-toggle" type="button" title="تبديل الوضع الليلي/النهاري">🌙</button>
                 <a href="index.html" class="icon-btn" title="الرئيسية">🏠</a>
             </div>
             <div class="university-brand">
@@ -243,32 +332,43 @@
             </div>
         </header>
 
+        <!-- بطاقة الترحيب والبيانات -->
         <div class="welcome-card">
             <div class="welcome-header">
-                <h2>مرحباً بك، جاري التحميل...</h2>
-                <p>قسم تقانة المعلومات</p>
+                <h2 id="student-welcome-title">مرحباً بك، جاري التحميل...</h2>
+                <p id="student-welcome-sub">قسم تقانة المعلومات - السمستر الثاني</p>
             </div>
             <div class="student-badge-box">
-                <span>الرقم الجامعي</span>
-                <strong>---</strong>
+                <span><span>🆔</span> الرقم الجامعي</span>
+                <strong id="student-id-val">---</strong>
             </div>
         </div>
 
+        <!-- المقررات الأكاديمية -->
         <div class="section-title">
             <span>📚</span> مقرّراتك الأكاديمية الحالية
         </div>
 
         <div class="courses-list">
             <div class="course-item">
-                <span class="course-name">هيكل البيانات والخوارزميات</span>
+                <div class="course-info-wrap">
+                    <div class="course-icon">💻</div>
+                    <span class="course-name">هيكل البيانات والخوارزميات</span>
+                </div>
                 <span class="course-status">✓ نشط</span>
             </div>
             <div class="course-item">
-                <span class="course-name">تطوير وتصميم الويب المتقدم</span>
+                <div class="course-info-wrap">
+                    <div class="course-icon">🌐</div>
+                    <span class="course-name">تطوير وتصميم الويب المتقدم</span>
+                </div>
                 <span class="course-status">✓ نشط</span>
             </div>
             <div class="course-item">
-                <span class="course-name">الشبكات وأنظمة الاتصالات</span>
+                <div class="course-info-wrap">
+                    <div class="course-icon">📡</div>
+                    <span class="course-name">الشبكات وأنظمة الاتصالات</span>
+                </div>
                 <span class="course-status">✓ نشط</span>
             </div>
         </div>
@@ -278,55 +378,48 @@
         const themeBtn = document.getElementById('theme-toggle');
         const bodyTag = document.body;
 
-        // تحديث أيقونة الزر بناءً على الوضع الحالي
-        if (bodyTag.getAttribute('data-theme') === 'dark') {
-            themeBtn.textContent = '☀️';
-        } else {
+        if (bodyTag.getAttribute('data-theme') === 'light') {
             themeBtn.textContent = '🌙';
+        } else {
+            themeBtn.textContent = '☀️';
         }
 
-        // تبديل وحفظ الوضع في ذاكرة التخزين (localStorage)
         themeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             let currentTheme = bodyTag.getAttribute('data-theme');
-            if (currentTheme === 'light') {
-                bodyTag.setAttribute('data-theme', 'dark');
-                localStorage.setItem('site_theme', 'dark');
-                themeBtn.textContent = '☀️';
-            } else {
+            if (currentTheme === 'dark') {
                 bodyTag.setAttribute('data-theme', 'light');
                 localStorage.setItem('site_theme', 'light');
                 themeBtn.textContent = '🌙';
+            } else {
+                bodyTag.setAttribute('data-theme', 'dark');
+                localStorage.setItem('site_theme', 'dark');
+                themeBtn.textContent = '☀️';
             }
         });
 
-        // الربط الديناميكي مع البيانات المسجلة عبر صفحة login.html
         document.addEventListener('DOMContentLoaded', () => {
             const loggedUser = localStorage.getItem('it_logged_user');
             const studentId = localStorage.getItem('it_logged_id');
             const semester = localStorage.getItem('it_logged_semester');
 
-            // التحقق من تسجيل الدخول
             if (!loggedUser) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            // تحديث عناصر الصفحة بالبيانات الفعلية للطالب
-            const welcomeHeader = document.querySelector('.welcome-header h2');
-            const welcomeSub = document.querySelector('.welcome-header p');
-            const studentBadgeStrong = document.querySelector('.student-badge-box strong');
+            const welcomeTitle = document.getElementById('student-welcome-title');
+            const welcomeSub = document.getElementById('student-welcome-sub');
+            const studentIdVal = document.getElementById('student-id-val');
 
-            if (welcomeHeader) welcomeHeader.innerText = `مرحباً بك، ${loggedUser}`;
+            if (welcomeTitle) welcomeTitle.innerText = `مرحباً بك، ${loggedUser}`;
             if (welcomeSub) welcomeSub.innerText = `قسم تقانة المعلومات - ${semester || 'السمستر الثاني'}`;
-            if (studentBadgeStrong) studentBadgeStrong.innerText = studentId || '---';
+            if (studentIdVal) studentIdVal.innerText = studentId || '7273688-2025';
         });
 
-        // تفعيل زر تسجيل الخروج وحذف الجلسة
         const logoutBtn = document.getElementById('logout-btn');
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             localStorage.removeItem('it_logged_user');
             localStorage.removeItem('it_logged_id');
             localStorage.removeItem('it_logged_semester');
