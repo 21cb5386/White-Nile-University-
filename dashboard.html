@@ -245,12 +245,12 @@
 
         <div class="welcome-card">
             <div class="welcome-header">
-                <h2>مرحباً بك، محمود عبدالله آدم محمد</h2>
-                <p>قسم تقانة المعلومات - السمستر الثاني</p>
+                <h2>مرحباً بك، جاري التحميل...</h2>
+                <p>قسم تقانة المعلومات</p>
             </div>
             <div class="student-badge-box">
                 <span>الرقم الجامعي</span>
-                <strong>7273688-2025</strong>
+                <strong>---</strong>
             </div>
         </div>
 
@@ -300,12 +300,36 @@
             }
         });
 
-        // تفعيل زر تسجيل الخروج بصورة مؤكدة
+        // الربط الديناميكي مع البيانات المسجلة عبر صفحة login.html
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedUser = localStorage.getItem('it_logged_user');
+            const studentId = localStorage.getItem('it_logged_id');
+            const semester = localStorage.getItem('it_logged_semester');
+
+            // التحقق من تسجيل الدخول
+            if (!loggedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // تحديث عناصر الصفحة بالبيانات الفعلية للطالب
+            const welcomeHeader = document.querySelector('.welcome-header h2');
+            const welcomeSub = document.querySelector('.welcome-header p');
+            const studentBadgeStrong = document.querySelector('.student-badge-box strong');
+
+            if (welcomeHeader) welcomeHeader.innerText = `مرحباً بك، ${loggedUser}`;
+            if (welcomeSub) welcomeSub.innerText = `قسم تقانة المعلومات - ${semester || 'السمستر الثاني'}`;
+            if (studentBadgeStrong) studentBadgeStrong.innerText = studentId || '---';
+        });
+
+        // تفعيل زر تسجيل الخروج وحذف الجلسة
         const logoutBtn = document.getElementById('logout-btn');
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            // لو صفحة الدخول باسم مختلف غير login.html غيرها هنا
+            localStorage.removeItem('it_logged_user');
+            localStorage.removeItem('it_logged_id');
+            localStorage.removeItem('it_logged_semester');
             window.location.href = 'login.html';
         });
     </script>
