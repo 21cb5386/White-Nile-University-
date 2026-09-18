@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let isLogin = true;
 let generatedOtp = "";
 let recoveryTargetEmail = "";
+let isGoogleCaptchaVerified = false;
 
 window.showToast = function(message) {
     const container = document.getElementById('toast-container');
@@ -111,6 +112,19 @@ window.checkPasswordMatch = function() {
     } else {
         matchText.innerText = "❌ كلمتا المرور غير متطابقتين!";
         matchText.style.color = "#ef4444";
+    }
+}
+
+// تفاعل كابتشا قوقل الشائعة
+window.toggleGoogleCaptcha = function() {
+    const box = document.getElementById('google-recaptcha-box');
+    if (box) {
+        isGoogleCaptchaVerified = !isGoogleCaptchaVerified;
+        if (isGoogleCaptchaVerified) {
+            box.classList.add('checked');
+        } else {
+            box.classList.remove('checked');
+        }
     }
 }
 
@@ -256,8 +270,7 @@ function startForgotPassword() {
 }
 
 function triggerRealCaptcha() {
-    const isChecked = document.getElementById('recaptcha-check').checked;
-    if (!isChecked) { alert("الرجاء تأكيد أنك لست روبوت (تحديد خانة التحقق)!"); return; }
+    if (!isGoogleCaptchaVerified) { alert("الرجاء تحديد خانة التحقق (أنا لست روبوت) أولاً!"); return; }
 
     showLoadingOverlay("جاري التحقق الأمني...");
     setTimeout(() => {
@@ -345,3 +358,4 @@ window.saveNewPassword = saveNewPassword;
 window.backToLogin = backToLogin;
 window.checkPasswordStrength = checkPasswordStrength;
 window.checkPasswordMatch = checkPasswordMatch;
+window.toggleGoogleCaptcha = toggleGoogleCaptcha;
