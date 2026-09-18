@@ -1,9 +1,11 @@
-// التحقق الذكي: لو الطالب مسجل دخول أساساً، يتم تحويله للوحة التحكم مباشرة
 document.addEventListener('DOMContentLoaded', () => {
     const loggedUser = localStorage.getItem('it_logged_user');
     if (loggedUser && window.location.pathname.includes('login.html')) {
         window.location.href = 'dashboard.html';
     }
+    const savedTheme = localStorage.getItem('it_theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
 });
 
 let isLogin = true;
@@ -18,6 +20,8 @@ const translations = {
         signupTitle: "إنشاء حساب جامعي جديد",
         signupSub: "قم بتعبئة بياناتك للانضمام للمنصة.",
         name: "الاسم الكامل",
+        universityId: "الرقم الجامعي (ID)",
+        semester: "السمستر الحالي",
         email: "البريد الإلكتروني الجامعي",
         password: "كلمة المرور",
         confirm: "تأكيد كلمة المرور",
@@ -59,6 +63,14 @@ const translations = {
     }
 };
 
+lottie.loadAnimation({
+    container: document.getElementById('lottie-animation'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
+});
+
 function changeLanguage() {
     const lang = document.getElementById('lang-select').value;
     const container = document.getElementById('main-container');
@@ -72,6 +84,8 @@ function changeLanguage() {
     
     const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
     setTxt('lbl-name', t.name);
+    setTxt('lbl-id', t.universityId);
+    setTxt('lbl-semester', t.semester);
     setTxt('lbl-email', t.email);
     setTxt('lbl-password', t.password);
     setTxt('lbl-confirm', t.confirm);
@@ -93,15 +107,20 @@ function changeLanguage() {
 
 function toggleMode() {
     isLogin = !isLogin;
-    const nameGroup = document.getElementById('name-group');
-    const confirmGroup = document.getElementById('confirm-pass-group');
+    const signupFields = document.querySelectorAll('.signup-field');
     const loginExtras = document.getElementById('login-extras');
     const strengthContainer = document.getElementById('strength-container');
     const t = translations.ar;
 
+    signupFields.forEach(field => {
+        if (isLogin) {
+            field.classList.add('hidden-view');
+        } else {
+            field.classList.remove('hidden-view');
+        }
+    });
+
     if (isLogin) {
-        if(nameGroup) nameGroup.classList.add('hidden-view');
-        if(confirmGroup) confirmGroup.classList.add('hidden-view');
         if(loginExtras) loginExtras.classList.remove('hidden-view');
         if(strengthContainer) strengthContainer.classList.add('hidden-view');
         document.getElementById('form-title').innerText = t.loginTitle;
@@ -110,8 +129,6 @@ function toggleMode() {
         document.getElementById('switch-text').innerText = t.switchInText;
         document.getElementById('switch-btn').innerText = t.linkUp;
     } else {
-        if(nameGroup) nameGroup.classList.remove('hidden-view');
-        if(confirmGroup) confirmGroup.classList.remove('hidden-view');
         if(loginExtras) loginExtras.classList.add('hidden-view');
         if(strengthContainer) strengthContainer.classList.remove('hidden-view');
         document.getElementById('form-title').innerText = t.signupTitle;
@@ -190,7 +207,6 @@ function checkPasswordMatch() {
     }
 }
 
-// شاشة التحميل الفخمة (Loading Overlay)
 function showLoadingOverlay(message) {
     let overlay = document.getElementById('loading-overlay');
     if (!overlay) {
@@ -247,12 +263,13 @@ function handleSubmit() {
             return;
         }
 
-        // إظهار التحميل والانتقال السلس التلقائي إلى لوحة التحكم بدون ضغط حسناً
         showLoadingOverlay("جاري التحقق من الاعتماد الأكاديمي...");
         
         setTimeout(() => {
             showLoadingOverlay("تم بنجاح! جاري تحويلك لوحة التحكم...");
             localStorage.setItem('it_logged_user', users[email].name);
+            localStorage.setItem('it_logged_id', users[email].studentId || 'IT-2026-039');
+            localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثالث');
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
             }, 800);
@@ -260,8 +277,13 @@ function handleSubmit() {
 
     } else {
         const name = document.getElementById('fullname').value.trim();
+        const studentId = document.getElementById('studentid').value.trim();
+        const semester = document.getElementById('semester').value.trim();
         const confirmPass = document.getElementById('confirm-pass-input').value;
+        
         if (!name) { alert(t.errName); return; }
+        if (!studentId) { alert('الرجاء إدخال الرقم الجامعي!'); return; }
+        if (!semester) { alert('الرجاء إدخال السمستر الحالي!'); return; }
         if (pass.length < 6) { alert(t.errPasswordLen); return; }
         if (pass !== confirmPass) { alert(t.errMismatch); return; }
 
@@ -273,7 +295,7 @@ function handleSubmit() {
 
         showLoadingOverlay("جاري إنشاء الحساب الأكاديمي...");
         setTimeout(() => {
-            users[email] = { name: name, pass: pass };
+            users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
             localStorage.setItem('it_platform_users', JSON.stringify(users));
             hideLoadingOverlay();
             alert(t.succSignup);
@@ -389,4 +411,17 @@ function backToLogin() {
     const realCaptchaBox = document.getElementById('real-captcha-box');
     if(captchaCheck) captchaCheck.style.display = 'none';
     if(realCaptchaBox) realCaptchaBox.style.borderColor = '#c1c1c1';
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('it_theme', newTheme);
+    updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const btn = document.getElementById('theme-toggle');
+    if (btn) { btn.innerText = theme === 'dark' ? '☀️' : '🌙'; }
 }
