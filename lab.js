@@ -16,7 +16,6 @@ const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
     const currentPath = window.location.pathname;
-
     if (currentPath.includes('dashboard.html')) {
         const loggedUser = localStorage.getItem('it_logged_user');
         if (!loggedUser) {
@@ -38,20 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
 let isLogin = true;
 let generatedOtp = "";
 let recoveryTargetEmail = "";
-let currentCaptchaCode = "";
 
-// دالة عرض رسائل Toast العصرية
 window.showToast = function(message) {
     const container = document.getElementById('toast-container');
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast-message';
-    toast.innerHTML = `<i class="fa-solid fa-circle-check fa-lg"></i> ${message}`;
+    toast.innerHTML = `<i class="fa-solid fa-circle-check fa-lg" style="color:#f97316;"></i> ${message}`;
     container.appendChild(toast);
     setTimeout(() => { toast.remove(); }, 3000);
 }
 
-// كشف كلمة المرور مؤقتاً عند الضغط والإفلات
 window.showPassword = function(inputId) {
     const input = document.getElementById(inputId);
     if (input) input.type = 'text';
@@ -64,16 +60,31 @@ window.hidePassword = function(inputId) {
 
 window.checkPasswordStrength = function(password) {
     const strengthText = document.getElementById('strength-text');
+    const bars = [document.getElementById('bar-1'), document.getElementById('bar-2'), document.getElementById('bar-3'), document.getElementById('bar-4')];
     if (!strengthText) return;
 
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (password.length >= 9) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9@$!%*?&]/.test(password)) score++;
+
+    bars.forEach((bar, index) => {
+        if (index < score) {
+            bar.style.background = score <= 2 ? '#ef4444' : score === 3 ? '#f59e0b' : '#10b981';
+        } else {
+            bar.style.background = '#e2e8f0';
+        }
+    });
+
     if (password.length === 0) {
-        strengthText.innerText = "أدخل كلمة مرور قوية (6 أحرف على الأقل)";
+        strengthText.innerText = "أدخل 6 أحرف على الأقل";
         strengthText.style.color = "#94a3b8";
-    } else if (password.length < 6) {
-        strengthText.innerText = "⚠️ كلمة المرور ضعيفة جداً (أقل من 6 أحرف)";
+    } else if (score <= 2) {
+        strengthText.innerText = "⚠️ كلمة المرور ضعيفة";
         strengthText.style.color = "#ef4444";
-    } else if (password.length < 9) {
-        strengthText.innerText = "⚡ كلمة المرور متوسطة القوة";
+    } else if (score === 3) {
+        strengthText.innerText = "⚡ كلمة المرور متوسطة";
         strengthText.style.color = "#f59e0b";
     } else {
         strengthText.innerText = "✅ كلمة المرور قوية ممتازة";
@@ -89,7 +100,7 @@ window.checkPasswordMatch = function() {
     
     if (!matchText) return;
     if (confirmPass.length === 0) {
-        matchText.innerText = "يرجى إعادة إدخال كلمة المرور للتأكيد";
+        matchText.innerText = "أعد إدخال كلمة المرور للتأكيد";
         matchText.style.color = "#94a3b8";
         return;
     }
@@ -107,6 +118,7 @@ function toggleMode() {
     isLogin = !isLogin;
     const signupFields = document.querySelectorAll('.signup-field');
     const loginExtras = document.getElementById('login-extras');
+    const barsContainer = document.getElementById('strength-bars-container');
 
     signupFields.forEach(field => {
         if (isLogin) {
@@ -115,6 +127,11 @@ function toggleMode() {
             field.classList.remove('hidden-view');
         }
     });
+
+    if (barsContainer) {
+        if (isLogin) barsContainer.classList.add('hidden-view');
+        else barsContainer.classList.remove('hidden-view');
+    }
 
     if (isLogin) {
         if(loginExtras) loginExtras.classList.remove('hidden-view');
@@ -140,12 +157,12 @@ function showLoadingOverlay(message) {
         overlay.id = 'loading-overlay';
         overlay.style.cssText = `
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 44, 89, 0.88); backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; color: white; font-family: 'Cairo', sans-serif;
         `;
         overlay.innerHTML = `
-            <div style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #14b8a6; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+            <div style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #f97316; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
             <p id="loading-text" style="margin-top: 15px; font-size: 1.05rem; font-weight: 700;">${message}</p>
         `;
         document.body.appendChild(overlay);
@@ -178,7 +195,7 @@ async function handleSubmit() {
         setTimeout(() => {
             hideLoadingOverlay();
             localStorage.setItem('it_logged_user', users[email].name);
-            localStorage.setItem('it_logged_id', users[email].studentId || '24-110000');
+            localStorage.setItem('it_logged_id', users[email].studentId || 'IT-2026-0000');
             localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثاني');
             
             showToast("تم تسجيل الدخول بنجاح! جاري تحويلك...");
@@ -219,7 +236,7 @@ async function handleSubmit() {
             localStorage.setItem('it_platform_users', JSON.stringify(users));
             hideLoadingOverlay();
             
-            showToast("تم إنشاء الحساب الأكاديمي بنجاح! يمكنك الدخول الآن.");
+            showToast("تم إنشاء الحساب الأكاديمي بنجاح!");
             setTimeout(() => { toggleMode(); }, 1200);
 
         } catch (error) {
@@ -233,57 +250,21 @@ async function handleSubmit() {
     }
 }
 
-// === استعادة كلمة المرور ===
 function startForgotPassword() {
     document.getElementById('auth-form-container').classList.add('hidden-view');
     document.getElementById('forgot-flow-container').classList.remove('hidden-view');
-    generateCaptcha();
-}
-
-function generateCaptcha() {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    currentCaptchaCode = "";
-    for (let i = 0; i < 5; i++) {
-        currentCaptchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    
-    let captchaBox = document.getElementById('captcha-display-box');
-    const stepCaptcha = document.getElementById('step-captcha');
-
-    if (!captchaBox) {
-        captchaBox = document.createElement('div');
-        captchaBox.id = 'captcha-display-box';
-        captchaBox.style.cssText = `
-            background: #e2e8f0; color: #0f766e; font-size: 1.4rem; font-weight: 900;
-            letter-spacing: 5px; text-align: center; padding: 12px; border-radius: 8px;
-            margin-bottom: 12px; user-select: none; text-decoration: line-through;
-        `;
-        stepCaptcha.insertBefore(captchaBox, stepCaptcha.firstChild);
-        
-        let inputField = document.getElementById('captcha-input');
-        if (!inputField) {
-            inputField = document.createElement('input');
-            inputField.type = 'text';
-            inputField.id = 'captcha-input';
-            inputField.placeholder = 'أدخل الرمز الظاهر بالأعلى';
-            inputField.style.cssText = 'width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); margin-bottom:10px; font-weight:700; background:var(--bg); color:var(--text); outline:none;';
-            stepCaptcha.insertBefore(inputField, stepCaptcha.children[1]);
-        }
-    }
-    captchaBox.innerText = currentCaptchaCode;
 }
 
 function triggerRealCaptcha() {
-    const userInput = document.getElementById('captcha-input');
-    if (!userInput || !userInput.value.trim()) { alert("الرجاء إدخال رمز التحقق (الكابتشا) أولاً!"); return; }
-    if (userInput.value.trim() !== currentCaptchaCode) { alert("رمز التحقق غير صحيح! حاول مرة أخرى."); generateCaptcha(); userInput.value = ""; return; }
+    const isChecked = document.getElementById('recaptcha-check').checked;
+    if (!isChecked) { alert("الرجاء تأكيد أنك لست روبوت (تحديد خانة التحقق)!"); return; }
 
-    showLoadingOverlay("جاري التحقق الأمني من أنك لست روبوت...");
+    showLoadingOverlay("جاري التحقق الأمني...");
     setTimeout(() => {
         hideLoadingOverlay();
         document.getElementById('step-captcha').classList.add('hidden-view');
         document.getElementById('step-email').classList.remove('hidden-view');
-    }, 1000);
+    }, 800);
 }
 
 function sendVerificationCode() {
@@ -294,13 +275,13 @@ function sendVerificationCode() {
     recoveryTargetEmail = email;
     generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
     
-    showLoadingOverlay("جاري إرسال رمز التحقق إلى بريدك الإلكتروني...");
+    showLoadingOverlay("جاري إرسال رمز التحقق...");
     setTimeout(() => {
         hideLoadingOverlay();
         alert("تم إرسال رمز التحقق بنجاح. رمز الـ OTP التجريبي الخاص بك هو: " + generatedOtp);
         document.getElementById('step-email').classList.add('hidden-view');
         document.getElementById('step-otp').classList.remove('hidden-view');
-    }, 1000);
+    }, 800);
 }
 
 function verifyOtpCode() {
@@ -344,8 +325,7 @@ function backToLogin() {
 
 function loadDashboardData() {
     const userName = localStorage.getItem('it_logged_user') || 'طالب تقانة المعلومات';
-    const userId = localStorage.getItem('it_logged_id') || '24-110000';
-
+    const userId = localStorage.getItem('it_logged_id') || 'IT-2026-0000';
     const waBtn = document.querySelector('.whatsapp-action-btn');
     if (waBtn) {
         const waMessage = encodeURIComponent(`مرحباً إدارة تقانة المعلومات، أنا الطالب ${userName} (الرقم الجامعي: ${userId})، وأحتاج إلى مساعدة أكاديمية.`);
@@ -353,7 +333,6 @@ function loadDashboardData() {
     }
 }
 
-// تصدير جميع الدوال للنطاق العام
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.showPassword = showPassword;
