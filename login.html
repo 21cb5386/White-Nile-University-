@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - جامعة النيل الأبيض</title>
-    <!-- ربط ملف الـ CSS الخارجي حقك -->
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <script>
-        // حقن الثيم فوراً لمنع وميض الشاشة الأبيض
         (function() {
             const savedTheme = localStorage.getItem('it_theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
 </head>
-<body>
+<body data-theme="light">
 
     <div class="container" id="main-container" dir="rtl">
         
-        <!-- شريط اختيار اللغة -->
         <div class="language-bar">
             <select id="lang-select" onchange="changeLanguage()">
                 <option value="ar">العربية</option>
@@ -27,69 +24,81 @@
             </select>
         </div>
 
-        <!-- جانب الرسوم المتحركة (Lottie) -->
         <div class="animation-side">
             <div id="lottie-animation"></div>
         </div>
 
-        <!-- جانب النموذج (تسجيل الدخول / إنشاء حساب / استعادة كلمة المرور) -->
         <div class="form-side">
             
-            <!-- حاوية نموذج الدخول والتسجيل الأساسية -->
             <div id="auth-form-container">
                 <div class="header-text">
                     <h2 id="form-title">بوابة تقانة المعلومات</h2>
                     <p id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
                 </div>
 
-                <!-- حقول إضافية لإنشاء الحساب (تظهر وتختفي ديناميكياً) -->
                 <div class="input-group signup-field hidden-view">
                     <label id="lbl-name">الاسم الكامل</label>
                     <div class="input-wrapper">
-                        <span class="input-icon">👤</span>
                         <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
+                        <span class="input-icon">👤</span>
                     </div>
                 </div>
 
                 <div class="input-group signup-field hidden-view">
                     <label id="lbl-id">الرقم الجامعي (ID)</label>
                     <div class="input-wrapper">
-                        <span class="input-icon">🆔</span>
                         <input type="text" id="studentid" placeholder="IT-2026-XXXX">
+                        <span class="input-icon">🆔</span>
                     </div>
                 </div>
 
                 <div class="input-group signup-field hidden-view">
                     <label id="lbl-semester">السمستر الحالي</label>
                     <div class="input-wrapper">
-                        <span class="input-icon">📚</span>
                         <input type="text" id="semester" placeholder="السمستر الثالث">
+                        <span class="input-icon">📚</span>
                     </div>
                 </div>
 
-                <!-- حقل البريد الإلكتروني -->
                 <div class="input-group">
                     <label id="lbl-email">البريد الإلكتروني الجامعي</label>
                     <div class="input-wrapper">
-                        <span class="input-icon">✉️</span>
                         <input type="email" id="email-input" placeholder="student@fit.edu">
+                        <span class="input-icon">✉️</span>
                     </div>
                 </div>
 
-                <!-- حقل كلمة المرور -->
+                <!-- كلمة المرور مع مؤشر القوة -->
                 <div class="input-group">
                     <label id="lbl-password">كلمة المرور</label>
                     <div class="input-wrapper">
-                        <span class="input-icon">🔒</span>
-                        <input type="password" id="pass-input" placeholder="••••••••">
-                        <!-- أيقونة إظهار وإخفاء كلمة المرور -->
-                        <svg class="toggle-password" viewBox="0 0 24 24" onmousedown="showPassword('pass-input', event)" onmouseup="hidePassword('pass-input', event)" ontouchstart="showPassword('pass-input', event)" ontouchend="hidePassword('pass-input', event)" title="اضغط مع الاستمرار لعرض كلمة المرور">
+                        <input type="password" id="pass-input" placeholder="••••••••" oninput="checkPasswordStrength(this.value)">
+                        <svg class="toggle-password" viewBox="0 0 24 24" onmousedown="showPassword('pass-input', event)" onmouseup="hidePassword('pass-input', event)" ontouchstart="showPassword('pass-input', event)" ontouchend="hidePassword('pass-input', event)" title="عرض كلمة المرور">
                             <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
                         </svg>
                     </div>
+                    <!-- شريط قياس قوة كلمة المرور (يظهر في وضع التسجيل) -->
+                    <div class="strength-meter-container signup-field hidden-view" id="strength-container">
+                        <div class="strength-bar" id="s-bar-1"></div>
+                        <div class="strength-bar" id="s-bar-2"></div>
+                        <div class="strength-bar" id="s-bar-3"></div>
+                        <div class="strength-bar" id="s-bar-4"></div>
+                    </div>
+                    <div class="strength-text signup-field hidden-view" id="strength-text">قوة كلمة المرور</div>
                 </div>
 
-                <!-- خيارات إضافية (تذكرني + نسيت كلمة المرور) -->
+                <!-- حقل تأكيد كلمة المرور (خاص بإنشاء الحساب) -->
+                <div class="input-group signup-field hidden-view">
+                    <label>تأكيد كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirm-pass-input" placeholder="••••••••" oninput="checkPasswordMatch()">
+                        <svg class="toggle-password" viewBox="0 0 24 24" onmousedown="showPassword('confirm-pass-input', event)" onmouseup="hidePassword('confirm-pass-input', event)" ontouchstart="showPassword('confirm-pass-input', event)" ontouchend="hidePassword('confirm-pass-input', event)" title="عرض كلمة المرور">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </div>
+                    <div class="match-feedback-text" id="match-feedback" style="font-size: 11px; margin-top: 3px;"></div>
+                </div>
+
                 <div class="extras" id="login-extras">
                     <label>
                         <input type="checkbox"> <span id="lbl-remember">تذكرني</span>
@@ -97,29 +106,25 @@
                     <a href="#" id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
                 </div>
 
-                <!-- زر الإرسال الأساسي -->
                 <button class="action-btn" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
 
-                <!-- زر التبديل بين تسجيل الدخول وإنشاء حساب -->
                 <div class="switch-mode">
                     <span id="switch-text">ليس لديك حساب؟</span> 
                     <a id="switch-btn" onclick="toggleMode()">سجل الآن</a>
                 </div>
 
-                <!-- رابط سريع للعودة للرئيسية -->
                 <div style="text-align: center; margin-top: 10px;">
                     <a href="index.html" id="nav-home" style="font-size: 12px; color: #777; text-decoration: none;">← العودة للصفحة الرئيسية</a>
                 </div>
             </div>
 
-            <!-- تدفق استعادة كلمة المرور (مخفي افتراضياً ويظهر عند النقر على نسيت كلمة المرور) -->
+            <!-- تدفق استعادة كلمة المرور -->
             <div id="forgot-flow-container" class="hidden-view">
                 <div class="header-text">
                     <h2>استعادة كلمة المرور</h2>
                     <p>اتبع الخطوات أدناه لاستعادة حسابك الجامعي.</p>
                 </div>
 
-                <!-- خطوة الكابتشا -->
                 <div id="step-captcha">
                     <p style="font-size: 12px; color: #555; margin-bottom: 8px;">الرجاء تأكيد التحقق:</p>
                     <div class="recaptcha-box-real" onclick="triggerRealCaptcha()">
@@ -137,44 +142,41 @@
                     </div>
                 </div>
 
-                <!-- خطوة إدخال البريد الإلكتروني -->
                 <div id="step-email" class="hidden-view" style="margin-top: 10px;">
                     <div class="input-group">
                         <label>البريد الإلكتروني الجامعي</label>
                         <div class="input-wrapper">
-                            <span class="input-icon">✉️</span>
                             <input type="email" id="recovery-email-input" placeholder="student@fit.edu">
+                            <span class="input-icon">✉️</span>
                         </div>
                     </div>
                     <button class="action-btn" onclick="sendVerificationCode()" style="margin-top: 12px; width: 100%;">إرسال رمز التحقق</button>
                 </div>
 
-                <!-- خطوة رمز الـ OTP -->
                 <div id="step-otp" class="hidden-view" style="margin-top: 10px;">
                     <div class="input-group">
                         <label>أدخل رمز التحقق المكون من 4 أرقام</label>
                         <div class="input-wrapper">
-                            <span class="input-icon">🔑</span>
                             <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="text-align: center; letter-spacing: 5px;">
+                            <span class="input-icon">🔑</span>
                         </div>
                     </div>
                     <button class="action-btn" onclick="verifyOtpCode()" style="margin-top: 12px; width: 100%;">التحقق من الرمز</button>
                 </div>
 
-                <!-- خطوة كلمة المرور الجديدة -->
                 <div id="step-newpass" class="hidden-view" style="margin-top: 10px;">
                     <div class="input-group" style="margin-bottom: 10px;">
                         <label>كلمة المرور الجديدة</label>
                         <div class="input-wrapper">
-                            <span class="input-icon">🔒</span>
                             <input type="password" id="new-pass-input" placeholder="••••••••">
+                            <span class="input-icon">🔒</span>
                         </div>
                     </div>
                     <div class="input-group">
                         <label>تأكيد كلمة المرور الجديدة</label>
                         <div class="input-wrapper">
-                            <span class="input-icon">🔒</span>
                             <input type="password" id="confirm-new-pass-input" placeholder="••••••••">
+                            <span class="input-icon">🔒</span>
                         </div>
                     </div>
                     <button class="action-btn" onclick="saveNewPassword()" style="margin-top: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">حفظ وتحديث كلمة المرور</button>
@@ -188,7 +190,6 @@
         </div>
     </div>
 
-    <!-- ربط ملف الجافاسكريبت الخارجي (lab.js) -->
     <script src="lab.js"></script>
 </body>
 </html>
