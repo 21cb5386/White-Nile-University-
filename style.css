@@ -1,250 +1,336 @@
+/* متغيرات الألوان للنظامين (فاتح ومظلم) */
+:root {
+    --bg-main: #f4f6f9;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: #e2e8f0;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --primary-blue: #2563eb;
+    --accent-glow: rgba(37, 99, 235, 0.15);
+    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] {
+    --bg-main: #07090e;
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary-blue: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.25);
+    --shadow-soft: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+}
+
 body.dashboard-body {
-    background-color: #f8fafc;
+    background-color: var(--bg-main);
     font-family: 'Cairo', sans-serif;
     margin: 0;
-    padding: 15px;
-    color: #1e293b;
+    padding: 20px;
+    color: var(--text-color);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease;
 }
+
+/* خلفيات متوهجة متحركة خفيفة */
+.bg-glow-orb {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: -1;
+    opacity: 0.2;
+}
+.orb-1 { top: -50px; right: -50px; background: var(--primary-blue); }
+.orb-2 { bottom: -50px; left: -50px; background: #10b981; }
 
 .dashboard-wrapper {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
-}
-
-/* الهيدر العلوي يظهر بثبات في المقدمة */
-.dash-top-bar {
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0;
-    padding: 15px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 20px;
 }
 
-.student-profile-summary {
+/* الهيدر العلوي الفخم */
+.dash-top-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.student-main-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
-.avatar-ring {
-    width: 48px;
-    height: 48px;
-    background: #3b82f6;
+.avatar-circle {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 26px;
+    font-weight: 900;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
     flex-shrink: 0;
 }
 
-.student-titles h2 {
-    margin: 0 0 5px 0;
-    font-size: 1.1rem;
-    color: #0f2c59;
+.student-text-data h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-color);
 }
 
-.meta-badges {
+.highlight-name {
+    color: var(--primary-blue);
+    font-weight: 900;
+}
+
+.badge-group {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
-.badge-id, .badge-semester {
-    font-size: 0.75rem;
-    background: #eff6ff;
-    color: #2563eb;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-weight: 600;
+.id-badge, .sem-badge {
+    font-size: 0.78rem;
+    background: var(--accent-glow);
+    color: var(--primary-blue);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
 }
 
-.dash-actions-header {
+/* أزرار الهيدر العلوية المتناسقة */
+.dash-top-actions {
     display: flex;
     gap: 10px;
-    width: 100%;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--card-border);
+    padding-top: 15px;
 }
 
-.nav-home-btn, .logout-btn-modern {
+.action-btn {
     flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-}
-
-.nav-home-btn {
-    background: #f1f5f9;
-    color: #475569;
-}
-
-.logout-btn-modern {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-.dashboard-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.glass-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-
-.card-icon-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.icon-box {
-    width: 36px;
-    height: 36px;
-    background: #eff6ff;
-    border-radius: 8px;
+    min-width: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid var(--card-border);
+    transition: all 0.2s ease;
 }
 
-.card-icon-title h3 {
+.home-btn {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--primary-blue);
+}
+.home-btn:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.theme-btn {
+    background: rgba(100, 116, 139, 0.08);
+    color: var(--text-color);
+}
+.theme-btn:hover {
+    background: var(--text-color);
+    color: var(--bg-main);
+}
+
+.logout-btn {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+}
+.logout-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* شبكة محتوى البطاقات */
+.dashboard-content-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.content-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* تأثير التوهج الفخم لبطاقة الواتساب */
+.glowing-card-border {
+    position: relative;
+    border: 1.5px solid rgba(37, 211, 102, 0.4);
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.12);
+}
+
+.card-header-flex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--accent-glow);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.whatsapp-bg-icon {
+    background: rgba(37, 211, 102, 0.15);
+    color: #25d366;
+}
+
+.content-card h2 {
     margin: 0;
-    font-size: 1rem;
-    color: #0f2c59;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-color);
 }
 
-.card-subtitle {
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 12px;
+.card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
 }
 
-.styled-list {
+/* قائمة المقررات */
+.subjects-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.styled-list li {
+.subjects-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 0.82rem;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.88rem;
+}
+.subjects-list li:last-child {
+    border-bottom: none;
 }
 
-.code-badge {
-    font-size: 0.7rem;
-    background: #f0fdf4;
-    color: #16a34a;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: bold;
+.sub-code {
+    font-size: 0.75rem;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 700;
 }
 
-.wa-action-btn {
+/* زر الواتساب المتوهج والناعم */
+.glow-whatsapp-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background: #25d366;
+    gap: 10px;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
     color: white;
     text-decoration: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-top: 10px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
+    animation: smoothGlowPulse 2.5s infinite;
+    transition: transform 0.2s ease;
 }
 
-.services-actions-grid {
+.glow-whatsapp-btn:hover {
+    transform: scale(1.02);
+}
+
+@keyframes smoothGlowPulse {
+    0% { box-shadow: 0 0 15px rgba(37, 211, 102, 0.3); }
+    50% { box-shadow: 0 0 28px rgba(37, 211, 102, 0.6); }
+    100% { box-shadow: 0 0 15px rgba(37, 211, 102, 0.3); }
+}
+
+/* أزرار الخدمات السريعة */
+.quick-services-grid {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.service-chip {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #334155;
-    padding: 10px;
-    border-radius: 10px;
+.service-chip-btn {
+    flex: 1;
+    min-width: 140px;
+    background: var(--accent-glow);
+    border: 1px solid var(--card-border);
+    color: var(--primary-blue);
+    padding: 11px 15px;
+    border-radius: 12px;
     font-family: 'Cairo', sans-serif;
-    font-weight: bold;
-    font-size: 0.82rem;
+    font-weight: 700;
+    font-size: 0.85rem;
     cursor: pointer;
-    text-align: right;
+    text-align: center;
+    transition: all 0.2s ease;
 }
 
-.table-container-modern {
-    overflow-x: auto;
-}
-
-.table-container-modern table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-    text-align: right;
-}
-
-.table-container-modern th, .table-container-modern td {
-    padding: 8px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.file-tag.pdf {
-    background: #fee2e2;
-    color: #dc2626;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-}
-
-.dl-btn {
-    background: #2563eb;
+.service-chip-btn:hover {
+    background: var(--primary-blue);
     color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-family: 'Cairo', sans-serif;
-    font-size: 0.75rem;
-    cursor: pointer;
+    transform: translateY(-2px);
 }
 
-/* إصلاح مكان ظهور الـ Toast لتكون بأسفل الشاشة ولا تعيق المحتوى */
-.toast-notification {
+/* إشعار Toast المنبثق */
+.toast-popup {
     position: fixed;
-    bottom: 20px;
+    bottom: 25px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: #0f2c59;
+    background: #0f172a;
     color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    transition: transform 0.3s ease;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 1000;
+    border: 1px solid rgba(255,255,255,0.1);
 }
-.toast-notification.show {
+
+.toast-popup.show {
     transform: translateX(-50%) translateY(0);
 }
