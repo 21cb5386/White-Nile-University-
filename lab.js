@@ -1,6 +1,6 @@
 // استيراد مكتبات فايربيس المطلوبة
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 // إعدادات الاتصال بقاعدة البيانات الخاصة بك
 const firebaseConfig = {
@@ -30,6 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if(langSelect) {
         langSelect.value = savedLang;
         changeLanguage();
+    }
+
+    // ربط زر الإرسال / تسجيل الدخول بـ EventListener لضمان استجابته المباشرة
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleSubmit();
+        });
+    }
+
+    // ربط رابط "نسيت كلمة المرور"
+    const forgotLnk = document.getElementById('lnk-forgot');
+    if (forgotLnk) {
+        forgotLnk.addEventListener('click', (e) => {
+            e.preventDefault();
+            startForgotPassword();
+        });
     }
 });
 
@@ -104,7 +122,8 @@ const translationsLogin = {
 };
 
 function changeLanguage() {
-    const lang = document.getElementById('lang-select').value;
+    const langSelect = document.getElementById('lang-select');
+    const lang = langSelect ? langSelect.value : 'ar';
     localStorage.setItem('it_lang', lang);
     const container = document.getElementById('main-container');
     if(container) container.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
@@ -148,13 +167,13 @@ function toggleMode() {
 }
 
 function showPassword(inputId, event) {
-    event.preventDefault();
+    if(event) event.preventDefault();
     const input = document.getElementById(inputId);
     if(input) input.type = 'text';
 }
 
 function hidePassword(inputId, event) {
-    event.preventDefault();
+    if(event) event.preventDefault();
     const input = document.getElementById(inputId);
     if(input) input.type = 'password';
 }
@@ -217,7 +236,7 @@ function checkPasswordMatch() {
 }
 
 const lottieElement = document.getElementById('lottie-animation');
-if(lottieElement) {
+if(lottieElement && typeof lottie !== 'undefined') {
     lottie.loadAnimation({
         container: lottieElement,
         renderer: 'svg',
@@ -254,10 +273,14 @@ function hideLoadingOverlay() {
     if(overlay) overlay.style.display = 'none';
 }
 
-// دالة التحقق من الرقم الجامعي في فايربيس وإنشاء/تسجيل الدخول
+// دالة التحقق من البيانات وتسجيل الدخول أو إنشاء الحساب
 async function handleSubmit() {
-    const email = document.getElementById('email-input').value.trim();
-    const pass = document.getElementById('pass-input').value;
+    const emailInput = document.getElementById('email-input');
+    const passInput = document.getElementById('pass-input');
+    
+    const email = emailInput ? emailInput.value.trim() : '';
+    const pass = passInput ? passInput.value : '';
+    
     const lang = localStorage.getItem('it_lang') || 'ar';
     const t = translationsLogin[lang] || translationsLogin.ar;
 
@@ -289,10 +312,15 @@ async function handleSubmit() {
         }, 800);
 
     } else {
-        const name = document.getElementById('fullname').value.trim();
-        const studentId = document.getElementById('studentid').value.trim();
-        const semester = document.getElementById('semester').value.trim();
-        const confirmPass = document.getElementById('confirm-pass-input').value;
+        const nameInput = document.getElementById('fullname');
+        const studentIdInput = document.getElementById('studentid');
+        const semesterInput = document.getElementById('semester');
+        const confirmPassInput = document.getElementById('confirm-pass-input');
+
+        const name = nameInput ? nameInput.value.trim() : '';
+        const studentId = studentIdInput ? studentIdInput.value.trim() : '';
+        const semester = semesterInput ? semesterInput.value.trim() : '';
+        const confirmPass = confirmPassInput ? confirmPassInput.value : '';
         
         if (!name || !studentId || !semester || !confirmPass) { alert(t.errFields); return; }
         if (pass !== confirmPass) { alert("كلمتا المرور غير متطابقتين!"); return; }
@@ -334,8 +362,10 @@ async function handleSubmit() {
 }
 
 function startForgotPassword() {
-    document.getElementById('auth-form-container').classList.add('hidden-view');
-    document.getElementById('forgot-flow-container').classList.remove('hidden-view');
+    const authForm = document.getElementById('auth-form-container');
+    const forgotFlow = document.getElementById('forgot-flow-container');
+    if (authForm) authForm.classList.add('hidden-view');
+    if (forgotFlow) forgotFlow.classList.remove('hidden-view');
 }
 
 function triggerRealCaptcha() {
@@ -347,14 +377,17 @@ function triggerRealCaptcha() {
         if(check) check.style.display = 'block';
         isCaptchaVerified = true;
         setTimeout(() => {
-            document.getElementById('step-captcha').classList.add('hidden-view');
-            document.getElementById('step-email').classList.remove('hidden-view');
+            const stepCaptcha = document.getElementById('step-captcha');
+            const stepEmail = document.getElementById('step-email');
+            if(stepCaptcha) stepCaptcha.classList.add('hidden-view');
+            if(stepEmail) stepEmail.classList.remove('hidden-view');
         }, 500);
     }, 1000);
 }
 
 function sendVerificationCode() {
-    const email = document.getElementById('recovery-email-input').value.trim();
+    const emailInput = document.getElementById('recovery-email-input');
+    const email = emailInput ? emailInput.value.trim() : '';
     let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
 
     if (!email || !users[email]) {
@@ -368,24 +401,32 @@ function sendVerificationCode() {
         recoveryTargetEmail = email;
         generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
         alert("رمز التحقق التجريبي الخاص بك هو: " + generatedOtp);
-        document.getElementById('step-email').classList.add('hidden-view');
-        document.getElementById('step-otp').classList.remove('hidden-view');
+        const stepEmail = document.getElementById('step-email');
+        const stepOtp = document.getElementById('step-otp');
+        if(stepEmail) stepEmail.classList.add('hidden-view');
+        if(stepOtp) stepOtp.classList.remove('hidden-view');
     }, 1000);
 }
 
 function verifyOtpCode() {
-    const enteredOtp = document.getElementById('otp-input').value.trim();
+    const otpInput = document.getElementById('otp-input');
+    const enteredOtp = otpInput ? otpInput.value.trim() : '';
     if (enteredOtp === generatedOtp) {
-        document.getElementById('step-otp').classList.add('hidden-view');
-        document.getElementById('step-newpass').classList.remove('hidden-view');
+        const stepOtp = document.getElementById('step-otp');
+        const stepNewPass = document.getElementById('step-newpass');
+        if(stepOtp) stepOtp.classList.add('hidden-view');
+        if(stepNewPass) stepNewPass.classList.remove('hidden-view');
     } else {
         alert("رمز التحقق غير صحيح!");
     }
 }
 
 function saveNewPassword() {
-    const newPass = document.getElementById('new-pass-input').value;
-    const confirmNewPass = document.getElementById('confirm-new-pass-input').value;
+    const newPassInput = document.getElementById('new-pass-input');
+    const confirmNewPassInput = document.getElementById('confirm-new-pass-input');
+
+    const newPass = newPassInput ? newPassInput.value : '';
+    const confirmNewPass = confirmNewPassInput ? confirmNewPassInput.value : '';
 
     if (newPass.length < 6) { alert("يجب ألا تقل كلمة المرور عن 6 أحرف!"); return; }
     if (newPass !== confirmNewPass) { alert("كلمتا المرور غير متطابقتين!"); return; }
@@ -404,14 +445,16 @@ function saveNewPassword() {
 }
 
 function backToLogin() {
-    document.getElementById('forgot-flow-container').classList.add('hidden-view');
-    document.getElementById('auth-form-container').classList.remove('hidden-view');
+    const forgotFlow = document.getElementById('forgot-flow-container');
+    const authForm = document.getElementById('auth-form-container');
+    if(forgotFlow) forgotFlow.classList.add('hidden-view');
+    if(authForm) authForm.classList.remove('hidden-view');
     isCaptchaVerified = false;
     const check = document.getElementById('captcha-check');
     if(check) check.style.display = 'none';
 }
 
-// ربط دالة التسجيل بالنافذة العامة لضمان عملها مع الـ HTML
+// تصدير الدوال للنطاق العام للاستخدام المباشر في HTML
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.changeLanguage = changeLanguage;
