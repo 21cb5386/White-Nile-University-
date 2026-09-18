@@ -3,48 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تقانة المعلومات - تسجيل الدخول</title>
+    <title>تسجيل الدخول الأكاديمي - جامعة النيل الأبيض</title>
     <!-- استدعاء مكتبة Lottie للرسوم المتحركة -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #fdf6f0 0%, #faedcd 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1a1a1a;
+            --text-muted: #777;
+            --primary-color: #ff5722;
+            --border-color: #eee;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text-main: #f3f4f6;
+            --text-muted: #aaa;
+            --primary-color: #ff5722;
+            --border-color: #333;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            max-width: 860px;
+            width: 100%;
+            flex-direction: column;
+            animation: fadeIn 0.8s ease-in-out;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* شريط التنقل العلوي المعكوس (أدوات باليسار، لجو باليمين) */
+        .top-nav-bar {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            left: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .university-brand-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mini-logo {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .mini-text h4 { font-size: 0.9rem; font-weight: 800; color: var(--text-main); }
+        .mini-text span { font-size: 0.65rem; color: var(--primary-color); display: block; }
+
+        .nav-controls-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-link-btn, .language-bar select, .theme-toggle-btn {
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .home-link-btn:hover, .language-bar select:focus, .theme-toggle-btn:hover {
+            border-color: var(--primary-color);
+        }
+
+        .animation-side {
+            background: linear-gradient(135deg, rgba(255, 237, 216, 0.5) 0%, rgba(255, 216, 177, 0.5) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            min-height: 200px;
+            margin-top: 65px;
+        }
+
+        #lottie-animation {
+            width: 100%;
+            height: 180px;
+        }
+
+        .form-side {
+            padding: 35px 30px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .header-text h2 {
+            margin: 0 0 5px 0;
+            color: var(--text-main);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .header-text p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 11px 40px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+            background: rgba(0,0,0,0.02);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        [data-theme="dark"] .input-wrapper input { background: #252525; }
+
+        .input-icon {
+            position: absolute;
+            right: 14px;
+            font-size: 15px;
+            color: #aaa;
+            pointer-events: none;
+        }
+
+        .toggle-password {
+            position: absolute;
+            left: 14px;
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            fill: #aaa;
+            transition: fill 0.2s;
+        }
+        .toggle-password:hover { fill: var(--primary-color); }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255, 87, 34, 0.15);
+        }
+
+        .strength-meter-container {
+            display: flex; gap: 5px; margin-top: 4px; height: 4px; width: 100%;
+        }
+        .strength-bar { flex: 1; background: #e0e0e0; border-radius: 2px; }
+        .strength-text, .match-feedback-text { font-size: 11px; color: var(--text-muted); margin-top: 3px; text-align: right; }
+
+        .extras {
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+        }
+        .extras label { display: flex; align-items: center; gap: 5px; color: var(--text-muted); cursor: pointer; }
+        .extras a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .extras a:hover { text-decoration: underline; }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            color: white; border: none; padding: 13px; border-radius: 12px;
+            font-size: 15px; font-weight: bold; cursor: pointer;
+            transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(255, 87, 34, 0.3);
+            margin-top: 5px; text-align: center; text-decoration: none; display: block;
+        }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(255, 87, 34, 0.4); }
+
+        .switch-mode { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+        .switch-mode a { color: var(--primary-color); font-weight: bold; cursor: pointer; text-decoration: none; }
+        .switch-mode a:hover { text-decoration: underline; }
+
+        .recaptcha-box-real {
+            background: #f9f9f9; border: 1px solid #d3d3d3; border-radius: 4px;
+            padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+            max-width: 304px; margin: 15px auto; box-shadow: 0 0 4px 1px rgba(0,0,0,0.08); cursor: pointer;
+        }
+        .recaptcha-left { display: flex; align-items: center; gap: 12px; }
+        .recaptcha-checkbox {
+            width: 28px; height: 28px; border: 2px solid #c1c1c1; border-radius: 2px;
+            background: #fff; display: flex; justify-content: center; align-items: center; position: relative;
+        }
+        .recaptcha-spinner {
+            width: 18px; height: 18px; border: 2.5px solid #f3f3f3; border-top: 2.5px solid #4d90fe;
+            border-radius: 50%; animation: spin 0.8s linear infinite; display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .recaptcha-check-icon { display: none; color: #0f9d58; font-size: 20px; font-weight: bold; }
+        .recaptcha-text { font-size: 14px; color: #222; }
+
+        .hidden-view { display: none !important; }
+
+        @media (min-width: 768px) {
+            .container { flex-direction: row; max-width: 820px; }
+            .animation-side { flex: 1; min-height: auto; margin-top: 0; }
+            #lottie-animation { height: 280px; }
+            .form-side { flex: 1; justify-content: center; padding: 35px; }
+            .top-nav-bar { top: 15px; right: 20px; left: 20px; }
+        }
+    </style>
 </head>
-<body>
+<body data-theme="light">
 
     <div class="container" id="main-container" dir="rtl">
         
-        <!-- شريط اللغة والرجوع للرئيسية -->
-        <div class="top-nav-bar" style="position: absolute; top: 15px; right: 20px; left: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10;">
-            <a href="index.html" class="home-link-btn" style="text-decoration: none; color: #2a5298; font-weight: 700; font-size: 13px; background: #fff; padding: 5px 10px; border-radius: 8px; border: 1px solid #ddd;">← الرئيسية للمنصة</a>
-            <select id="lang-select" onchange="changeLanguage()" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #ddd; background: #fff; font-size: 12px; cursor: pointer; outline: none;">
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="es">Español</option>
-            </select>
+        <!-- الشريط العلوي المعكوس (لوجو يمين، أزراع وأدوات يسار) -->
+        <div class="top-nav-bar">
+            <div class="university-brand-mini">
+                <div class="mini-logo">IT</div>
+                <div class="mini-text">
+                    <h4>جامعة النيل الأبيض</h4>
+                    <span>بوابة تقانة المعلومات</span>
+                </div>
+            </div>
+
+            <div class="nav-controls-group">
+                <a href="index.html" class="home-link-btn">الرئيسية</a>
+                <div class="language-bar">
+                    <select id="lang-select" onchange="changeLanguage()">
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
+            </div>
         </div>
 
-        <div class="animation-side" style="margin-top: 30px;">
+        <div class="animation-side">
             <div id="lottie-animation"></div>
         </div>
 
         <div class="form-side">
-            <div class="header-text">
-                <h2 id="form-title">مرحباً بك في منصة تقانة المعلومات</h2>
-                <p id="form-subtitle">الرجاء إدخال بياناتك لتسجيل الدخول.</p>
+            <div class="header-text" style="margin-top: 25px;">
+                <h2 id="form-title">بوابة تقانة المعلومات</h2>
+                <p id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
             </div>
 
             <!-- نموذج تسجيل الدخول / إنشاء الحساب -->
             <div id="auth-form-container">
+                
+                <!-- حقول إضافية للتسجيل (الاسم، الرقم الجامعي، السمستر) -->
                 <div class="input-group signup-field hidden-view" id="name-group">
                     <label id="lbl-name">الاسم الكامل</label>
                     <div class="input-wrapper">
-                        <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
+                        <input type="text" id="fullname" placeholder="مثال: محمد أحمد">
                         <span class="input-icon">👤</span>
                     </div>
                 </div>
 
+                <div class="input-group signup-field hidden-view" id="id-group">
+                    <label id="lbl-id">الرقم الجامعي (ID)</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="studentid" placeholder="مثال: IT-2026-039">
+                        <span class="input-icon">🪪</span>
+                    </div>
+                </div>
+
+                <div class="input-group signup-field hidden-view" id="semester-group">
+                    <label id="lbl-semester">السمستر الحالي</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="semester" placeholder="مثال: السمستر الثالث">
+                        <span class="input-icon">🎓</span>
+                    </div>
+                </div>
+
                 <div class="input-group">
-                    <label id="lbl-email">البريد الإلكتروني</label>
+                    <label id="lbl-email">البريد الإلكتروني الجامعي</label>
                     <div class="input-wrapper">
                         <input type="email" id="email-input" placeholder="name@example.com">
                         <span class="input-icon">✉️</span>
@@ -74,7 +363,7 @@
                 </div>
 
                 <div class="input-group signup-field hidden-view" id="confirm-pass-group">
-                    <label id="lbl-confirm">إعادة كتابة كلمة المرور</label>
+                    <label id="lbl-confirm">تأكيد كلمة المرور</label>
                     <div class="input-wrapper">
                         <input type="password" id="confirm-pass-input" placeholder="••••••••" oninput="checkPasswordMatch()">
                         <span class="input-icon">🔒</span>
@@ -102,16 +391,6 @@
                 </div>
             </div>
 
-            <!-- لوحة التحكم / شاشة النجاح وتسجيل الخروج -->
-            <div id="dashboard-view" class="dashboard-container hidden-view">
-                <h3 id="dash-welcome">أهلاً بك في منصة تقانة المعلومات!</h3>
-                <p id="dash-email-display" style="margin-bottom: 15px; color: #555;"></p>
-                <div style="display: flex; gap: 10px; flex-direction: column;">
-                    <a href="index.html" class="action-btn" style="text-decoration: none; text-align: center; background: #2a5298;">الانتقال للمنصة الرئيسية</a>
-                    <button class="action-btn" id="btn-logout" onclick="handleLogout()" style="background: #e53935;">تسجيل الخروج</button>
-                </div>
-            </div>
-
             <!-- مراحل استعادة كلمة المرور -->
             <div id="forgot-flow-container" class="hidden-view">
                 <div id="step-captcha">
@@ -122,15 +401,6 @@
                                 <span class="recaptcha-check-icon" id="captcha-check">✓</span>
                             </div>
                             <span class="recaptcha-text" id="lbl-robot">أنا لست روبوت</span>
-                        </div>
-                        <div class="recaptcha-brand">
-                            <span class="logo-icon">
-                                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16 2L4 7V15C4 22.16 9.12 28.86 16 30.5C22.88 28.86 28 22.16 28 15V7L16 2Z" fill="#1A73E8"/>
-                                    <path d="M13.5 21.5L8.5 16.5L10.28 14.72L13.5 17.94L21.72 9.72L23.5 11.5L13.5 21.5Z" fill="white"/>
-                                </svg>
-                            </span>
-                            <span style="font-size: 9px; font-weight: bold; color: #555;">reCAPTCHA</span>
                         </div>
                     </div>
                 </div>
@@ -148,7 +418,7 @@
 
                 <div id="step-otp" class="hidden-view">
                     <div class="input-group">
-                        <label id="lbl-otp">أدخل الرمز المكون من 4 أرقام المرسل لبريدك</label>
+                        <label id="lbl-otp">أدخل رمز التحقق (4 أرقام)</label>
                         <div class="input-wrapper">
                             <input type="text" id="otp-input" placeholder="1234" maxlength="4">
                             <span class="input-icon">🔑</span>
@@ -183,6 +453,7 @@
         </div>
     </div>
 
+    <!-- استدعاء ملف الجافاسكريبت الخارجي -->
     <script src="lab.js"></script>
 </body>
 </html>
