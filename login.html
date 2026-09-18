@@ -8,187 +8,271 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #0f766e;
-            --primary-dark: #115e59;
-            --bg: #f8fafc;
+            --primary: #f97316;
+            --primary-dark: #ea580c;
+            --primary-light: #ffedd5;
+            --bg: #fdfbf7;
             --card-bg: #ffffff;
             --text: #1e293b;
             --text-muted: #64748b;
-            --border: #e2e8f0;
+            --border: #fed7aa;
         }
-        .dark-mode {
-            --bg: #0b0f19;
-            --card-bg: #1f2937;
-            --text: #f9fafb;
-            --text-muted: #9ca3af;
-            --border: #374151;
-            --primary: #14b8a6;
-            --primary-dark: #0d9488;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: 0.3s; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; transition: 0.25s ease; }
         body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        
-        .top-nav-bar { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .btn-back-home { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .btn-back-home:hover { border-color: var(--primary); color: var(--primary); }
 
-        .login-card { background: var(--card-bg); width: 100%; max-width: 420px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .header-top select { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-weight: 600; cursor: pointer; }
-        h1 { font-size: 1.4rem; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
-        p.subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; }
+        .login-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 440px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(249, 115, 22, 0.08);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-header-img {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .lang-select-box {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .card-header-img img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .card-body-content {
+            padding: 30px;
+        }
+
+        h1 { font-size: 1.5rem; font-weight: 900; color: var(--text); margin-bottom: 5px; text-align: center; }
+        p.subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 25px; text-align: center; }
+
         .form-group { margin-bottom: 18px; position: relative; }
-        .form-group label { display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 8px; }
-        .input-wrapper { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); overflow: hidden; padding: 0 12px; }
-        .input-wrapper i { color: var(--text-muted); margin-left: 10px; font-size: 1rem; }
-        .input-wrapper input { width: 100%; padding: 12px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; color: var(--text); }
-        .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; user-select: none; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
         
-        .password-strength-indicator, .password-match-indicator { font-size: 0.78rem; margin-top: 5px; font-weight: 700; display: block; }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            background: #f8fafc;
+            padding: 0 14px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+        }
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+        }
 
-        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
-        .btn-submit:hover { background: var(--primary-dark); }
-        .switch-mode { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
-        .switch-mode a { color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; }
+        .input-wrapper i { color: var(--text-muted); margin-left: 10px; font-size: 0.95rem; }
+        .input-wrapper input { width: 100%; padding: 13px 0; border: none; background: transparent; outline: none; font-size: 0.92rem; color: var(--text); }
+        .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; user-select: none; }
+        .eye-icon:hover { color: var(--primary); }
+
+        .password-strength-bars {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .password-strength-indicator { font-size: 0.75rem; margin-top: 4px; font-weight: 700; display: block; color: var(--text-muted); }
+        .password-match-indicator { font-size: 0.78rem; margin-top: 5px; font-weight: 700; display: block; }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+            transition: 0.3s;
+        }
+        .btn-submit:hover { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); transform: translateY(-1px); }
+
+        .switch-mode, .back-footer { text-align: center; margin-top: 18px; font-size: 0.88rem; color: var(--text-muted); }
+        .switch-mode a, .back-footer a { color: var(--primary); font-weight: 700; text-decoration: none; cursor: pointer; }
+        .switch-mode a:hover, .back-footer a:hover { text-decoration: underline; }
+
         .hidden-view { display: none !important; }
-        .extras-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-top: 10px; }
+        .extras-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-top: 8px; margin-bottom: 15px; }
         .extras-row a { color: var(--primary); text-decoration: none; font-weight: 600; cursor: pointer; }
 
-        /* تصميم رسائل الـ Toast العصرية */
+        /* تيونست عصرية */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
-        .toast-message { background: #0f766e; color: white; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeInOut 3s ease forwards; display: flex; align-items: center; gap: 10px; }
+        .toast-message { background: #1e293b; color: #fff; border-right: 5px solid var(--primary); padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeInOut 3s ease forwards; display: flex; align-items: center; gap: 10px; }
         @keyframes fadeInOut { 0% { opacity: 0; transform: translateY(-20px); } 15% { opacity: 1; transform: translateY(0); } 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-20px); } }
     </style>
-    <script>
-        (function() {
-            if (localStorage.getItem('theme') !== 'light') { document.documentElement.classList.add('dark-mode'); }
-        })();
-    </script>
 </head>
-<body class="dark-mode" style="background-color: var(--bg);">
+<body>
 
     <div id="toast-container"></div>
 
-    <div class="top-nav-bar">
-        <a href="index.html" class="btn-back-home">
-            <i class="fa-solid fa-arrow-right"></i> الرئيسية
-        </a>
-    </div>
-
     <div class="login-card" id="main-container">
-        <div class="header-top">
+        <div class="card-header-img">
+            <select class="lang-select-box" id="lang-select">
+                <option value="ar">العربية</option>
+            </select>
+            <!-- رسمه تعبيرية ترحيبية أنيقة -->
+            <svg width="120" height="90" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="20" width="120" height="90" rx="12" fill="#fff" stroke="#f97316" stroke-width="4"/>
+                <circle cx="100" cy="55" r="20" fill="#ffedd5"/>
+                <path d="M70 90C70 78.9543 78.9543 70 90 70H110C121.046 70 130 78.9543 130 90V95H70V90Z" fill="#f97316"/>
+                <circle cx="145" cy="35" r="6" fill="#10b981"/>
+            </svg>
+        </div>
+
+        <div class="card-body-content">
             <h1 id="form-title">بوابة تقانة المعلومات</h1>
-            <select id="lang-select"><option value="ar">العربية</option></select>
-        </div>
-        <p class="subtitle" id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
+            <p class="subtitle" id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
 
-        <div id="auth-form-container">
-            <div class="form-group signup-field hidden-view">
-                <label id="lbl-name">الاسم الكامل</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="fullname" placeholder="أدخل اسمك ثلاثياً">
+            <div id="auth-form-container">
+                <div class="form-group signup-field hidden-view">
+                    <label id="lbl-name">الاسم الكامل</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="fullname" placeholder="أدخل اسمك ثلاثياً">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+
+                <div class="form-group signup-field hidden-view">
+                    <label id="lbl-id">الرقم الجامعي (ID)</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="studentid" placeholder="IT-2026-XXXX">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                </div>
+
+                <div class="form-group signup-field hidden-view">
+                    <label id="lbl-semester">السمستر الحالي</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="semester" placeholder="السمستر الثاني">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label id="lbl-email">البريد الإلكتروني الجامعي</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email-input" placeholder="student@kosti.edu.sd">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label id="lbl-password">كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="pass-input" placeholder="********" oninput="checkPasswordStrength(this.value)">
+                        <i class="fa-solid fa-eye eye-icon" 
+                           onmousedown="showPassword('pass-input')" 
+                           onmouseup="hidePassword('pass-input')" 
+                           ontouchstart="showPassword('pass-input')" 
+                           ontouchend="hidePassword('pass-input')"></i>
+                    </div>
+                    <!-- مؤشرات القوة بـ 4 شرطات -->
+                    <div class="password-strength-bars signup-field hidden-view" id="strength-bars-container">
+                        <div class="strength-bar" id="bar-1"></div>
+                        <div class="strength-bar" id="bar-2"></div>
+                        <div class="strength-bar" id="bar-3"></div>
+                        <div class="strength-bar" id="bar-4"></div>
+                    </div>
+                    <span id="strength-text" class="password-strength-indicator" style="color: #94a3b8;">أدخل 6 أحرف على الأقل</span>
+                </div>
+
+                <div class="form-group signup-field hidden-view">
+                    <label>تأكيد كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirm-pass-input" placeholder="********" oninput="checkPasswordMatch()">
+                        <i class="fa-solid fa-eye eye-icon" 
+                           onmousedown="showPassword('confirm-pass-input')" 
+                           onmouseup="hidePassword('confirm-pass-input')" 
+                           ontouchstart="showPassword('confirm-pass-input')" 
+                           ontouchend="hidePassword('confirm-pass-input')"></i>
+                    </div>
+                    <span id="match-text" class="password-match-indicator" style="color: #94a3b8;">أعد إدخال كلمة المرور للتأكيد</span>
+                </div>
+
+                <div class="extras-row" id="login-extras">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 6px;"><input type="checkbox"> <span id="lbl-remember">تذكرني</span></label>
+                    <a id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
+                </div>
+
+                <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
+
+                <div class="switch-mode">
+                    <span id="switch-text">ليس لديك حساب؟</span> 
+                    <a id="switch-btn" onclick="toggleMode()">سجل الآن</a>
+                </div>
+
+                <div class="back-footer">
+                    <a href="index.html">← العودة للصفحة الرئيسية</a>
                 </div>
             </div>
 
-            <div class="form-group signup-field hidden-view">
-                <label id="lbl-id">الرقم الجامعي (ID)</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-id-card"></i>
-                    <input type="text" id="studentid" placeholder="مثال: 24-110XXXXX">
+            <!-- واجهة استعادة كلمة المرور -->
+            <div id="forgot-flow-container" class="hidden-view">
+                <div id="step-captcha">
+                    <p style="font-size: 0.88rem; margin-bottom: 12px; font-weight: 700;">الرجاء تأكيد التحقق:</p>
+                    <div style="background: #f8fafc; border: 1.5px solid var(--border); padding: 15px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                        <span style="font-size: 0.9rem; font-weight: 700;">أنا لست روبوت</span>
+                        <input type="checkbox" id="recaptcha-check" style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
+                    </div>
+                    <button class="btn-submit" onclick="triggerRealCaptcha()">تحقق والمتابعة</button>
                 </div>
-            </div>
-
-            <div class="form-group signup-field hidden-view">
-                <label id="lbl-semester">السمستر الحالي</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-book"></i>
-                    <input type="text" id="semester" placeholder="مثال: السمستر الثاني">
+                <div id="step-email" class="hidden-view" style="margin-top: 5px;">
+                    <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">البريد الإلكتروني المسجل:</label>
+                    <input type="email" id="recovery-email-input" placeholder="student@kosti.edu.sd" style="width:100%; padding:13px; border-radius:12px; border:1.5px solid #cbd5e1; background:#f8fafc; margin-bottom:12px; outline:none;">
+                    <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label id="lbl-email">البريد الإلكتروني الجامعي</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="email" id="email-input" placeholder="student@kosti.edu.sd">
+                <div id="step-otp" class="hidden-view" style="margin-top: 5px;">
+                    <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">أدخل رمز التحقق المرسل (OTP):</label>
+                    <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="width:100%; padding:13px; border-radius:12px; border:1.5px solid #cbd5e1; background:#f8fafc; text-align:center; letter-spacing:5px; margin-bottom:12px; outline:none;">
+                    <button class="btn-submit" onclick="verifyOtpCode()">التحقق من الرمز</button>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label id="lbl-password">كلمة المرور</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="pass-input" placeholder="********" oninput="checkPasswordStrength(this.value)">
-                    <!-- زر عين فعال للضغط والإفلات -->
-                    <i class="fa-solid fa-eye eye-icon" 
-                       onmousedown="showPassword('pass-input')" 
-                       onmouseup="hidePassword('pass-input')" 
-                       ontouchstart="showPassword('pass-input')" 
-                       ontouchend="hidePassword('pass-input')"></i>
+                <div id="step-newpass" class="hidden-view" style="margin-top: 5px;">
+                    <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">كلمة المرور الجديدة:</label>
+                    <input type="password" id="new-pass-input" placeholder="********" style="width:100%; padding:13px; border-radius:12px; border:1.5px solid #cbd5e1; background:#f8fafc; margin-bottom:10px; outline:none;">
+                    <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">تأكيد كلمة المرور:</label>
+                    <input type="password" id="confirm-new-pass-input" placeholder="********" style="width:100%; padding:13px; border-radius:12px; border:1.5px solid #cbd5e1; background:#f8fafc; margin-bottom:12px; outline:none;">
+                    <button class="btn-submit" onclick="saveNewPassword()">حفظ وتحديث كلمة المرور</button>
                 </div>
-                <span id="strength-text" class="password-strength-indicator" style="color: #94a3b8;">أدخل كلمة مرور قوية (6 أحرف على الأقل)</span>
-            </div>
-
-            <div class="form-group signup-field hidden-view">
-                <label>تأكيد كلمة المرور</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="confirm-pass-input" placeholder="********" oninput="checkPasswordMatch()">
-                    <i class="fa-solid fa-eye eye-icon" 
-                       onmousedown="showPassword('confirm-pass-input')" 
-                       onmouseup="hidePassword('confirm-pass-input')" 
-                       ontouchstart="showPassword('confirm-pass-input')" 
-                       ontouchend="hidePassword('confirm-pass-input')"></i>
+                <div class="switch-mode" style="margin-top: 15px;">
+                    <a onclick="backToLogin()">← العودة لصفحة تسجيل الدخول</a>
                 </div>
-                <span id="match-text" class="password-match-indicator" style="color: #94a3b8;">يرجى إعادة إدخال كلمة المرور للتأكيد</span>
-            </div>
-
-            <div class="extras-row" id="login-extras">
-                <label><input type="checkbox"> <span id="lbl-remember">تذكرني</span></label>
-                <a id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
-            </div>
-
-            <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
-
-            <div class="switch-mode">
-                <span id="switch-text">ليس لديك حساب؟</span> 
-                <a id="switch-btn" onclick="toggleMode()">سجل الآن</a>
-            </div>
-        </div>
-
-        <div id="forgot-flow-container" class="hidden-view">
-            <h3 style="margin-bottom: 15px; color: var(--primary);">استعادة كلمة المرور</h3>
-            <div id="step-captcha">
-                <p style="font-size: 0.85rem; margin-bottom: 8px;">أدخل رموز التحقق لتأكيد أنك لست روبوت:</p>
-                <button class="btn-submit" onclick="triggerRealCaptcha()" style="margin-top: 5px;">تحقق من الرمز</button>
-            </div>
-            <div id="step-email" class="hidden-view" style="margin-top: 5px;">
-                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">البريد الإلكتروني المسجل:</label>
-                <input type="email" id="recovery-email-input" placeholder="student@kosti.edu.sd" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
-                <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
-            </div>
-            <div id="step-otp" class="hidden-view" style="margin-top: 5px;">
-                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">أدخل رمز التحقق المرسل (OTP):</label>
-                <input type="text" id="otp-input" placeholder="1234" maxlength="4" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); text-align:center; letter-spacing:5px; margin-bottom:10px; outline:none;">
-                <button class="btn-submit" onclick="verifyOtpCode()">التحقق من الرمز</button>
-            </div>
-            <div id="step-newpass" class="hidden-view" style="margin-top: 5px;">
-                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">كلمة المرور الجديدة:</label>
-                <input type="password" id="new-pass-input" placeholder="********" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
-                <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">تأكيد كلمة المرور:</label>
-                <input type="password" id="confirm-new-pass-input" placeholder="********" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
-                <button class="btn-submit" onclick="saveNewPassword()">حفظ وتحديث كلمة المرور</button>
-            </div>
-            <div class="switch-mode" style="margin-top: 15px;">
-                <a onclick="backToLogin()">العودة لتسجيل الدخول</a>
             </div>
         </div>
     </div>
 
-    <script>
-        if (localStorage.getItem('theme') !== 'light') { document.body.classList.add('dark-mode'); }
-    </script>
     <script type="module" src="lab.js"></script>
 </body>
 </html>
