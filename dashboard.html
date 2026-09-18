@@ -3,106 +3,577 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الذكية - تقانة المعلومات</title>
-    <link rel="stylesheet" href="style.css">
+    <title>لوحة تحكم الطالب الاحترافية - متجر كوستي الالكتروني</title>
+    <!-- خط Cairo المميز -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('it_theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        })();
-    </script>
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --primary-color: #0f766e;
+            --primary-gradient: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+            --primary-hover: #115e59;
+            --sidebar-hover: #f0fdf4;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode {
+            --bg-color: #0b0f19;
+            --sidebar-bg: #111827;
+            --card-bg: #1f2937;
+            --text-color: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary-color: #14b8a6;
+            --primary-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            --primary-hover: #0d9488;
+            --sidebar-hover: #374151;
+            --border-color: #374151;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* القائمة الجانبية */
+        aside {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 25px 20px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 15px;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 18px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--sidebar-hover);
+            color: var(--primary-color);
+        }
+
+        /* المحتوى الرئيسي */
+        main {
+            flex-grow: 1;
+            margin-right: 280px;
+            padding: 30px;
+        }
+
+        /* رأس الهوية الأكاديمية */
+        .student-hero-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary-gradient);
+        }
+
+        .profile-main-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.3);
+        }
+
+        .text-info h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 6px;
+        }
+
+        .academic-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge-tag {
+            background: rgba(15, 118, 110, 0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* أزرار التحكم */
+        .action-buttons-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-control {
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            background: var(--card-bg);
+            color: var(--text-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .btn-control:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-danger-custom {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        .dark-mode .btn-danger-custom {
+            background-color: rgba(220, 38, 38, 0.15);
+            color: #fca5a5;
+            border-color: #7f1d1d;
+        }
+
+        .btn-danger-custom:hover {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        /* إحصائيات سريعة */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: rgba(15, 118, 110, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-data h4 {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }
+
+        .stat-data span {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        /* شبكة المحتوى الأساسية */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .course-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 15px;
+            background: rgba(0,0,0,0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .course-row {
+            background: rgba(255,255,255,0.01);
+        }
+
+        .course-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .course-code-badge {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .whatsapp-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+            transition: background-color 0.2s;
+        }
+
+        .whatsapp-action-btn:hover {
+            background-color: #20ba5a;
+        }
+
+        .btn-quick-service {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+
+        .btn-quick-service:hover {
+            background: var(--primary-hover);
+        }
+
+        @media (max-width: 992px) {
+            aside {
+                display: none;
+            }
+            main {
+                margin-right: 0;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-<body class="dashboard-body">
+<body>
 
-    <!-- خلفية تفاعلية متوهجة -->
-    <div class="bg-glow-orb orb-1"></div>
-    <div class="bg-glow-orb orb-2"></div>
+    <!-- القائمة الجانبية الاحترافية -->
+    <aside>
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-graduation-cap fa-lg"></i> متجر كوستي التقني
+        </div>
+        <ul class="sidebar-menu" id="sidebar-menu">
+            <li><a href="#" class="active" data-page="home"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
+            <li><a href="#" data-page="schedule"><i class="fa-solid fa-calendar-days"></i> الجدول الدراسي</a></li>
+            <li><a href="#" data-page="courses"><i class="fa-solid fa-book-open"></i> المقررات الحالية</a></li>
+            <li><a href="#" data-page="records"><i class="fa-solid fa-chart-pie"></i> السجل الأكاديمي</a></li>
+            <li><a href="#" data-page="notifications"><i class="fa-solid fa-bell"></i> الإشعارات والتعاميم</a></li>
+            <li><a href="#" data-page="settings"><i class="fa-solid fa-user-gear"></i> إعدادات الحساب</a></li>
+        </ul>
+    </aside>
 
-    <div class="dashboard-wrapper">
-        
-        <!-- الهيدر العلوي الفخم -->
-        <header class="dash-top-card">
-            <div class="student-main-info">
-                <div class="avatar-circle">م</div>
-                <div class="student-text-data">
-                    <h1>مرحباً، <span class="highlight-name">محمود عبدالله ادم محمد</span></h1>
-                    <div class="badge-group">
-                        <span class="id-badge">🆔 الرقم الجامعي: 11086250-24</span>
-                        <span class="sem-badge">📚 السمستر الثاني</span>
+    <!-- المحتوى الرئيسي -->
+    <main>
+        <!-- رأس الهوية الأكاديمية -->
+        <div class="student-hero-card">
+            <div class="profile-main-info">
+                <div class="avatar-box">م</div>
+                <div class="text-info">
+                    <h1>مرحباً، محمود عبدالله ادم محمد</h1>
+                    <div class="academic-badges">
+                        <span class="badge-tag"><i class="fa-solid fa-id-card"></i> الرقم الجامعي: 11086250-24</span>
+                        <span class="badge-tag"><i class="fa-solid fa-layer-group"></i> السمستر الثاني</span>
+                        <span class="badge-tag"><i class="fa-solid fa-laptop-code"></i> تقانة المعلومات</span>
                     </div>
                 </div>
             </div>
 
-            <!-- أزرار التحكم العلوي (الرئيسية + الوضع الداكن + تسجيل الخروج) -->
-            <div class="dash-top-actions">
-                <a href="index.html" class="action-btn home-btn" title="العودة للرئيسية">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span>الرئيسية</span>
-                </a>
-                <button onclick="toggleThemeMode()" class="action-btn theme-btn" id="theme-toggle-btn" title="تغيير الوضع المظلم">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <span>الوضع الليلي</span>
+            <!-- أزرار التحكم -->
+            <div class="action-buttons-group">
+                <button class="btn-control" id="theme-toggle">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i> <span id="theme-text">الوضع الداكن</span>
                 </button>
-                <button onclick="logoutUser()" class="action-btn logout-btn" title="تسجيل الخروج">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    <span>خروج</span>
+                <a href="#" class="btn-control" id="home-btn">
+                    <i class="fa-solid fa-house"></i> الرئيسية
+                </a>
+                <button class="btn-control btn-danger-custom" id="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> خروج
                 </button>
             </div>
-        </header>
+        </div>
+
+        <!-- شريط الإحصائيات السريعة -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
+                <div class="stat-data">
+                    <h4>المقررات المسجلة</h4>
+                    <span>4 مقررات</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-award"></i></div>
+                <div class="stat-data">
+                    <h4>الحالة الدراسية</h4>
+                    <span style="color: #10b981;">منتظم (نشط)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <div class="stat-data">
+                    <h4>العام الأكاديمي</h4>
+                    <span>2025 - 2026</span>
+                </div>
+            </div>
+        </div>
 
         <!-- شبكة المحتوى -->
-        <div class="dashboard-content-grid">
-            
-            <!-- بطاقة الجدول الدراسي -->
-            <div class="content-card">
-                <div class="card-header-flex">
-                    <div class="card-icon">📚</div>
-                    <h2>الجدول الدراسي والمقررات الحالية</h2>
+        <div class="dashboard-grid">
+            <!-- الجدول الدراسي والمقررات الحالية -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-list-check"></i> الجدول الدراسي والمقررات الحالية
                 </div>
-                <p class="card-desc">مقررات فصل تقانة المعلومات:</p>
-                <ul class="subjects-list">
-                    <li><span>هياكل البيانات والخوارزميات المتقدمة</span> <span class="sub-code">IT-301</span></li>
-                    <li><span>شبكات الحاسوب وتوجيه البيانات</span> <span class="sub-code">IT-302</span></li>
-                    <li><span>تطوير واجهات الويب (Frontend)</span> <span class="sub-code">IT-303</span></li>
-                    <li><span>أنظمة قواعد البيانات المتقدمة</span> <span class="sub-code">IT-304</span></li>
-                </ul>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">مقررات فصل تقانة المعلومات:</p>
+                
+                <div class="course-row">
+                    <span class="course-name">هياكل البيانات والخوارزميات المتقدمة</span>
+                    <span class="course-code-badge">IT-301</span>
+                </div>
+                <div class="course-row">
+                    <span class="course-name">شبكات الحاسوب وتوجيه البيانات</span>
+                    <span class="course-code-badge">IT-302</span>
+                </div>
+                <div class="course-row">
+                    <span class="course-name">تطوير واجهات الويب (Frontend)</span>
+                    <span class="course-code-badge">IT-303</span>
+                </div>
+                <div class="course-row">
+                    <span class="course-name">أنظمة قواعد البيانات المتقدمة</span>
+                    <span class="course-code-badge">IT-304</span>
+                </div>
             </div>
 
-            <!-- بطاقة الواتساب الفخمة مع زر متوهج برقمك -->
-            <div class="content-card glowing-card-border">
-                <div class="card-header-flex">
-                    <div class="card-icon whatsapp-bg-icon">💬</div>
-                    <h2>الدعم الفني والمساعد الأكاديمي</h2>
+            <!-- الدعم الفني والخدمات الأكاديمية -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-headset"></i> الدعم الفني والمساعد الأكاديمي
                 </div>
-                <p class="card-desc">تواصل فوري ومباشر مع الإدارة عبر الواتساب للاستفسارات:</p>
-                <a href="https://wa.me/249900623733?text=مرحباً%20إدارة%20تقانة%20المعلومات،%20أنا%20الطالب%20محمود%20عبدالله%20(الرقم:%2011086250-24)." target="_blank" class="glow-whatsapp-btn">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    <span>التواصل عبر واتساب الكلية</span>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">تواصل فوري ومباشر مع الإدارة عبر الواتساب للاستفسارات:</p>
+                
+                <!-- زر الواتساب -->
+                <a href="https://wa.me/249900623733" target="_blank" class="whatsapp-action-btn">
+                    <i class="fa-brands fa-whatsapp fa-xl"></i> التواصل عبر واتساب الكلية
                 </a>
-            </div>
 
-            <!-- بطاقة الخدمات الأكاديمية السريعة -->
-            <div class="content-card">
-                <div class="card-header-flex">
-                    <div class="card-icon">⚡</div>
-                    <h2>الخدمات الأكاديمية السريعة</h2>
+                <div class="card-title" style="margin-top: 25px;">
+                    <i class="fa-solid fa-bolt"></i> الخدمات الأكاديمية السريعة
                 </div>
-                <p class="card-desc">إرسال الطلبات الإدارية بضغطة زر واحدة:</p>
-                <div class="quick-services-grid">
-                    <button onclick="showToast('تم إرسال طلب إفادة قيد بنجاح')" class="service-chip-btn">📄 طلب إفادة قيد</button>
-                    <button onclick="showToast('تم إرسال طلب الشهادة بنجاح')" class="service-chip-btn">🎓 شهادة قيد للرئاسة</button>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">إرسال الطلبات الإدارية بضغطة زر واحدة:</p>
+
+                <div class="course-row">
+                    <span class="course-name">📄 طلب إفادة قيد</span>
+                    <button class="btn-quick-service" onclick="handleServiceRequest('إفادة قيد')">إرسال</button>
+                </div>
+                <div class="course-row">
+                    <span class="course-name">🎓 شهادة قيد للرئاسة</span>
+                    <button class="btn-quick-service" onclick="handleServiceRequest('شهادة قيد للرئاسة')">إرسال</button>
                 </div>
             </div>
-
         </div>
-    </div>
+    </main>
 
-    <!-- إشعار Toast تفاعلي -->
-    <div id="toast-notification" class="toast-popup">
-        <span id="toast-text">تم تنفيذ العملية بنجاح</span>
-    </div>
+    <!-- الأكواد البرمجية التفاعلية المحدثة والمنسقة -->
+    <script>
+        // 1. تفعيل وحفظ الوضع الداكن تلقائياً
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
 
-    <script src="lab.js"></script>
+        // التحقق من حالة الوضع المفظلة مسبقاً
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.textContent = 'الوضع الفاتح';
+        }
+
+        themeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            if (isDark) {
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'الوضع الفاتح';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'الوضع الداكن';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // 2. زر الرئيسية (يعيد تحميل الصفحة أو التمرير للأعلى بسلاسة)
+        const homeBtn = document.getElementById('home-btn');
+        homeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 3. تفعيل زر تسجيل الخروج بكفاءة
+        const logoutBtn = document.getElementById('logout-btn');
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
+                alert('تم تسجيل الخروج بنجاح');
+                // يمكنك هنا توجيه المستخدم لصفحة تسجيل الدخول، مثال:
+                // window.location.href = 'login.html';
+            }
+        });
+
+        // 4. تفاعل أزرار القائمة الجانبية (Sidebar Active State)
+        const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                sidebarLinks.forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+                
+                const pageName = this.getAttribute('data-page');
+                // يمكنك تخصيص إجراء لكل صفحة عند الضغط عليها
+                if(pageName !== 'home') {
+                    console.text || console.log('تم الانتقال إلى قسم: ' + this.textContent.trim());
+                }
+            });
+        });
+
+        // 5. دالة معالجة الخدمات السريعة بكفاءة واحترافية
+        function handleServiceRequest(serviceName) {
+            // يمكن ربطها لاحقاً بـ API أو قاعدة بيانات حقيقية
+            if (confirm(`هل أنت متأكد من إرسال طلب (${serviceName})؟`)) {
+                setTimeout(() => {
+                    alert(`تم إرسال طلب (${serviceName}) بنجاح إلى شؤون الطلاب.`);
+                }, 300);
+            }
+        }
+    </script>
 </body>
 </html>
