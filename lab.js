@@ -4,18 +4,26 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'dashboard.html';
     }
     const savedTheme = localStorage.getItem('it_theme') || 'light';
+    const savedLang = localStorage.getItem('it_lang') || 'ar';
     document.body.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
+    const themeBtn = document.getElementById('theme-toggle');
+    if(themeBtn) themeBtn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+    
+    const langSelect = document.getElementById('lang-select');
+    if(langSelect) {
+        langSelect.value = savedLang;
+        changeLanguage();
+    }
 });
 
 let isLogin = true;
-let isCaptchaVerified = false;
-let generatedOtp = "";
-let recoveryTargetEmail = "";
 
-const translations = {
+const translationsLogin = {
     ar: {
-        loginTitle: "بوابة تقانة المعلومات - جامعة النيل الأبيض",
+        miniTitle: "جامعة النيل الأبيض",
+        miniSub: "بوابة تقانة المعلومات",
+        home: "الرئيسية",
+        loginTitle: "بوابة تقانة المعلومات",
         loginSub: "تسجيل الدخول الأكاديمي للطلاب.",
         signupTitle: "إنشاء حساب جامعي جديد",
         signupSub: "قم بتعبئة بياناتك للانضمام للمنصة.",
@@ -24,7 +32,6 @@ const translations = {
         semester: "السمستر الحالي",
         email: "البريد الإلكتروني الجامعي",
         password: "كلمة المرور",
-        confirm: "تأكيد كلمة المرور",
         remember: "تذكرني",
         forgot: "نسيت كلمة المرور؟",
         btnIn: "تسجيل الدخول",
@@ -33,84 +40,79 @@ const translations = {
         switchUpText: "لديك حساب بالفعل؟",
         linkUp: "سجل الآن",
         linkIn: "سجل دخولك",
-        robotLabel: "أنا لست روبوت",
-        sendCodeBtn: "إرسال رمز التحقق",
-        verifyCodeBtn: "التحقق من الرمز",
-        resetBtn: "إعادة تعيين كلمة المرور",
-        backLogin: "العودة لتسجيل الدخول",
-        lblRecEmail: "أدخل بريدك الإلكتروني المسجل",
-        lblOtpText: "أدخل رمز التحقق (4 أرقام)",
-        lblNewPass: "كلمة المرور الجديدة",
-        lblConfirmNewPass: "تأكيد كلمة المرور الجديدة",
-        strengthWeak: "ضعيفة",
-        strengthFair: "مقبولة",
-        strengthGood: "جيدة",
-        strengthStrong: "قوية جداً",
-        matchError: "كلمتا المرور غير متطابقتين",
-        matchSuccess: "كلمتا المرور متطابقتان ✓",
         errFields: "الرجاء ملء جميع الحقول المطلوبة!",
-        errEmail: "الرجاء إدخال بريد صالح!",
-        errName: "الرجاء إدخال الاسم الكامل!",
-        errPasswordLen: "يجب ألا تقل كلمة المرور عن 6 أحرف!",
-        errMismatch: "كلمتا المرور غير متطابقتين!",
-        errAlreadyExists: "هذا البريد مسجل مسبقاً!",
         errNotFound: "الحساب غير موجود، يرجى إنشاء حساب جديد!",
         errWrongPass: "كلمة المرور غير صحيحة!",
-        errEmailNotRegistered: "هذا البريد غير مسجل في النظام!",
-        errInvalidOtp: "رمز التحقق غير صحيح!",
+        errAlreadyExists: "هذا البريد مسجل مسبقاً!",
         succSignup: "تم إنشاء الحساب الأكاديمي بنجاح!",
-        succLogin: "تم تسجيل الدخول بنجاح، جاري تحويلك لوحة التحكم..."
+        loadLogin: "جاري التحقق من الاعتماد الأكاديمي...",
+        loadRedirect: "تم بنجاح! جاري تحويلك لوحة التحكم...",
+        loadSignup: "جاري إنشاء الحساب الأكاديمي..."
+    },
+    en: {
+        miniTitle: "White Nile Univ",
+        miniSub: "IT Portal",
+        home: "Home",
+        loginTitle: "IT Student Portal",
+        loginSub: "Student Academic Sign In.",
+        signupTitle: "Create University Account",
+        signupSub: "Fill in your details to join the platform.",
+        name: "Full Name",
+        universityId: "University ID",
+        semester: "Current Semester",
+        email: "University Email",
+        password: "Password",
+        remember: "Remember me",
+        forgot: "Forgot Password?",
+        btnIn: "Sign In",
+        btnUp: "Create Account",
+        switchInText: "Don't have an account?",
+        switchUpText: "Already have an account?",
+        linkUp: "Sign Up",
+        linkIn: "Sign In",
+        errFields: "Please fill in all required fields!",
+        errNotFound: "Account not found, please sign up!",
+        errWrongPass: "Incorrect password!",
+        errAlreadyExists: "This email is already registered!",
+        succSignup: "Account created successfully!",
+        loadLogin: "Verifying academic credentials...",
+        loadRedirect: "Success! Redirecting to dashboard...",
+        loadSignup: "Creating academic account..."
     }
 };
 
-lottie.loadAnimation({
-    container: document.getElementById('lottie-animation'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
-});
-
 function changeLanguage() {
     const lang = document.getElementById('lang-select').value;
+    localStorage.setItem('it_lang', lang);
     const container = document.getElementById('main-container');
     if(container) container.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
     
-    const t = translations[lang] || translations.ar;
-    const titleEl = document.getElementById('form-title');
-    const subEl = document.getElementById('form-subtitle');
-    if(titleEl) titleEl.innerText = isLogin ? t.loginTitle : t.signupTitle;
-    if(subEl) subEl.innerText = isLogin ? t.loginSub : t.signupSub;
+    const t = translationsLogin[lang] || translationsLogin.ar;
     
     const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
+    setTxt('uni-mini-title', t.miniTitle);
+    setTxt('uni-mini-sub', t.miniSub);
+    setTxt('nav-home', t.home);
+    setTxt('form-title', isLogin ? t.loginTitle : t.signupTitle);
+    setTxt('form-subtitle', isLogin ? t.loginSub : t.signupSub);
     setTxt('lbl-name', t.name);
     setTxt('lbl-id', t.universityId);
     setTxt('lbl-semester', t.semester);
     setTxt('lbl-email', t.email);
     setTxt('lbl-password', t.password);
-    setTxt('lbl-confirm', t.confirm);
     setTxt('lbl-remember', t.remember);
     setTxt('lnk-forgot', t.forgot);
     setTxt('submit-btn', isLogin ? t.btnIn : t.btnUp);
     setTxt('switch-text', isLogin ? t.switchInText : t.switchUpText);
     setTxt('switch-btn', isLogin ? t.linkUp : t.linkIn);
-    setTxt('lbl-robot', t.robotLabel);
-    setTxt('btn-send-code', t.sendCodeBtn);
-    setTxt('btn-verify-otp', t.verifyCodeBtn);
-    setTxt('btn-save-pass', t.resetBtn);
-    setTxt('back-to-login', t.backLogin);
-    setTxt('lbl-recovery-email', t.lblRecEmail);
-    setTxt('lbl-otp', t.lblOtpText);
-    setTxt('lbl-new-pass', t.lblNewPass);
-    setTxt('lbl-confirm-new-pass', t.lblConfirmNewPass);
 }
 
 function toggleMode() {
     isLogin = !isLogin;
     const signupFields = document.querySelectorAll('.signup-field');
     const loginExtras = document.getElementById('login-extras');
-    const strengthContainer = document.getElementById('strength-container');
-    const t = translations.ar;
+    const lang = localStorage.getItem('it_lang') || 'ar';
+    const t = translationsLogin[lang] || translationsLogin.ar;
 
     signupFields.forEach(field => {
         if (isLogin) {
@@ -122,7 +124,6 @@ function toggleMode() {
 
     if (isLogin) {
         if(loginExtras) loginExtras.classList.remove('hidden-view');
-        if(strengthContainer) strengthContainer.classList.add('hidden-view');
         document.getElementById('form-title').innerText = t.loginTitle;
         document.getElementById('form-subtitle').innerText = t.loginSub;
         document.getElementById('submit-btn').innerText = t.btnIn;
@@ -130,7 +131,6 @@ function toggleMode() {
         document.getElementById('switch-btn').innerText = t.linkUp;
     } else {
         if(loginExtras) loginExtras.classList.add('hidden-view');
-        if(strengthContainer) strengthContainer.classList.remove('hidden-view');
         document.getElementById('form-title').innerText = t.signupTitle;
         document.getElementById('form-subtitle').innerText = t.signupSub;
         document.getElementById('submit-btn').innerText = t.btnUp;
@@ -151,61 +151,13 @@ function hidePassword(inputId, event) {
     if(input) input.type = 'password';
 }
 
-function checkPasswordStrength(password) {
-    const strengthContainer = document.getElementById('strength-container');
-    const strengthLabel = document.getElementById('strength-label');
-    if (!password) {
-        if(strengthContainer) strengthContainer.classList.add('hidden-view');
-        return;
-    }
-    if(strengthContainer) strengthContainer.classList.remove('hidden-view');
-    
-    let score = 0;
-    if (password.length >= 6) score++;
-    if (password.length >= 10) score++;
-    if (/[A-Z]/.test(password) && /[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-
-    const bars = [document.getElementById('bar-1'), document.getElementById('bar-2'), document.getElementById('bar-3'), document.getElementById('bar-4')];
-    const colors = ['#e53935', '#ffa726', '#ffeb3b', '#10b981'];
-    const t = translations.ar;
-    const texts = [t.strengthWeak, t.strengthFair, t.strengthGood, t.strengthStrong];
-
-    bars.forEach((bar, index) => {
-        if(bar) bar.style.background = index < score ? colors[score - 1] : '#e0e0e0';
-    });
-    if(strengthLabel) {
-        strengthLabel.innerText = texts[score - 1] || t.strengthWeak;
-        strengthLabel.style.color = colors[score - 1] || '#777';
-    }
-}
-
-function checkPasswordMatch() {
-    if (isLogin) return;
-    const pass = document.getElementById('pass-input').value;
-    const confirmPass = document.getElementById('confirm-pass-input').value;
-    const matchContainer = document.getElementById('match-container');
-    const matchLabel = document.getElementById('match-label');
-    const t = translations.ar;
-
-    if (!confirmPass) {
-        if(matchContainer) matchContainer.classList.add('hidden-view');
-        return;
-    }
-    if(matchContainer) matchContainer.classList.remove('hidden-view');
-
-    if (pass === confirmPass) {
-        if(matchLabel) {
-            matchLabel.innerText = t.matchSuccess;
-            matchLabel.style.color = '#10b981';
-        }
-    } else {
-        if(matchLabel) {
-            matchLabel.innerText = t.matchError;
-            matchLabel.style.color = '#e53935';
-        }
-    }
-}
+lottie.loadAnimation({
+    container: document.getElementById('lottie-animation'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
+});
 
 function showLoadingOverlay(message) {
     let overlay = document.getElementById('loading-overlay');
@@ -220,8 +172,8 @@ function showLoadingOverlay(message) {
             animation: fadeIn 0.3s ease;
         `;
         overlay.innerHTML = `
-            <div style="width: 55px; height: 55px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #f59e0b; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
-            <p id="loading-text" style="margin-top: 20px; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.5px;">${message}</p>
+            <div style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #f59e0b; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+            <p id="loading-text" style="margin-top: 15px; font-size: 1.05rem; font-weight: 700;">${message}</p>
         `;
         document.body.appendChild(overlay);
 
@@ -237,15 +189,11 @@ function showLoadingOverlay(message) {
     }
 }
 
-function hideLoadingOverlay() {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) overlay.style.display = 'none';
-}
-
 function handleSubmit() {
     const email = document.getElementById('email-input').value.trim();
     const pass = document.getElementById('pass-input').value;
-    const t = translations.ar;
+    const lang = localStorage.getItem('it_lang') || 'ar';
+    const t = translationsLogin[lang] || translationsLogin.ar;
 
     if (!email || !pass) {
         alert(t.errFields);
@@ -263,29 +211,26 @@ function handleSubmit() {
             return;
         }
 
-        showLoadingOverlay("جاري التحقق من الاعتماد الأكاديمي...");
+        // إظهار شاشة الـ Loading السلسة والفورية
+        showLoadingOverlay(t.loadLogin);
         
         setTimeout(() => {
-            showLoadingOverlay("تم بنجاح! جاري تحويلك لوحة التحكم...");
+            showLoadingOverlay(t.loadRedirect);
             localStorage.setItem('it_logged_user', users[email].name);
             localStorage.setItem('it_logged_id', users[email].studentId || 'IT-2026-039');
             localStorage.setItem('it_logged_semester', users[email].semester || 'السمستر الثالث');
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
-            }, 800);
-        }, 1000);
+            }, 700);
+        }, 800);
 
     } else {
         const name = document.getElementById('fullname').value.trim();
         const studentId = document.getElementById('studentid').value.trim();
         const semester = document.getElementById('semester').value.trim();
-        const confirmPass = document.getElementById('confirm-pass-input').value;
+        const confirmPass = document.getElementById('pass-input').value;
         
-        if (!name) { alert(t.errName); return; }
-        if (!studentId) { alert('الرجاء إدخال الرقم الجامعي!'); return; }
-        if (!semester) { alert('الرجاء إدخال السمستر الحالي!'); return; }
-        if (pass.length < 6) { alert(t.errPasswordLen); return; }
-        if (pass !== confirmPass) { alert(t.errMismatch); return; }
+        if (!name) { alert(t.errFields); return; }
 
         let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
         if (users[email]) {
@@ -293,124 +238,16 @@ function handleSubmit() {
             return;
         }
 
-        showLoadingOverlay("جاري إنشاء الحساب الأكاديمي...");
+        showLoadingOverlay(t.loadSignup);
         setTimeout(() => {
             users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
             localStorage.setItem('it_platform_users', JSON.stringify(users));
-            hideLoadingOverlay();
+            const overlay = document.getElementById('loading-overlay');
+            if(overlay) overlay.style.display = 'none';
             alert(t.succSignup);
             toggleMode();
-        }, 1200);
+        }, 1000);
     }
-}
-
-function startForgotPassword() {
-    const authContainer = document.getElementById('auth-form-container');
-    const forgotContainer = document.getElementById('forgot-flow-container');
-    if(authContainer) authContainer.classList.add('hidden-view');
-    if(forgotContainer) forgotContainer.classList.remove('hidden-view');
-    
-    const stepCaptcha = document.getElementById('step-captcha');
-    const stepEmail = document.getElementById('step-email');
-    const stepOtp = document.getElementById('step-otp');
-    const stepNewpass = document.getElementById('step-newpass');
-    
-    if(stepCaptcha) stepCaptcha.classList.remove('hidden-view');
-    if(stepEmail) stepEmail.classList.add('hidden-view');
-    if(stepOtp) stepOtp.classList.add('hidden-view');
-    if(stepNewpass) stepNewpass.classList.add('hidden-view');
-}
-
-function triggerRealCaptcha() {
-    const spinner = document.getElementById('captcha-spinner');
-    const check = document.getElementById('captcha-check');
-    if(spinner) spinner.style.display = 'block';
-    setTimeout(() => {
-        if(spinner) spinner.style.display = 'none';
-        if(check) check.style.display = 'block';
-        isCaptchaVerified = true;
-        setTimeout(() => {
-            const stepCaptcha = document.getElementById('step-captcha');
-            const stepEmail = document.getElementById('step-email');
-            if(stepCaptcha) stepCaptcha.classList.add('hidden-view');
-            if(stepEmail) stepEmail.classList.remove('hidden-view');
-        }, 500);
-    }, 1000);
-}
-
-function sendVerificationCode() {
-    const emailInput = document.getElementById('recovery-email-input');
-    const email = emailInput ? emailInput.value.trim() : '';
-    const t = translations.ar;
-    let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
-
-    if (!email || !users[email]) {
-        alert(t.errEmailNotRegistered);
-        return;
-    }
-
-    showLoadingOverlay("جاري إرسال رمز الـ OTP لبريدك...");
-    setTimeout(() => {
-        hideLoadingOverlay();
-        recoveryTargetEmail = email;
-        generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        alert("رمز التحقق التجريبي الخاص بك هو: " + generatedOtp);
-        
-        const stepEmail = document.getElementById('step-email');
-        const stepOtp = document.getElementById('step-otp');
-        if(stepEmail) stepEmail.classList.add('hidden-view');
-        if(stepOtp) stepOtp.classList.remove('hidden-view');
-    }, 1000);
-}
-
-function verifyOtpCode() {
-    const otpInput = document.getElementById('otp-input');
-    const enteredOtp = otpInput ? otpInput.value.trim() : '';
-    const t = translations.ar;
-
-    if (enteredOtp === generatedOtp) {
-        const stepOtp = document.getElementById('step-otp');
-        const stepNewpass = document.getElementById('step-newpass');
-        if(stepOtp) stepOtp.classList.add('hidden-view');
-        if(stepNewpass) stepNewpass.classList.remove('hidden-view');
-    } else {
-        alert(t.errInvalidOtp);
-    }
-}
-
-function saveNewPassword() {
-    const newPassInput = document.getElementById('new-pass-input');
-    const confirmNewPassInput = document.getElementById('confirm-new-pass-input');
-    const newPass = newPassInput ? newPassInput.value : '';
-    const confirmNewPass = confirmNewPassInput ? confirmNewPassInput.value : '';
-    const t = translations.ar;
-
-    if (newPass.length < 6) { alert(t.errPasswordLen); return; }
-    if (newPass !== confirmNewPass) { alert(t.errMismatch); return; }
-
-    showLoadingOverlay("جاري تحديث كلمة المرور...");
-    setTimeout(() => {
-        let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
-        if (users[recoveryTargetEmail]) {
-            users[recoveryTargetEmail].pass = newPass;
-            localStorage.setItem('it_platform_users', JSON.stringify(users));
-            hideLoadingOverlay();
-            alert("تم تغيير كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.");
-            backToLogin();
-        }
-    }, 1000);
-}
-
-function backToLogin() {
-    const forgotContainer = document.getElementById('forgot-flow-container');
-    const authContainer = document.getElementById('auth-form-container');
-    if(forgotContainer) forgotContainer.classList.add('hidden-view');
-    if(authContainer) authContainer.classList.remove('hidden-view');
-    isCaptchaVerified = false;
-    const captchaCheck = document.getElementById('captcha-check');
-    const realCaptchaBox = document.getElementById('real-captcha-box');
-    if(captchaCheck) captchaCheck.style.display = 'none';
-    if(realCaptchaBox) realCaptchaBox.style.borderColor = '#c1c1c1';
 }
 
 function toggleTheme() {
@@ -418,10 +255,6 @@ function toggleTheme() {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.body.setAttribute('data-theme', newTheme);
     localStorage.setItem('it_theme', newTheme);
-    updateThemeIcon(newTheme);
-}
-
-function updateThemeIcon(theme) {
-    const btn = document.getElementById('theme-toggle');
-    if (btn) { btn.innerText = theme === 'dark' ? '☀️' : '🌙'; }
+    const themeBtn = document.getElementById('theme-toggle');
+    if(themeBtn) themeBtn.innerText = newTheme === 'dark' ? '☀️' : '🌙';
 }
