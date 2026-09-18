@@ -13,16 +13,14 @@ let recoveryTargetEmail = "";
 
 const translations = {
     ar: {
-        loginTitle: "مرحباً بك في منصة تقانة المعلومات",
-        loginSub: "الرجاء إدخال بياناتك لتسجيل الدخول.",
-        signupTitle: "إنشاء حساب جديد",
-        signupSub: "الرجاء تعبئة البيانات للبدء معنا في المنصة.",
-        dashWelcome: "أهلاً بك في منصة تقانة المعلومات!",
-        dashLogout: "تسجيل الخروج",
+        loginTitle: "بوابة تقانة المعلومات - جامعة النيل الأبيض",
+        loginSub: "تسجيل الدخول الأكاديمي للطلاب.",
+        signupTitle: "إنشاء حساب جامعي جديد",
+        signupSub: "قم بتعبئة بياناتك للانضمام للمنصة.",
         name: "الاسم الكامل",
-        email: "البريد الإلكتروني",
+        email: "البريد الإلكتروني الجامعي",
         password: "كلمة المرور",
-        confirm: "إعادة كتابة كلمة المرور",
+        confirm: "تأكيد كلمة المرور",
         remember: "تذكرني",
         forgot: "نسيت كلمة المرور؟",
         btnIn: "تسجيل الدخول",
@@ -37,7 +35,7 @@ const translations = {
         resetBtn: "إعادة تعيين كلمة المرور",
         backLogin: "العودة لتسجيل الدخول",
         lblRecEmail: "أدخل بريدك الإلكتروني المسجل",
-        lblOtpText: "أدخل الرمز المكون من 4 أرقام المرسل لبريدك",
+        lblOtpText: "أدخل رمز التحقق (4 أرقام)",
         lblNewPass: "كلمة المرور الجديدة",
         lblConfirmNewPass: "تأكيد كلمة المرور الجديدة",
         strengthWeak: "ضعيفة",
@@ -45,70 +43,19 @@ const translations = {
         strengthGood: "جيدة",
         strengthStrong: "قوية جداً",
         matchError: "كلمتا المرور غير متطابقتين",
-        matchSuccess: "كلمتا المرور متطابقتان تماماً ✓",
+        matchSuccess: "كلمتا المرور متطابقتان ✓",
         errFields: "الرجاء ملء جميع الحقول المطلوبة!",
-        errEmail: "الرجاء إدخال بريد إلكتروني صالح!",
-        errName: "الرجاء إدخال اسمك الكامل!",
+        errEmail: "الرجاء إدخال بريد صالح!",
+        errName: "الرجاء إدخال الاسم الكامل!",
         errPasswordLen: "يجب ألا تقل كلمة المرور عن 6 أحرف!",
         errMismatch: "كلمتا المرور غير متطابقتين!",
-        errAlreadyExists: "هذا البريد الإلكتروني مسجل مسبقاً!",
-        errNotFound: "الحساب غير موجود!",
+        errAlreadyExists: "هذا البريد مسجل مسبقاً!",
+        errNotFound: "الحساب غير موجود، يرجى إنشاء حساب جديد!",
         errWrongPass: "كلمة المرور غير صحيحة!",
         errEmailNotRegistered: "هذا البريد غير مسجل في النظام!",
         errInvalidOtp: "رمز التحقق غير صحيح!",
-        succSignup: "تم إنشاء الحساب بنجاح!",
-        succLogin: "تم تسجيل الدخول بنجاح! جاري تحويلك للمنصة...",
-        succOtpSent: "تم إرسال رمز التحقق التجريبي: ",
-        succPassReset: "تم تغيير كلمة المرور بنجاح! يمكنك الدخول الآن."
-    },
-    en: {
-        loginTitle: "Welcome to IT Platform",
-        loginSub: "Please enter your details to sign in.",
-        signupTitle: "Create Account",
-        signupSub: "Please fill in the details to get started.",
-        dashWelcome: "Welcome to IT Platform!",
-        dashLogout: "Sign Out",
-        name: "Full Name",
-        email: "Email Address",
-        password: "Password",
-        confirm: "Confirm Password",
-        remember: "Remember me",
-        forgot: "Forgot Password?",
-        btnIn: "Sign In",
-        btnUp: "Sign Up",
-        switchInText: "Don't have an account?",
-        switchUpText: "Already have an account?",
-        linkUp: "Sign Up",
-        linkIn: "Sign In",
-        robotLabel: "I'm not a robot",
-        sendCodeBtn: "Send Verification Code",
-        verifyCodeBtn: "Verify Code",
-        resetBtn: "Reset Password",
-        backLogin: "Back to Sign In",
-        lblRecEmail: "Enter your registered email",
-        lblOtpText: "Enter 4-digit code sent to your email",
-        lblNewPass: "New Password",
-        lblConfirmNewPass: "Confirm New Password",
-        strengthWeak: "Weak",
-        strengthFair: "Fair",
-        strengthGood: "Good",
-        strengthStrong: "Strong",
-        matchError: "Passwords do not match",
-        matchSuccess: "Passwords match perfectly ✓",
-        errFields: "Please fill in all required fields!",
-        errEmail: "Please enter a valid email address!",
-        errName: "Please enter your full name!",
-        errPasswordLen: "Password must be at least 6 characters long!",
-        errMismatch: "Passwords do not match!",
-        errAlreadyExists: "This email is already registered!",
-        errNotFound: "Account not found!",
-        errWrongPass: "Incorrect password!",
-        errEmailNotRegistered: "This email is not registered in the system!",
-        errInvalidOtp: "Invalid verification code!",
-        succSignup: "Account created successfully!",
-        succLogin: "Signed in successfully! Redirecting...",
-        succOtpSent: "Verification code sent: ",
-        succPassReset: "Password reset successfully!"
+        succSignup: "تم إنشاء الحساب الأكاديمي بنجاح!",
+        succLogin: "تم تسجيل الدخول بنجاح، جاري تحويلك للمنصة..."
     }
 };
 
@@ -146,8 +93,7 @@ function toggleMode() {
     const confirmGroup = document.getElementById('confirm-pass-group');
     const loginExtras = document.getElementById('login-extras');
     const strengthContainer = document.getElementById('strength-container');
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const t = translations.ar;
 
     if (isLogin) {
         nameGroup.classList.add('hidden-view');
@@ -198,9 +144,8 @@ function checkPasswordStrength(password) {
     if (/[^A-Za-z0-9]/.test(password)) score++;
 
     const bars = [document.getElementById('bar-1'), document.getElementById('bar-2'), document.getElementById('bar-3'), document.getElementById('bar-4')];
-    const colors = ['#e53935', '#ffa726', '#ffeb3b', '#4caf50'];
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const colors = ['#e53935', '#ffa726', '#ffeb3b', '#10b981'];
+    const t = translations.ar;
     const texts = [t.strengthWeak, t.strengthFair, t.strengthGood, t.strengthStrong];
 
     bars.forEach((bar, index) => {
@@ -216,8 +161,7 @@ function checkPasswordMatch() {
     const confirmPass = document.getElementById('confirm-pass-input').value;
     const matchContainer = document.getElementById('match-container');
     const matchLabel = document.getElementById('match-label');
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const t = translations.ar;
 
     if (!confirmPass) {
         matchContainer.classList.add('hidden-view');
@@ -227,18 +171,53 @@ function checkPasswordMatch() {
 
     if (pass === confirmPass) {
         matchLabel.innerText = t.matchSuccess;
-        matchLabel.style.color = '#0f9d58';
+        matchLabel.style.color = '#10b981';
     } else {
         matchLabel.innerText = t.matchError;
         matchLabel.style.color = '#e53935';
     }
 }
 
+// عرض شاشة الـ Loading الاحترافية بتصميم متطور
+function showLoadingOverlay(message) {
+    let overlay = document.getElementById('loading-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'loading-overlay';
+        overlay.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 44, 89, 0.85); backdrop-filter: blur(8px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; color: white; font-family: 'Cairo', sans-serif;
+            animation: fadeIn 0.3s ease;
+        `;
+        overlay.innerHTML = `
+            <div style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-top: 5px solid #f59e0b; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+            <p id="loading-text" style="margin-top: 20px; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px;">${message}</p>
+        `;
+        document.body.appendChild(overlay);
+
+        if (!document.getElementById('spin-anim')) {
+            const style = document.createElement('style');
+            style.id = 'spin-anim';
+            style.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
+            document.head.appendChild(style);
+        }
+    } else {
+        document.getElementById('loading-text').innerText = message;
+        overlay.style.display = 'flex';
+    }
+}
+
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) overlay.style.display = 'none';
+}
+
 function handleSubmit() {
     const email = document.getElementById('email-input').value.trim();
     const pass = document.getElementById('pass-input').value;
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const t = translations.ar;
 
     if (!email || !pass) {
         alert(t.errFields);
@@ -255,12 +234,18 @@ function handleSubmit() {
             alert(t.errWrongPass);
             return;
         }
-        alert(t.succLogin);
-        // حفظ حالة تسجيل الدخول واسم المستخدم وتحويله التلقائي للمنصة
-        localStorage.setItem('it_logged_user', users[email].name);
+
+        // تشغيل شاشة التحميل الفخمة والانتقال السلس بدون ضغط "حسناً"
+        showLoadingOverlay("جاري التحقق من الاعتماد الأكاديمي...");
+        
         setTimeout(() => {
-            window.location.href = 'index.html';
+            showLoadingOverlay("تم بنجاح! جاري تحويلك للمنصة...");
+            localStorage.setItem('it_logged_user', users[email].name);
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 800);
         }, 1000);
+
     } else {
         const name = document.getElementById('fullname').value.trim();
         const confirmPass = document.getElementById('confirm-pass-input').value;
@@ -274,10 +259,14 @@ function handleSubmit() {
             return;
         }
 
-        users[email] = { name: name, pass: pass };
-        localStorage.setItem('it_platform_users', JSON.stringify(users));
-        alert(t.succSignup);
-        toggleMode();
+        showLoadingOverlay("جاري إنشاء الحساب في النظام...");
+        setTimeout(() => {
+            users[email] = { name: name, pass: pass };
+            localStorage.setItem('it_platform_users', JSON.stringify(users));
+            hideLoadingOverlay();
+            alert(t.succSignup);
+            toggleMode();
+        }, 1200);
     }
 }
 
@@ -307,8 +296,7 @@ function triggerRealCaptcha() {
 
 function sendVerificationCode() {
     const email = document.getElementById('recovery-email-input').value.trim();
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const t = translations.ar;
     let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
 
     if (!email || !users[email]) {
@@ -316,18 +304,20 @@ function sendVerificationCode() {
         return;
     }
 
-    recoveryTargetEmail = email;
-    generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-    alert(t.succOtpSent + generatedOtp);
-
-    document.getElementById('step-email').classList.add('hidden-view');
-    document.getElementById('step-otp').classList.remove('hidden-view');
+    showLoadingOverlay("جاري إرسال رمز الـ OTP لبريدك الجامعي...");
+    setTimeout(() => {
+        hideLoadingOverlay();
+        recoveryTargetEmail = email;
+        generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        alert("رمز التحقق التجريبي الخاص بك هو: " + generatedOtp);
+        document.getElementById('step-email').classList.add('hidden-view');
+        document.getElementById('step-otp').classList.remove('hidden-view');
+    }, 1000);
 }
 
 function verifyOtpCode() {
     const enteredOtp = document.getElementById('otp-input').value.trim();
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const t = translations.ar;
 
     if (enteredOtp === generatedOtp) {
         document.getElementById('step-otp').classList.add('hidden-view');
@@ -340,19 +330,22 @@ function verifyOtpCode() {
 function saveNewPassword() {
     const newPass = document.getElementById('new-pass-input').value;
     const confirmNewPass = document.getElementById('confirm-new-pass-input').value;
-    const lang = document.getElementById('lang-select').value;
-    const t = translations[lang] || translations.ar;
+    const t = translations.ar;
 
     if (newPass.length < 6) { alert(t.errPasswordLen); return; }
     if (newPass !== confirmNewPass) { alert(t.errMismatch); return; }
 
-    let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
-    if (users[recoveryTargetEmail]) {
-        users[recoveryTargetEmail].pass = newPass;
-        localStorage.setItem('it_platform_users', JSON.stringify(users));
-        alert(t.succPassReset);
-        backToLogin();
-    }
+    showLoadingOverlay("جاري تحديث كلمة المرور في النظام...");
+    setTimeout(() => {
+        let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
+        if (users[recoveryTargetEmail]) {
+            users[recoveryTargetEmail].pass = newPass;
+            localStorage.setItem('it_platform_users', JSON.stringify(users));
+            hideLoadingOverlay();
+            alert(t.succPassReset);
+            backToLogin();
+        }
+    }, 1000);
 }
 
 function backToLogin() {
