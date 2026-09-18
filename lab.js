@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let isLogin = true;
+let isCaptchaVerified = false;
+let generatedOtp = "";
+let recoveryTargetEmail = "";
 
 const translationsLogin = {
     ar: {
@@ -151,13 +154,16 @@ function hidePassword(inputId, event) {
     if(input) input.type = 'password';
 }
 
-lottie.loadAnimation({
-    container: document.getElementById('lottie-animation'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
-});
+const lottieElement = document.getElementById('lottie-animation');
+if(lottieElement) {
+    lottie.loadAnimation({
+        container: lottieElement,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
+    });
+}
 
 function showLoadingOverlay(message) {
     let overlay = document.getElementById('loading-overlay');
@@ -211,7 +217,6 @@ function handleSubmit() {
             return;
         }
 
-        // إظهار شاشة الـ Loading السلسة والفورية
         showLoadingOverlay(t.loadLogin);
         
         setTimeout(() => {
@@ -228,7 +233,6 @@ function handleSubmit() {
         const name = document.getElementById('fullname').value.trim();
         const studentId = document.getElementById('studentid').value.trim();
         const semester = document.getElementById('semester').value.trim();
-        const confirmPass = document.getElementById('pass-input').value;
         
         if (!name) { alert(t.errFields); return; }
 
@@ -248,6 +252,111 @@ function handleSubmit() {
             toggleMode();
         }, 1000);
     }
+}
+
+// دالة نسيت كلمة المرور المحدثة والمنظمة بدقة
+function startForgotPassword() {
+    const authContainer = document.getElementById('auth-form-container');
+    const forgotContainer = document.getElementById('forgot-flow-container');
+    if(authContainer) authContainer.classList.add('hidden-view');
+    if(forgotContainer) forgotContainer.classList.remove('hidden-view');
+    
+    const stepCaptcha = document.getElementById('step-captcha');
+    const stepEmail = document.getElementById('step-email');
+    const stepOtp = document.getElementById('step-otp');
+    const stepNewpass = document.getElementById('step-newpass');
+    
+    if(stepCaptcha) stepCaptcha.classList.remove('hidden-view');
+    if(stepEmail) stepEmail.classList.add('hidden-view');
+    if(stepOtp) stepOtp.classList.add('hidden-view');
+    if(stepNewpass) stepNewpass.classList.add('hidden-view');
+}
+
+function triggerRealCaptcha() {
+    const spinner = document.getElementById('captcha-spinner');
+    const check = document.getElementById('captcha-check');
+    if(spinner) spinner.style.display = 'block';
+    setTimeout(() => {
+        if(spinner) spinner.style.display = 'none';
+        if(check) check.style.display = 'block';
+        isCaptchaVerified = true;
+        setTimeout(() => {
+            const stepCaptcha = document.getElementById('step-captcha');
+            const stepEmail = document.getElementById('step-email');
+            if(stepCaptcha) stepCaptcha.classList.add('hidden-view');
+            if(stepEmail) stepEmail.classList.remove('hidden-view');
+        }, 500);
+    }, 1000);
+}
+
+function sendVerificationCode() {
+    const emailInput = document.getElementById('recovery-email-input');
+    const email = emailInput ? emailInput.value.trim() : '';
+    let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
+
+    if (!email || !users[email]) {
+        alert("هذا البريد غير مسجل في النظام!");
+        return;
+    }
+
+    showLoadingOverlay("جاري إرسال رمز الـ OTP لبريدك...");
+    setTimeout(() => {
+        hideLoadingOverlay();
+        recoveryTargetEmail = email;
+        generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        alert("رمز التحقق التجريبي الخاص بك هو: " + generatedOtp);
+        
+        const stepEmail = document.getElementById('step-email');
+        const stepOtp = document.getElementById('step-otp');
+        if(stepEmail) stepEmail.classList.add('hidden-view');
+        if(stepOtp) stepOtp.classList.remove('hidden-view');
+    }, 1000);
+}
+
+function verifyOtpCode() {
+    const otpInput = document.getElementById('otp-input');
+    const enteredOtp = otpInput ? otpInput.value.trim() : '';
+
+    if (enteredOtp === generatedOtp) {
+        const stepOtp = document.getElementById('step-otp');
+        const stepNewpass = document.getElementById('step-newpass');
+        if(stepOtp) stepOtp.classList.add('hidden-view');
+        if(stepNewpass) stepNewpass.classList.remove('hidden-view');
+    } else {
+        alert("رمز التحقق غير صحيح!");
+    }
+}
+
+function saveNewPassword() {
+    const newPassInput = document.getElementById('new-pass-input');
+    const confirmNewPassInput = document.getElementById('confirm-new-pass-input');
+    const newPass = newPassInput ? newPassInput.value : '';
+    const confirmNewPass = confirmNewPassInput ? confirmNewPassInput.value : '';
+
+    if (newPass.length < 6) { alert("يجب ألا تقل كلمة المرور عن 6 أحرف!"); return; }
+    if (newPass !== confirmNewPass) { alert("كلمتا المرور غير متطابقتين!"); return; }
+
+    showLoadingOverlay("جاري تحديث كلمة المرور...");
+    setTimeout(() => {
+        let users = JSON.parse(localStorage.getItem('it_platform_users') || '{}');
+        if (users[recoveryTargetEmail]) {
+            users[recoveryTargetEmail].pass = newPass;
+            localStorage.setItem('it_platform_users', JSON.stringify(users));
+            hideLoadingOverlay();
+            alert("تم تغيير كلمة المرور بنجاح! يمكنك تسجيل الدخول الآن.");
+            backToLogin();
+        }
+    }, 1000);
+}
+
+function backToLogin() {
+    const forgotContainer = document.getElementById('forgot-flow-container');
+    const authContainer = document.getElementById('auth-form-container');
+    if(forgotContainer) forgotContainer.classList.add('hidden-view');
+    if(authContainer) authContainer.classList.remove('hidden-view');
+    isCaptchaVerified = false;
+    const captchaCheck = document.getElementById('captcha-check');
+    if(captchaCheck) captchaCheck.style.display = 'none';
 }
 
 function toggleTheme() {
