@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الأكاديمية - جامعة النيل الأبيض</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f2c59;
+            --secondary: #1a56db;
+            --accent: #f59e0b;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo-area h1 { font-size: 1.15rem; font-weight: 800; }
+        .logo-area span { font-size: 0.8rem; color: var(--accent); }
+
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; width: 100%; flex: 1; }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #1e3c72, #2a5298); color: white;
+            padding: 2rem; border-radius: 16px; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .welcome-banner h2 { font-size: 1.8rem; margin-bottom: 5px; }
+        .welcome-banner p { font-size: 0.95rem; opacity: 0.9; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+        .dash-card {
+            background: var(--card-bg); padding: 1.8rem; border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03); border-top: 4px solid var(--secondary);
+        }
+        .dash-card h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 1rem; font-weight: 700; }
+
+        .course-list { list-style: none; }
+        .course-list li {
+            padding: 10px 0; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 0.9rem;
+        }
+        .course-list li:last-child { border-bottom: none; }
+
+        .btn {
+            background: var(--secondary); color: white; padding: 0.6rem 1.2rem;
+            border-radius: 8px; border: none; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.85rem;
+        }
+        .btn:hover { opacity: 0.9; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; font-size: 0.9rem;
+        }
+
+        footer { text-align: center; padding: 1.2rem; background: #fff; color: #6b7280; font-size: 0.85rem; border-top: 1px solid #e5e7eb; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <h1>جامعة النيل الأبيض - لوحة التحكم</h1>
+            <span>كلية علوم الحاسوب وتقانة المعلومات (السمستر الثالث)</span>
+        </div>
+        <div>
+            <a href="index.html" class="btn" style="background: rgba(255,255,255,0.2);">← الرئيسية للمنصة</a>
+            <button onclick="logout()" class="btn" style="background: #ef4444; margin-right: 10px;">تسجيل الخروج</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-banner">
+            <div>
+                <h2 id="student-name-display">مرحباً بك يا بشمهندس</h2>
+                <p>أنت مسجل حالياً في السمستر الثالث - قسم تقانة المعلومات (IT).</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.15); padding: 15px 20px; border-radius: 12px; text-align: center;">
+                <span style="font-size: 0.8rem; display: block; opacity: 0.8;">الرقم الجامعي</span>
+                <b style="font-size: 1.1rem; color: #fbbf24;">IT-2026-039</b>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- المقررات الدراسية -->
+            <div class="dash-card">
+                <h3>📚 مقررات السمستر الثالث</h3>
+                <ul class="course-list">
+                    <li><span>هيكل البيانات والخوارزميات</span> <b style="color: #10b981;">نشط</b></li>
+                    <li><span>تطوير وتصميم الويب (HTML/CSS/JS)</span> <b style="color: #10b981;">نشط</b></li>
+                    <li><span>الشبكات وأنظمة الاتصالات</span> <b style="color: #10b981;">نشط</b></li>
+                    <li><span>قواعد البيانات المتقدمة</span> <b style="color: #10b981;">نشط</b></li>
+                </ul>
+            </div>
+
+            <!-- رفع وتجربة المشاريع -->
+            <div class="dash-card">
+                <h3>🚀 رفع وتقديم مشاريع الطلاب</h3>
+                <div class="form-group">
+                    <label>اسم المشروع البرمجي / تطبيق الـ APK</label>
+                    <input type="text" id="proj-title" placeholder="مثال: متجر كوستي الإلكتروني">
+                </div>
+                <div class="form-group">
+                    <label>رابط المشروع (GitHub / Vercel)</label>
+                    <input type="url" id="proj-url" placeholder="https://github.com/...">
+                </div>
+                <button class="btn" onclick="submitProject()">نشر المشروع في المعرض</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('it_logged_user');
+            if (!user) {
+                alert('عذراً، يجب تسجيل الدخول أولاً للوصول إلى لوحة التحكم.');
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('student-name-display').innerText = `مرحباً بك، ${user}`;
+        });
+
+        function submitProject() {
+            const title = document.getElementById('proj-title').value.trim();
+            const url = document.getElementById('proj-url').value.trim();
+            if (!title || !url) {
+                alert('الرجاء إدخال اسم المشروع ورابطه بشكل صحيح!');
+                return;
+            }
+            alert(`تم رفع مشروع "${title}" بنجاح وإرساله للجنة التقييم في الكلية!`);
+            document.getElementById('proj-title').value = '';
+            document.getElementById('proj-url').value = '';
+        }
+
+        function logout() {
+            localStorage.removeItem('it_logged_user');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
