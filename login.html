@@ -53,10 +53,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: 0.2s;
         }
-        .btn-back-home:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
+        .btn-back-home:hover { border-color: var(--primary); color: var(--primary); }
 
         .login-card { background: var(--card-bg); width: 100%; max-width: 420px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border); }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -70,7 +67,6 @@
         .input-wrapper input { width: 100%; padding: 12px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; color: var(--text); }
         .eye-icon { cursor: pointer; color: var(--text-muted); padding: 5px; }
         
-        /* مؤشرات التتبع الحقيقي للقوة والتطابق */
         .password-strength-indicator, .password-match-indicator {
             font-size: 0.78rem;
             margin-top: 5px;
@@ -117,7 +113,7 @@
                 <label id="lbl-name">الاسم الكامل</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
+                    <input type="text" id="fullname" placeholder="أدخل اسمك ثلاثياً">
                 </div>
             </div>
 
@@ -125,7 +121,7 @@
                 <label id="lbl-id">الرقم الجامعي (ID)</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-id-card"></i>
-                    <input type="text" id="studentid" placeholder="11086250-24">
+                    <input type="text" id="studentid" placeholder="مثال: 24-110XXXXX">
                 </div>
             </div>
 
@@ -133,7 +129,7 @@
                 <label id="lbl-semester">السمستر الحالي</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-book"></i>
-                    <input type="text" id="semester" placeholder="السمستر الثاني">
+                    <input type="text" id="semester" placeholder="مثال: السمستر الثاني">
                 </div>
             </div>
 
@@ -141,7 +137,7 @@
                 <label id="lbl-email">البريد الإلكتروني الجامعي</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" id="email-input" placeholder="student@fit.edu">
+                    <input type="email" id="email-input" placeholder="student@kosti.edu.sd">
                 </div>
             </div>
 
@@ -152,7 +148,6 @@
                     <input type="password" id="pass-input" placeholder="********" oninput="checkPasswordStrength(this.value)">
                     <i class="fa-solid fa-eye eye-icon" onmousedown="showPassword('pass-input')" onmouseup="hidePassword('pass-input')"></i>
                 </div>
-                <!-- مؤشر القوة الفوري -->
                 <span id="strength-text" class="password-strength-indicator" style="color: #94a3b8;">أدخل كلمة مرور قوية (6 أحرف على الأقل)</span>
             </div>
 
@@ -163,7 +158,6 @@
                     <input type="password" id="confirm-pass-input" placeholder="********" oninput="checkPasswordMatch()">
                     <i class="fa-solid fa-eye eye-icon" onmousedown="showPassword('confirm-pass-input')" onmouseup="hidePassword('confirm-pass-input')"></i>
                 </div>
-                <!-- مؤشر التطابق الفوري -->
                 <span id="match-text" class="password-match-indicator" style="color: #94a3b8;">يرجى إعادة إدخال كلمة المرور للتأكيد</span>
             </div>
 
@@ -188,7 +182,7 @@
             </div>
             <div id="step-email" class="hidden-view" style="margin-top: 5px;">
                 <label style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; display:block;">البريد الإلكتروني المسجل:</label>
-                <input type="email" id="recovery-email-input" placeholder="student@fit.edu" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
+                <input type="email" id="recovery-email-input" placeholder="student@kosti.edu.sd" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); margin-bottom:10px; outline:none;">
                 <button class="btn-submit" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
             </div>
             <div id="step-otp" class="hidden-view" style="margin-top: 5px;">
