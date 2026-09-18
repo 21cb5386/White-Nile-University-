@@ -3,246 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الرئيسية - جامعة النيل الأبيض</title>
+    <title>منصة تقانة المعلومات - جامعة النيل الأبيض</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --primary: #ff5722;
-            --primary-gradient: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
-            --border-color: #f1f5f9;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --bg-gradient: linear-gradient(135deg, #fdf6f0 0%, #faedcd 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1a1a1a;
+            --text-muted: #777;
+            --primary-color: #ff5722;
+            --border-color: #eee;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
         [data-theme="dark"] {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --card-bg: rgba(30, 41, 59, 0.95);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --primary: #ff5722;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --bg-gradient: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text-main: #f3f4f6;
+            --text-muted: #aaa;
+            --primary-color: #ff5722;
+            --border-color: #333;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; }
         
         body {
             background: var(--bg-gradient);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            color: var(--text-main);
-            transition: background 0.3s ease, color 0.3s ease;
+            flex-direction: column;
+            padding: 10px;
         }
 
-        .main-container {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 28px;
-            box-shadow: var(--shadow);
+        /* شريط التنبيهات يتحرك بانسيابية من اليسار لليمين */
+        .notice-ticker {
+            background: #ff5722;
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(255, 87, 34, 0.2);
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
             width: 100%;
-            max-width: 480px;
-            padding: 28px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+        }
+        .notice-ticker span { 
+            display: inline-block; 
+            animation: smoothTicker 20s linear infinite; 
+        }
+        @keyframes smoothTicker { 
+            0% { transform: translateX(100%); } 
+            100% { transform: translateX(-100%); } 
+        }
+
+        .main-wrapper {
+            max-width: 1100px; width: 100%; margin: 0 auto;
+            background: var(--card-bg); backdrop-filter: blur(10px);
+            border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
+            display: flex; flex-direction: column; border: 1px solid var(--border-color); flex: 1;
+        }
+
+        header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);
+            flex-wrap: wrap; gap: 10px;
+        }
+
+        .university-brand { display: flex; align-items: center; gap: 10px; }
+        .university-logo {
+            width: 40px; height: 40px; background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            color: white; border-radius: 10px; display: flex; justify-content: center; align-items: center;
+            font-weight: 900; font-size: 1rem; box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+        }
+        .logo-area h1 { font-size: 1rem; font-weight: 800; color: var(--text-main); }
+        .logo-area span { font-size: 0.7rem; color: var(--primary-color); font-weight: 600; display: block; }
+
+        .nav-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        
+        .theme-toggle-btn, .language-bar select {
+            padding: 6px 10px; border-radius: 10px; border: 2px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-main); font-size: 12px; cursor: pointer; outline: none;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ff5722 0%, #f4511e 100%);
+            color: white; border: none; padding: 9px 18px; border-radius: 12px;
+            font-size: 13px; font-weight: bold; cursor: pointer; 
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.3); text-decoration: none;
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .action-btn:active { transform: scale(0.95); }
+        .action-btn:hover { box-shadow: 0 10px 20px rgba(255, 87, 34, 0.4); }
+        
+        .action-btn.secondary { background: #eef2f7; color: #333; box-shadow: none; }
+        [data-theme="dark"] .action-btn.secondary { background: #2d2d2d; color: #f3f4f6; }
+        .action-btn.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+
+        .content-body { padding: 20px; }
+        
+        .hero-section {
+            text-align: center; margin-bottom: 25px; padding: 20px;
+            background: rgba(255, 167, 38, 0.05); border-radius: 16px; border: 1px dashed rgba(255, 87, 34, 0.3);
+        }
+        .hero-section h2 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 8px; font-weight: 800; }
+        .hero-section p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; max-width: 750px; margin: 0 auto; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        
+        .feature-card {
+            background: var(--card-bg); border: 2px solid var(--border-color); padding: 20px;
+            border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; overflow: hidden;
+            transition: transform 0.2s ease, border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--primary-color); transform: translateY(-3px); }
+        .feature-card h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px; font-weight: 700; }
+        .feature-card p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5; }
+
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            background: rgba(255, 87, 34, 0.03); padding: 15px; border-radius: 14px; border: 1px solid var(--border-color);
             text-align: center;
         }
+        .stat-item h4 { font-size: 1.2rem; color: var(--primary-color); font-weight: 900; }
+        .stat-item span { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
 
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .university-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-logo {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-gradient);
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 900;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
-            flex-shrink: 0;
-        }
-
-        .brand-info {
-            text-align: right;
-        }
-
-        .brand-info h1 {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.2;
-        }
-
-        .brand-info span {
-            font-size: 0.7rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .icon-btn {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        [data-theme="dark"] .icon-btn { background: rgba(255, 255, 255, 0.05); }
-        .icon-btn:hover { border-color: var(--primary); }
-
-        .welcome-hero {
-            background: var(--primary-gradient);
-            border-radius: 20px;
-            padding: 30px 20px;
-            color: white;
-            box-shadow: 0 12px 25px rgba(255, 87, 34, 0.25);
-        }
-
-        .welcome-hero h2 {
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .welcome-hero p {
-            font-size: 0.85srem;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        .action-links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn-primary-custom {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.3);
-            transition: 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary-custom:hover { opacity: 0.95; transform: translateY(-1px); }
-
-        .btn-secondary-custom {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 0.90rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        [data-theme="dark"] .btn-secondary-custom { background: rgba(255, 255, 255, 0.05); }
-        .btn-secondary-custom:hover { border-color: var(--primary); }
+        footer { text-align: center; padding: 15px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; font-weight: 600; }
+        .user-welcome-box { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; flex-wrap: wrap; }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <script>
-        // قراءة الوضع المحفوظ مسبقاً لمنع أي لخبطة عند التنقل بين الصفحات
-        const savedTheme = localStorage.getItem('site_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.body.setAttribute('data-theme', savedTheme);
-    </script>
+    <div class="notice-ticker">
+        <span id="ticker-text">📢 تنبيه أكاديمي رسمي: تم تفعيل نظام الإرشاد الأكاديمي الذكي ورفع أحدث ملخصات مقررات السمستر الثالث. استعرض لوحة التحكم الخاصة بك الآن.</span>
+    </div>
 
-    <div class="main-container">
-        <!-- الهيدر العلوي -->
-        <header class="top-nav">
-            <button class="icon-btn" id="theme-toggle" type="button" title="الوضع الليلي">🌙</button>
+    <div class="main-wrapper">
+        <header>
             <div class="university-brand">
-                <div class="brand-info">
-                    <h1>جامعة النيل الأبيض</h1>
-                    <span>بوابة الطلاب الإلكترونية</span>
+                <div class="university-logo">IT</div>
+                <div class="logo-area">
+                    <h1 id="uni-title">جامعة النيل الأبيض</h1>
+                    <span id="uni-sub">كلية علوم الحاسوب وتقانة المعلومات</span>
                 </div>
-                <div class="brand-logo">IT</div>
+            </div>
+            
+            <div class="nav-actions">
+                <select id="lang-select" onchange="changeLanguageMain()">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع">🌙</button>
+                <div id="auth-nav-area">
+                    <a href="login.html" class="action-btn" id="login-btn-text">تسجيل الدخول</a>
+                </div>
             </div>
         </header>
 
-        <!-- الترحيب -->
-        <div class="welcome-hero">
-            <h2>مرحباً بك في البوابة الأكاديمية</h2>
-            <p>منصة إدارة الخدمات التعليمية واللوحة الذكية للطلاب</p>
+        <div class="content-body">
+            <div class="hero-section">
+                <h2 id="main-welcome-title">البوابة الذكية لطلاب تقانة المعلومات</h2>
+                <p id="main-welcome-desc">منصة أكاديمية متكاملة مصممة لإدارة المقررات، تتبع الجداول الدراسية، وعرض مشاريع الـ Web وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.</p>
+            </div>
+
+            <div class="features-grid" id="services">
+                <div class="feature-card">
+                    <div>
+                        <h3 id="feat-1-title">🤖 الإرشاد الأكاديمي الذكي</h3>
+                        <p id="feat-1-desc">نظام مساعد ذكي لمراجعة السجل الأكاديمي، توجيه الطالب للمواد المتبقية، وتجنب التعارضات.</p>
+                    </div>
+                    <button class="action-btn secondary" id="feat-1-btn" onclick="alert('خاصية المرشد الأكاديمي متاحة فور تسجيل الدخول.')">بدء الاستشارة</button>
+                </div>
+
+                <div class="feature-card">
+                    <div>
+                        <h3 id="feat-2-title">📂 المستودع الرقمي للمراجع</h3>
+                        <p id="feat-2-desc">مكتبة مركزية تضم شروحات مرئية، كتب مرجعية لـ السمستر الثالث، ومشاريع تخرج سابقة.</p>
+                    </div>
+                    <button class="action-btn secondary" id="feat-2-btn" onclick="alert('المستودع الرقمي مفتوح للتصفح الأكاديمي.')">تصفح المكتبة</button>
+                </div>
+
+                <div class="feature-card">
+                    <div>
+                        <h3 id="feat-3-title">🚀 معرض مشاريع الـ IT والـ APK</h3>
+                        <p id="feat-3-desc">منصة حصرية لعرض ومشاركة التطبيقات البرمجية ومشاريع التخرج البرمجية للطلاب بفاعلية.</p>
+                    </div>
+                    <button class="action-btn" id="btn-projects" onclick="checkAccess()">استعراض المعرض</button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <h4>+450</h4>
+                    <span id="stat-1">طالب وطالبة</span>
+                </div>
+                <div class="stat-item">
+                    <h4>24</h4>
+                    <span id="stat-2">مقرراً أكاديمياً</span>
+                </div>
+                <div class="stat-item">
+                    <h4>100%</h4>
+                    <span id="stat-3">استقرار النظام</span>
+                </div>
+            </div>
         </div>
 
-        <!-- الأزرار التوجيهية -->
-        <div class="action-links">
-            <a href="dashboard.html" class="btn-primary-custom">الانتقال إلى لوحة التحكم 🚀</a>
-            <a href="login.html" class="btn-secondary-custom">تسجيل الدخول / الخروج</a>
-        </div>
+        <footer>
+            <p id="footer-text">جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026</p>
+        </footer>
     </div>
 
     <script>
-        const themeBtn = document.getElementById('theme-toggle');
-        const bodyTag = document.body;
+        const translationsMain = {
+            ar: {
+                ticker: "📢 تنبيه أكاديمي رسمي: تم تفعيل نظام الإرشاد الأكاديمي الذكي ورفع أحدث ملخصات مقررات السمستر الثالث. استعرض لوحة التحكم الخاصة بك الآن.",
+                title: "جامعة النيل الأبيض",
+                sub: "كلية علوم الحاسوب وتقانة المعلومات",
+                login: "تسجيل الدخول",
+                heroTitle: "البوابة الذكية لطلاب تقانة المعلومات",
+                heroDesc: "منصة أكاديمية متكاملة مصممة لإدارة المقررات، تتبع الجداول الدراسية، وعرض مشاريع الـ Web وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.",
+                f1Title: "🤖 الإرشاد الأكاديمي الذكي",
+                f1Desc: "نظام مساعد ذكي لمراجعة السجل الأكاديمي، توجيه الطالب للمواد المتبقية، وتجنب التعارضات.",
+                f1Btn: "بدء الاستشارة",
+                f2Title: "📂 المستودع الرقمي للمراجع",
+                f2Desc: "مكتبة مركزية تضم شروحات مرئية، كتب مرجعية لـ السمستر الثالث، ومشاريع تخرج سابقة.",
+                f2Btn: "تصفح المكتبة",
+                f3Title: "🚀 معرض مشاريع الـ IT والـ APK",
+                f3Desc: "منصة حصرية لعرض ومشاركة التطبيقات البرمجية ومشاريع التخرج البرمجية للطلاب بفاعلية.",
+                f3Btn: "استعراض المعرض",
+                s1: "طالب وطالبة", s2: "مقرراً أكاديمياً", s3: "استقرار النظام",
+                footer: "جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي 2026",
+                dashboard: "لوحة التحكم",
+                logout: "خروج"
+            },
+            en: {
+                ticker: "📢 Official Academic Notice: Smart Academic Guidance system activated. Check your dashboard now.",
+                title: "White Nile University",
+                sub: "Faculty of Computer Science & IT",
+                login: "Sign In",
+                heroTitle: "Smart Portal for IT Students",
+                heroDesc: "An integrated academic platform designed for managing courses, tracking schedules, and showcasing student web and APK projects.",
+                f1Title: "🤖 Smart Academic Advisor",
+                f1Desc: "An intelligent assistant system to review academic records and guide students effectively.",
+                f1Btn: "Start Consultation",
+                f2Title: "📂 Digital Repository",
+                f2Desc: "A central library including visual tutorials, reference books, and graduation projects.",
+                f2Btn: "Browse Library",
+                f3Title: "🚀 IT & APK Projects Gallery",
+                f3Desc: "An exclusive platform for showcasing software applications and student projects.",
+                f3Btn: "Explore Gallery",
+                s1: "Active Students", s2: "Courses", s3: "System Uptime",
+                footer: "All Rights Reserved © White Nile University - Kosti 2026",
+                dashboard: "Dashboard",
+                logout: "Logout"
+            }
+        };
 
-        // ضبط الأيقونة حسب الوضع الحالي
-        if (bodyTag.getAttribute('data-theme') === 'dark') {
-            themeBtn.textContent = '☀️';
-        } else {
-            themeBtn.textContent = '🌙';
+        function changeLanguageMain() {
+            const lang = document.getElementById('lang-select').value;
+            localStorage.setItem('it_lang', lang);
+            applyMainLang(lang);
         }
 
-        // التبديل وحفظ الوضع في التخزين المحلي
-        themeBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            let currentTheme = bodyTag.getAttribute('data-theme');
-            if (currentTheme === 'light') {
-                bodyTag.setAttribute('data-theme', 'dark');
-                localStorage.setItem('site_theme', 'dark');
-                themeBtn.textContent = '☀️';
+        function applyMainLang(lang) {
+            const t = translationsMain[lang] || translationsMain.ar;
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.getElementById('ticker-text').innerText = t.ticker;
+            document.getElementById('uni-title').innerText = t.title;
+            document.getElementById('uni-sub').innerText = t.sub;
+            document.getElementById('main-welcome-title').innerText = t.heroTitle;
+            document.getElementById('main-welcome-desc').innerText = t.heroDesc;
+            document.getElementById('feat-1-title').innerText = t.f1Title;
+            document.getElementById('feat-1-desc').innerText = t.f1Desc;
+            document.getElementById('feat-1-btn').innerText = t.f1Btn;
+            document.getElementById('feat-2-title').innerText = t.f2Title;
+            document.getElementById('feat-2-desc').innerText = t.f2Desc;
+            document.getElementById('feat-2-btn').innerText = t.f2Btn;
+            document.getElementById('feat-3-title').innerText = t.f3Title;
+            document.getElementById('feat-3-desc').innerText = t.f3Desc;
+            document.getElementById('footer-text').innerText = t.footer;
+            document.getElementById('stat-1').innerText = t.s1;
+            document.getElementById('stat-2').innerText = t.s2;
+            document.getElementById('stat-3').innerText = t.s3;
+
+            const currentUser = localStorage.getItem('it_logged_user');
+            const authNavArea = document.getElementById('auth-nav-area');
+            if (!currentUser) {
+                document.getElementById('login-btn-text').innerText = t.login;
             } else {
-                bodyTag.setAttribute('data-theme', 'light');
-                localStorage.setItem('site_theme', 'light');
-                themeBtn.textContent = '🌙';
+                authNavArea.innerHTML = `
+                    <div class="user-welcome-box">
+                        <span>${lang === 'ar' ? 'أهلاً،' : 'Hello,'} <b>${currentUser}</b></span>
+                        <a href="dashboard.html" class="action-btn secondary" style="padding: 6px 10px; font-size: 11px;">${t.dashboard}</a>
+                        <button onclick="logoutUser()" class="action-btn danger" style="padding: 6px 10px; font-size: 11px;">${t.logout}</button>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('it_logged_user');
+            const savedTheme = localStorage.getItem('it_theme') || 'light';
+            const savedLang = localStorage.getItem('it_lang') || 'ar';
+            
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+            document.getElementById('lang-select').value = savedLang;
+            applyMainLang(savedLang);
+
+            if (currentUser) {
+                document.getElementById('btn-projects').onclick = () => window.location.href = 'dashboard.html';
+                document.getElementById('btn-projects').innerText = savedLang === 'ar' ? "معرض المشاريع الحصري ✓" : "Exclusive Gallery ✓";
             }
         });
+
+        function checkAccess() {
+            alert('يرجى تسجيل الدخول بحسابك الجامعي أولاً للوصول لهذه الخدمات.');
+            window.location.href = 'login.html';
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('it_logged_user');
+            localStorage.removeItem('it_logged_id');
+            localStorage.removeItem('it_logged_semester');
+            window.location.reload();
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('it_theme', newTheme);
+            document.getElementById('theme-toggle').innerText = newTheme === 'dark' ? '☀️' : '🌙';
+        }
     </script>
 </body>
 </html>
