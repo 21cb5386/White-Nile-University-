@@ -44,9 +44,11 @@
             display: flex; flex-direction: column; border: 1px solid var(--border-color); flex: 1;
         }
 
+        /* شريط لوحة التحكم العلوي: الشعار يمين، والأزرار والأدوات يسار */
         header {
             padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);
+            width: 100%;
         }
 
         .university-brand { display: flex; align-items: center; gap: 12px; }
@@ -114,7 +116,7 @@
 <body data-theme="light">
 
     <div class="main-wrapper">
-        <!-- الشريط العلوي مع عكس العناصر -->
+        <!-- شريط لوحة التحكم: اللوجو والشعار يمين، الأدوات وأزرار الخروج يسار -->
         <header>
             <div class="university-brand">
                 <div class="university-logo">IT</div>
