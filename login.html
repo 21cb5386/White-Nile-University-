@@ -28,6 +28,13 @@
         }
 
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+        
+        a, button, .extras a, .switch-mode a {
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
         body { margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg-gradient); padding: 10px; }
 
         .container {
@@ -96,12 +103,109 @@
         .switch-mode a { color: var(--primary-color); font-weight: bold; cursor: pointer; text-decoration: none; }
         .hidden-view { display: none !important; }
 
-        .recaptcha-box-real {
-            background: #f9f9f9; border: 1px solid #d3d3d3; border-radius: 4px;
-            padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
-            max-width: 100%; margin: 10px 0; cursor: pointer;
+        /* التصميم العالمي الجديد لشكل reCAPTCHA "أنا لست روبوت" الاحترافي */
+        .recaptcha-box-global {
+            background: #f9f9f9;
+            border: 1px solid #d3d3d3;
+            border-radius: 6px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 320px;
+            width: 100%;
+            margin: 15px auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        [data-theme="dark"] .recaptcha-box-real { background: #2a2a2a; border-color: #444; }
+        .recaptcha-box-global:hover {
+            border-color: #b0b0b0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        [data-theme="dark"] .recaptcha-box-global {
+            background: #222;
+            border-color: #444;
+        }
+
+        .recaptcha-left-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .recaptcha-checkbox-custom {
+            width: 26px;
+            height: 26px;
+            background: #fff;
+            border: 2px solid #c1c1c1;
+            border-radius: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        [data-theme="dark"] .recaptcha-checkbox-custom {
+            background: #111;
+            border-color: #555;
+        }
+
+        .recaptcha-check-icon {
+            color: #006600;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+            animation: popIn 0.2s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .recaptcha-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #4285f4;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .recaptcha-label-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            letter-spacing: 0.2px;
+        }
+
+        .recaptcha-brand-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .recaptcha-logo-img {
+            width: 28px;
+            height: 28px;
+            opacity: 0.85;
+        }
+        .recaptcha-brand-right span {
+            font-size: 9px;
+            color: #777;
+            margin-top: 1px;
+            font-weight: 600;
+        }
+        .recaptcha-brand-right a {
+            font-size: 8px;
+            color: #555;
+            text-decoration: none;
+        }
+        .recaptcha-brand-right a:hover { text-decoration: underline; }
 
         @media (min-width: 768px) {
             .container { flex-direction: row; max-width: 780px; }
@@ -203,17 +307,29 @@
                 </div>
             </div>
 
-            <!-- خطوات استعادة كلمة المرور (مضبوطة بالكامل) -->
+            <!-- خطوات استعادة كلمة المرور مع "أنا لست روبوت" العالمية الاحترافية -->
             <div id="forgot-flow-container" class="hidden-view">
-                <div id="step-captcha">
-                    <p style="font-size: 13px; margin-bottom: 8px; color: var(--text-muted);">الرجاء تأكيد أنك لست روبوت:</p>
-                    <div class="recaptcha-box-real" onclick="triggerRealCaptcha()">
-                        <div class="recaptcha-left">
-                            <div class="recaptcha-checkbox" id="real-captcha-box">
-                                <div class="recaptcha-spinner" id="captcha-spinner" style="display:none; width:16px; height:16px; border:2px solid #ccc; border-top:2px solid #333; border-radius:50%; animation: spin 0.8s linear infinite;"></div>
-                                <span class="recaptcha-check-icon" id="captcha-check" style="display:none; color:green; font-weight:bold;">✓</span>
+                <div id="step-captcha" style="text-align: center;">
+                    <p style="font-size: 13px; margin-bottom: 15px; color: var(--text-muted); font-weight: 600;">الرجاء التحقق من هويتك للمتابعة:</p>
+                    
+                    <!-- التصميم العالمي الاحترافي لـ reCAPTCHA -->
+                    <div class="recaptcha-box-global" onclick="triggerRealCaptcha()">
+                        <div class="recaptcha-left-content">
+                            <div class="recaptcha-checkbox-custom">
+                                <div class="recaptcha-spinner" id="captcha-spinner"></div>
+                                <span class="recaptcha-check-icon" id="captcha-check">✓</span>
                             </div>
-                            <span class="recaptcha-text" id="lbl-robot" style="font-size: 13px;">أنا لست روبوت</span>
+                            <span class="recaptcha-label-text" id="lbl-robot">أنا لست روبوت</span>
+                        </div>
+                        <div class="recaptcha-brand-right">
+                            <svg class="recaptcha-logo-img" viewBox="0 0 48 48">
+                                <path fill="#4285F4" d="M36 24c0-1.3-.1-2.5-.3-3.6H24v7h6.8c-.3 1.5-1.1 2.8-2.4 3.7v3.1h3.9c2.3-2.1 3.7-5.2 3.7-9.2z"/>
+                                <path fill="#34A853" d="M24 36c3.2 0 6-1.1 8-3l-3.9-3.1c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5h-4v3.2C14.9 33.2 19.1 36 24 36z"/>
+                                <path fill="#FBBC05" d="M17.3 26.1c-.2-.7-.4-1.5-.4-2.1s.2-1.4.4-2.1v-3.2h-4c-.8 1.6-1.3 3.4-1.3 5.3s.5 3.7 1.3 5.3l4-3.2z"/>
+                                <path fill="#EA4335" d="M24 14.8c1.8 0 3.4.6 4.6 1.8l3.5-3.5C30 11.1 27.2 10 24 10c-4.9 0-9.1 2.8-11.1 6.9l4 3.2c.9-2.9 3.6-5.3 6.7-5.3z"/>
+                            </svg>
+                            <span>reCAPTCHA</span>
+                            <div><a href="#" onclick="return false;">الخصوصية</a> - <a href="#" onclick="return false;">الشروط</a></div>
                         </div>
                     </div>
                 </div>
