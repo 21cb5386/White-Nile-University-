@@ -17,11 +17,40 @@
             --border: #e2e8f0;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .top-nav-bar {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .btn-back-home {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: 0.2s;
+        }
+        .btn-back-home:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
         .login-card { background: var(--card-bg); width: 100%; max-width: 420px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border); }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .header-top select { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); font-weight: 600; cursor: pointer; }
-        h1 { font-size: 1.5rem; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
+        h1 { font-size: 1.4rem; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
         p.subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; }
         .form-group { margin-bottom: 18px; position: relative; }
         .form-group label { display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 8px; }
@@ -40,17 +69,23 @@
 </head>
 <body>
 
+    <!-- شريط علوي صغير للرجوع للرئيسية -->
+    <div class="top-nav-bar">
+        <a href="index.html" class="btn-back-home">
+            <i class="fa-solid fa-arrow-right"></i> الرئيسية
+        </a>
+    </div>
+
     <div class="login-card" id="main-container">
         <div class="header-top">
             <h1 id="form-title">بوابة تقانة المعلومات</h1>
-            <select id="lang-select" onchange="changeLanguage()">
+            <select id="lang-select">
                 <option value="ar">العربية</option>
             </select>
         </div>
         <p class="subtitle" id="form-subtitle">تسجيل الدخول الأكاديمي للطلاب.</p>
 
         <div id="auth-form-container">
-            <!-- حقول التسجيل / الدخول -->
             <div class="form-group signup-field hidden-view">
                 <label id="lbl-name">الاسم الكامل</label>
                 <div class="input-wrapper">
@@ -92,7 +127,6 @@
                 </div>
             </div>
 
-            <!-- حقل تأكيد كلمة المرور عند إنشاء حساب -->
             <div class="form-group signup-field hidden-view">
                 <label>تأكيد كلمة المرور</label>
                 <div class="input-wrapper">
@@ -103,7 +137,7 @@
 
             <div class="extras-row" id="login-extras">
                 <label><input type="checkbox"> <span id="lbl-remember">تذكرني</span></label>
-                <a id="lnk-forgot">نسيت كلمة المرور؟</a>
+                <a id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
             </div>
 
             <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
@@ -114,7 +148,6 @@
             </div>
         </div>
 
-        <!-- واجهة استعادة كلمة المرور (مخفية افتراضياً) -->
         <div id="forgot-flow-container" class="hidden-view">
             <h3 style="margin-bottom: 15px; color: var(--primary);">استعادة كلمة المرور</h3>
             <div id="step-captcha">
@@ -140,7 +173,6 @@
         </div>
     </div>
 
-    <!-- ربط ملف الجافاسكريبت الموحد -->
     <script type="module" src="lab.js"></script>
 </body>
 </html>
