@@ -13,119 +13,117 @@
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
             --text-main: #1f2937;
+            --header-text: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        [data-theme="dark"] {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #fbbf24;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --header-text: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.3s, color 0.3s; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* شريط التنقل الأكاديمي الفاخر */
+        /* شريط الإعلانات العاجلة المتحرك */
+        .notice-ticker {
+            background: #ef4444;
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: inset 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .notice-ticker span {
+            display: inline-block;
+            animation: ticker 25s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* شريط التنقل الأكاديمي */
         header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+            color: var(--header-text);
             padding: 1.2rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(15, 44, 89, 0.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .university-brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
+        .university-brand { display: flex; align-items: center; gap: 15px; }
         .university-logo {
-            width: 45px;
-            height: 45px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 900;
-            color: var(--primary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            font-size: 1.1rem;
+            width: 45px; height: 45px; background: #fff; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 900; color: #0f2c59; box-shadow: 0 2px 10px rgba(0,0,0,0.2); font-size: 1.1rem;
         }
-
-        .logo-area h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; }
+        .logo-area h1 { font-size: 1.15rem; font-weight: 800; }
         .logo-area span { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+
+        .nav-controls { display: flex; align-items: center; gap: 15px; }
+        .theme-toggle-btn {
+            background: rgba(255,255,255,0.2); border: none; color: #fff;
+            width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 1.1rem;
+        }
+        .theme-toggle-btn:hover { background: rgba(255,255,255,0.3); }
 
         .main-container { flex: 1; max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; width: 100%; }
 
-        /* واجهة الـ Hero الأكاديمية الجذابة */
         .hero-section {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
-            text-align: center;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(26, 86, 219, 0.1);
-            position: relative;
-            overflow: hidden;
+            background: var(--card-bg); padding: 3rem 2rem; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04); text-align: center; margin-bottom: 2rem;
+            border: 1px solid rgba(26, 86, 219, 0.1); position: relative; overflow: hidden;
         }
-
         .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; width: 6px; height: 100%;
-            background: var(--accent);
+            content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--accent);
         }
+        .hero-section h2 { font-size: 2rem; color: var(--text-main); margin-bottom: 1rem; font-weight: 800; }
+        .hero-section p { color: #6b7280; font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.8rem; max-width: 800px; margin-left: auto; margin-right: auto; }
 
-        .hero-section h2 { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; font-weight: 800; }
-        .hero-section p { color: #4b5563; font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.8rem; max-width: 800px; margin-left: auto; margin-right: auto; }
-
-        /* شبكة الخدمات والأقسام */
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
         
         .feature-card {
-            background: var(--card-bg);
-            padding: 1.8rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
-            border-top: 5px solid var(--secondary);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: var(--card-bg); padding: 1.8rem; border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03); border-top: 5px solid var(--secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; justify-content: space-between;
         }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(26, 86, 219, 0.08);
-        }
-
-        .feature-card h3 { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.6rem; font-weight: 700; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(26, 86, 219, 0.08); }
+        .feature-card h3 { font-size: 1.25rem; color: var(--text-main); margin-bottom: 0.6rem; font-weight: 700; }
         .feature-card p { font-size: 0.9rem; color: #6b7280; margin-bottom: 1.5rem; line-height: 1.5; }
 
         .btn {
-            display: inline-block;
-            background: var(--secondary);
-            color: white;
-            padding: 0.65rem 1.4rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 700;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            text-align: center;
+            display: inline-block; background: var(--secondary); color: white; padding: 0.65rem 1.4rem;
+            border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700;
+            transition: all 0.3s; cursor: pointer; border: none; text-align: center;
         }
+        .btn:hover { opacity: 0.9; box-shadow: 0 5px 15px rgba(26, 86, 219, 0.3); }
 
-        .btn:hover { background: var(--primary); box-shadow: 0 5px 15px rgba(15, 44, 89, 0.2); }
-
-        footer { text-align: center; padding: 1.5rem; background: #ffffff; color: #6b7280; font-size: 0.85rem; border-top: 1px solid #e5e7eb; margin-top: auto; font-weight: 600; }
-        
-        .user-welcome { display: flex; align-items: center; gap: 12px; color: #fff; font-size: 0.95rem; font-weight: 600; }
+        footer { text-align: center; padding: 1.5rem; background: var(--card-bg); color: #6b7280; font-size: 0.85rem; border-top: 1px solid rgba(0,0,0,0.05); margin-top: auto; font-weight: 600; }
+        .user-welcome { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; font-weight: 600; }
     </style>
 </head>
-<body>
+<body data-theme="light">
+
+    <!-- شريط الإعلانات الأكاديمية العاجلة -->
+    <div class="notice-ticker">
+        <span>📢 تنبيه أكاديمي عاجل: تم تحديث جداول محاضرات السمستر الثالث وإدراج متطلبات مشاريع البرمجة الذكية لهذا الأسبوع. يرجى مراجعة لوحة التحكم الخاصة بك.</span>
+    </div>
+
     <header>
         <div class="university-brand">
             <div class="university-logo">WNU</div>
@@ -134,8 +132,11 @@
                 <span>كلية علوم الحاسوب وتقانة المعلومات</span>
             </div>
         </div>
-        <div id="auth-nav-area">
-            <a href="login.html" class="btn" style="background: var(--accent); color: var(--primary);">تسجيل الدخول الأكاديمي</a>
+        <div class="nav-controls">
+            <button class="theme-toggle-btn" onclick="toggleTheme()" title="تبديل الوضع الداكن">🌓</button>
+            <div id="auth-nav-area">
+                <a href="login.html" class="btn" style="background: var(--accent); color: var(--primary);">تسجيل الدخول الأكاديمي</a>
+            </div>
         </div>
     </header>
 
@@ -160,7 +161,7 @@
                     <h3>جداول المحاضرات وقاعات التدريس</h3>
                     <p>متابعة جداول المحاضرات اليومية، توزيع القاعات، والمواعيد الرسمية للامتحانات الفصلية.</p>
                 </div>
-                <button class="btn" id="btn-schedules" onclick="checkAccess('يرجى تسجيل الدخول بحسابك الجامعي لعرض الجداول وقاعات المحاضرات.')">عرض الجداول الرسمية</button>
+                <button class="btn" id="btn-schedules" onclick="checkAccess()">عرض الجداول الرسمية</button>
             </div>
 
             <div class="feature-card">
@@ -168,7 +169,7 @@
                     <h3>معرض مشاريع الطلاب المبتكرة</h3>
                     <p>منصة حصرية لعرض تطبيقات الـ Web، الـ Mobile، ومشاريع التخرج التقنية لأبناء الكلية.</p>
                 </div>
-                <button class="btn" id="btn-projects" onclick="checkAccess('معرض المشاريع مخصص للطلاب المسجلين في المنصة فقط.')">استعراض المشاريع</button>
+                <button class="btn" id="btn-projects" onclick="checkAccess()">استعراض المشاريع</button>
             </div>
         </div>
     </div>
@@ -187,34 +188,46 @@
             const btnSchedules = document.getElementById('btn-schedules');
             const btnProjects = document.getElementById('btn-projects');
 
+            // تفعيل الثيم المحفوظ مسبقاً
+            const savedTheme = localStorage.getItem('it_theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+
             if (currentUser) {
                 authNavArea.innerHTML = `
                     <div class="user-welcome">
-                        <span>مرحباً، <b>${currentUser}</b></span>
-                        <button onclick="logoutUser()" class="btn" style="background: #ef4444; padding: 5px 12px; font-size: 0.8rem;">تسجيل الخروج</button>
+                        <span>أهلاً، <b>${currentUser}</b></span>
+                        <a href="dashboard.html" class="btn" style="background: var(--secondary); padding: 5px 12px; font-size: 0.8rem;">لوحة التحكم</a>
+                        <button onclick="logoutUser()" class="btn" style="background: #ef4444; padding: 5px 12px; font-size: 0.8rem;">خروج</button>
                     </div>
                 `;
                 mainTitle.innerText = `أهلاً بك يا بشمهندس / ${currentUser}`;
-                mainDesc.innerText = `تم التحقق من هويتك الأكاديمية بنجاح. كافة الأقسام الحصرية، جداول السمستر الثالث، ولوحة رفع المشاريع متاحة لك الآن.`;
+                mainDesc.innerText = `تم التحقق من هويتك الأكاديمية. يمكنك الانتقال الفوري لـ "لوحة التحكم" لمتابعة مقرراتك ورفع مشاريعك البرمجية.`;
 
-                btnSchedules.setAttribute("onclick", "alert('جاري فتح الجداول الرسمية وقاعات السمستر الثالث...')");
+                btnSchedules.onclick = () => window.location.href = 'dashboard.html';
                 btnSchedules.style.background = "#10b981";
-                btnSchedules.innerText = "عرض الجداول الرسمية ✓";
+                btnSchedules.innerText = "عرض جداول السمستر ✓";
 
-                btnProjects.setAttribute("onclick", "alert('جاري فتح لوحة معرض المشاريع والابتكارات...')");
+                btnProjects.onclick = () => window.location.href = 'dashboard.html';
                 btnProjects.style.background = "#10b981";
-                btnProjects.innerText = "معرض المشاريع الحصري ✓";
+                btnProjects.innerText = "لوحة إدارة المشاريع ✓";
             }
         });
 
-        function checkAccess(msg) {
-            alert(msg);
+        function checkAccess() {
+            alert('يرجى تسجيل الدخول بحسابك الجامعي أولاً للوصول لهذه الخدمات.');
             window.location.href = 'login.html';
         }
 
         function logoutUser() {
             localStorage.removeItem('it_logged_user');
             window.location.reload();
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('it_theme', newTheme);
         }
     </script>
 </body>
