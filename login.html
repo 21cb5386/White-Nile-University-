@@ -106,7 +106,7 @@
                     <a href="#" id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
                 </div>
 
-                <button class="action-btn" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
+                <button type="button" class="action-btn" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
 
                 <div class="switch-mode">
                     <span id="switch-text">ليس لديك حساب؟</span> 
@@ -150,7 +150,7 @@
                             <span class="input-icon">✉️</span>
                         </div>
                     </div>
-                    <button class="action-btn" onclick="sendVerificationCode()" style="margin-top: 12px; width: 100%;">إرسال رمز التحقق</button>
+                    <button type="button" class="action-btn" onclick="sendVerificationCode()" style="margin-top: 12px; width: 100%;">إرسال رمز التحقق</button>
                 </div>
 
                 <div id="step-otp" class="hidden-view" style="margin-top: 10px;">
@@ -161,7 +161,7 @@
                             <span class="input-icon">🔑</span>
                         </div>
                     </div>
-                    <button class="action-btn" onclick="verifyOtpCode()" style="margin-top: 12px; width: 100%;">التحقق من الرمز</button>
+                    <button type="button" class="action-btn" onclick="verifyOtpCode()" style="margin-top: 12px; width: 100%;">التحقق من الرمز</button>
                 </div>
 
                 <div id="step-newpass" class="hidden-view" style="margin-top: 10px;">
@@ -179,7 +179,7 @@
                             <span class="input-icon">🔒</span>
                         </div>
                     </div>
-                    <button class="action-btn" onclick="saveNewPassword()" style="margin-top: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">حفظ وتحديث كلمة المرور</button>
+                    <button type="button" class="action-btn" onclick="saveNewPassword()" style="margin-top: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">حفظ وتحديث كلمة المرور</button>
                 </div>
 
                 <div class="switch-mode" style="margin-top: 15px;">
@@ -190,6 +190,7 @@
         </div>
     </div>
 
-    <script src="lab.js"></script>
+    <!-- التعديل الهام هنا بتطبيق type="module" لملف lab.js -->
+    <script type="module" src="lab.js"></script>
 </body>
 </html>
