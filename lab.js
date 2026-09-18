@@ -1,6 +1,6 @@
-// استيراد مكتبات فايربيس المطلوبة (إصدار مستقر ومتوافق مع المتصفحات)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// استيراد مكتبات فايربيس المطلوبة
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 // إعدادات الاتصال بقاعدة البيانات الخاصة بك
 const firebaseConfig = {
@@ -13,21 +13,15 @@ const firebaseConfig = {
   appId: "1:364361272352:web:56953086b49cb2e0a6c045"
 };
 
-// تهيئة Firebase و Firestore بأمان
-let app, db;
-try {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-} catch (e) {
-    console.error("Firebase Initialization Error:", e);
-}
+// تهيئة Firebase و Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
     const loggedUser = localStorage.getItem('it_logged_user');
     if (loggedUser && window.location.pathname.includes('login.html')) {
         window.location.href = 'dashboard.html';
     }
-    
     const savedTheme = localStorage.getItem('it_theme') || 'light';
     const savedLang = localStorage.getItem('it_lang') || 'ar';
     document.body.setAttribute('data-theme', savedTheme);
@@ -38,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         changeLanguage();
     }
 
-    // ربط زر الإرسال / تسجيل الدخول بـ EventListener مباشر
+    // ربط زر الإرسال / تسجيل الدخول بـ EventListener لضمان استجابته المباشرة
     const submitBtn = document.getElementById('submit-btn');
     if (submitBtn) {
         submitBtn.addEventListener('click', (e) => {
@@ -64,10 +58,26 @@ let recoveryTargetEmail = "";
 
 const translationsLogin = {
     ar: {
+        miniTitle: "جامعة النيل الأبيض",
+        miniSub: "بوابة تقانة المعلومات",
+        home: "الرئيسية",
         loginTitle: "بوابة تقانة المعلومات",
         loginSub: "تسجيل الدخول الأكاديمي للطلاب.",
         signupTitle: "إنشاء حساب جامعي جديد",
         signupSub: "قم بتعبئة بياناتك للانضمام للمنصة.",
+        name: "الاسم الكامل",
+        universityId: "الرقم الجامعي (ID)",
+        semester: "السمستر الحالي",
+        email: "البريد الإلكتروني الجامعي",
+        password: "كلمة المرور",
+        remember: "تذكرني",
+        forgot: "نسيت كلمة المرور؟",
+        btnIn: "تسجيل الدخول",
+        btnUp: "إنشاء الحساب",
+        switchInText: "ليس لديك حساب؟",
+        switchUpText: "لديك حساب بالفعل؟",
+        linkUp: "سجل الآن",
+        linkIn: "سجل دخولك",
         errFields: "الرجاء ملء جميع الحقول المطلوبة!",
         errNotFound: "الحساب غير موجود، يرجى إنشاء حساب جديد!",
         errWrongPass: "كلمة المرور غير صحيحة!",
@@ -79,10 +89,26 @@ const translationsLogin = {
         loadSignup: "جاري التحقق من الرقم الجامعي وإنشاء الحساب..."
     },
     en: {
+        miniTitle: "White Nile Univ",
+        miniSub: "IT Portal",
+        home: "Home",
         loginTitle: "IT Student Portal",
         loginSub: "Student Academic Sign In.",
         signupTitle: "Create University Account",
         signupSub: "Fill in your details to join the platform.",
+        name: "Full Name",
+        universityId: "University ID",
+        semester: "Current Semester",
+        email: "University Email",
+        password: "Password",
+        remember: "Remember me",
+        forgot: "Forgot Password?",
+        btnIn: "Sign In",
+        btnUp: "Create Account",
+        switchInText: "Don't have an account?",
+        switchUpText: "Already have an account?",
+        linkUp: "Sign Up",
+        linkIn: "Sign In",
         errFields: "Please fill in all required fields!",
         errNotFound: "Account not found, please sign up!",
         errWrongPass: "Incorrect password!",
@@ -107,7 +133,16 @@ function changeLanguage() {
     
     setTxt('form-title', isLogin ? t.loginTitle : t.signupTitle);
     setTxt('form-subtitle', isLogin ? t.loginSub : t.signupSub);
-    setTxt('submit-btn', isLogin ? (lang === 'ar' ? 'تسجيل الدخول' : 'Sign In') : (lang === 'ar' ? 'إنشاء الحساب' : 'Create Account'));
+    setTxt('lbl-name', t.name);
+    setTxt('lbl-id', t.universityId);
+    setTxt('lbl-semester', t.semester);
+    setTxt('lbl-email', t.email);
+    setTxt('lbl-password', t.password);
+    setTxt('lbl-remember', t.remember);
+    setTxt('lnk-forgot', t.forgot);
+    setTxt('submit-btn', isLogin ? t.btnIn : t.btnUp);
+    setTxt('switch-text', isLogin ? t.switchInText : t.switchUpText);
+    setTxt('switch-btn', isLogin ? t.linkUp : t.linkIn);
 }
 
 function toggleMode() {
@@ -143,6 +178,74 @@ function hidePassword(inputId, event) {
     if(input) input.type = 'password';
 }
 
+function checkPasswordStrength(password) {
+    const bars = [
+        document.getElementById('s-bar-1'),
+        document.getElementById('s-bar-2'),
+        document.getElementById('s-bar-3'),
+        document.getElementById('s-bar-4')
+    ];
+    const textEl = document.getElementById('strength-text');
+    if (!bars[0]) return;
+
+    let score = 0;
+    if (password.length > 5) score++;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password) && /[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    const colors = ['#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+    const texts = ['ضعيفة جداً', 'ضعيفة', 'جيدة', 'قوية وممتازة'];
+
+    bars.forEach((bar, index) => {
+        if (index < score && password.length > 0) {
+            bar.style.background = colors[score - 1];
+        } else {
+            bar.style.background = '#e0e0e0';
+        }
+    });
+
+    if (password.length > 0) {
+        textEl.innerText = texts[score - 1] || 'ضعيفة جداً';
+        textEl.style.color = colors[score - 1] || '#ef4444';
+    } else {
+        textEl.innerText = 'قوة كلمة المرور';
+        textEl.style.color = '#777';
+    }
+}
+
+function checkPasswordMatch() {
+    const pass = document.getElementById('pass-input').value;
+    const confirmPass = document.getElementById('confirm-pass-input').value;
+    const feedback = document.getElementById('match-feedback');
+    
+    if (!feedback) return;
+
+    if (confirmPass.length === 0) {
+        feedback.innerText = "";
+        return;
+    }
+
+    if (pass === confirmPass) {
+        feedback.innerText = "✓ كلمتا المرور متطابقتان";
+        feedback.style.color = "#10b981";
+    } else {
+        feedback.innerText = "✗ كلمتا المرور غير متطابقتين";
+        feedback.style.color = "#ef4444";
+    }
+}
+
+const lottieElement = document.getElementById('lottie-animation');
+if(lottieElement && typeof lottie !== 'undefined') {
+    lottie.loadAnimation({
+        container: lottieElement,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json'
+    });
+}
+
 function showLoadingOverlay(message) {
     let overlay = document.getElementById('loading-overlay');
     if (!overlay) {
@@ -170,7 +273,6 @@ function hideLoadingOverlay() {
     if(overlay) overlay.style.display = 'none';
 }
 
-// دالة التحقق وتسجيل الدخول أو إنشاء الحساب الأساسية
 async function handleSubmit() {
     const emailInput = document.getElementById('email-input');
     const passInput = document.getElementById('pass-input');
@@ -251,7 +353,6 @@ async function handleSubmit() {
         } catch (error) {
             hideLoadingOverlay();
             console.error("Firebase Error:", error);
-            // في حال عدم الاتصال بالإنترنت أو خطأ في الفايربيس، نسمح بالتسجيل مؤقتاً لتجربة الموقع
             users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
             localStorage.setItem('it_platform_users', JSON.stringify(users));
             alert(t.succSignup);
@@ -294,12 +395,12 @@ function sendVerificationCode() {
         return;
     }
 
-    showLoadingOverlay("جاري إرسال رمز التحقق...");
+    showLoadingOverlay("جاري إرسال رمز الـ OTP لبريدك...");
     setTimeout(() => {
         hideLoadingOverlay();
         recoveryTargetEmail = email;
         generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        alert("رمز التحقق الخاص بك هو: " + generatedOtp);
+        alert("رمز التحقق التجريبي الخاص بك هو: " + generatedOtp);
         const stepEmail = document.getElementById('step-email');
         const stepOtp = document.getElementById('step-otp');
         if(stepEmail) stepEmail.classList.add('hidden-view');
@@ -353,12 +454,14 @@ function backToLogin() {
     if(check) check.style.display = 'none';
 }
 
-// تصدير الدوال للاستخدام العام في الأزرار داخل HTML
+// تصدير الدوال للنطاق العام لتعمل مع الأزرار مباشرة
 window.handleSubmit = handleSubmit;
 window.toggleMode = toggleMode;
 window.changeLanguage = changeLanguage;
 window.showPassword = showPassword;
 window.hidePassword = hidePassword;
+window.checkPasswordStrength = checkPasswordStrength;
+window.checkPasswordMatch = checkPasswordMatch;
 window.startForgotPassword = startForgotPassword;
 window.triggerRealCaptcha = triggerRealCaptcha;
 window.sendVerificationCode = sendVerificationCode;
