@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تقانة المعلومات - تسجيل الدخول</title>
+    <!-- استدعاء مكتبة Lottie للرسوم المتحركة -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container" id="main-container" dir="rtl">
+        
+        <!-- شريط اللغة والرجوع للرئيسية -->
+        <div class="top-nav-bar" style="position: absolute; top: 15px; right: 20px; left: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+            <a href="index.html" class="home-link-btn" style="text-decoration: none; color: #2a5298; font-weight: 700; font-size: 13px; background: #fff; padding: 5px 10px; border-radius: 8px; border: 1px solid #ddd;">← الرئيسية للمنصة</a>
+            <select id="lang-select" onchange="changeLanguage()" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #ddd; background: #fff; font-size: 12px; cursor: pointer; outline: none;">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select>
+        </div>
+
+        <div class="animation-side" style="margin-top: 30px;">
+            <div id="lottie-animation"></div>
+        </div>
+
+        <div class="form-side">
+            <div class="header-text">
+                <h2 id="form-title">مرحباً بك في منصة تقانة المعلومات</h2>
+                <p id="form-subtitle">الرجاء إدخال بياناتك لتسجيل الدخول.</p>
+            </div>
+
+            <!-- نموذج تسجيل الدخول / إنشاء الحساب -->
+            <div id="auth-form-container">
+                <div class="input-group signup-field hidden-view" id="name-group">
+                    <label id="lbl-name">الاسم الكامل</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="fullname" placeholder="أدخل اسمك الكامل">
+                        <span class="input-icon">👤</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="lbl-email">البريد الإلكتروني</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email-input" placeholder="name@example.com">
+                        <span class="input-icon">✉️</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label id="lbl-password">كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="pass-input" placeholder="••••••••" oninput="checkPasswordStrength(this.value); checkPasswordMatch();">
+                        <span class="input-icon">🔒</span>
+                        <svg class="toggle-password" viewBox="0 0 24 24" 
+                             onpointerdown="showPassword('pass-input', event)" onpointerup="hidePassword('pass-input', event)"
+                             oncontextmenu="return false;">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </div>
+                    <div id="strength-container" class="hidden-view">
+                        <div class="strength-meter-container">
+                            <div class="strength-bar" id="bar-1"></div>
+                            <div class="strength-bar" id="bar-2"></div>
+                            <div class="strength-bar" id="bar-3"></div>
+                            <div class="strength-bar" id="bar-4"></div>
+                        </div>
+                        <div class="strength-text" id="strength-label">قوة كلمة المرور</div>
+                    </div>
+                </div>
+
+                <div class="input-group signup-field hidden-view" id="confirm-pass-group">
+                    <label id="lbl-confirm">إعادة كتابة كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirm-pass-input" placeholder="••••••••" oninput="checkPasswordMatch()">
+                        <span class="input-icon">🔒</span>
+                        <svg class="toggle-password" viewBox="0 0 24 24" 
+                             onpointerdown="showPassword('confirm-pass-input', event)" onpointerup="hidePassword('confirm-pass-input', event)"
+                             oncontextmenu="return false;">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </div>
+                    <div id="match-container" class="hidden-view">
+                        <div class="match-feedback-text" id="match-label">كلمتا المرور غير متطابقتين</div>
+                    </div>
+                </div>
+
+                <div class="extras" id="login-extras">
+                    <label><input type="checkbox" id="remember-me-chk"> <span id="lbl-remember">تذكرني</span></label>
+                    <a href="#" id="lnk-forgot" onclick="startForgotPassword()">نسيت كلمة المرور؟</a>
+                </div>
+
+                <button class="action-btn" id="submit-btn" onclick="handleSubmit()">تسجيل الدخول</button>
+
+                <div class="switch-mode">
+                    <span id="switch-text">ليس لديك حساب؟</span> 
+                    <a id="switch-btn" onclick="toggleMode()">سجل الآن</a>
+                </div>
+            </div>
+
+            <!-- لوحة التحكم / شاشة النجاح وتسجيل الخروج -->
+            <div id="dashboard-view" class="dashboard-container hidden-view">
+                <h3 id="dash-welcome">أهلاً بك في منصة تقانة المعلومات!</h3>
+                <p id="dash-email-display" style="margin-bottom: 15px; color: #555;"></p>
+                <div style="display: flex; gap: 10px; flex-direction: column;">
+                    <a href="index.html" class="action-btn" style="text-decoration: none; text-align: center; background: #2a5298;">الانتقال للمنصة الرئيسية</a>
+                    <button class="action-btn" id="btn-logout" onclick="handleLogout()" style="background: #e53935;">تسجيل الخروج</button>
+                </div>
+            </div>
+
+            <!-- مراحل استعادة كلمة المرور -->
+            <div id="forgot-flow-container" class="hidden-view">
+                <div id="step-captcha">
+                    <div class="recaptcha-box-real" onclick="triggerRealCaptcha()">
+                        <div class="recaptcha-left">
+                            <div class="recaptcha-checkbox" id="real-captcha-box">
+                                <div class="recaptcha-spinner" id="captcha-spinner"></div>
+                                <span class="recaptcha-check-icon" id="captcha-check">✓</span>
+                            </div>
+                            <span class="recaptcha-text" id="lbl-robot">أنا لست روبوت</span>
+                        </div>
+                        <div class="recaptcha-brand">
+                            <span class="logo-icon">
+                                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 2L4 7V15C4 22.16 9.12 28.86 16 30.5C22.88 28.86 28 22.16 28 15V7L16 2Z" fill="#1A73E8"/>
+                                    <path d="M13.5 21.5L8.5 16.5L10.28 14.72L13.5 17.94L21.72 9.72L23.5 11.5L13.5 21.5Z" fill="white"/>
+                                </svg>
+                            </span>
+                            <span style="font-size: 9px; font-weight: bold; color: #555;">reCAPTCHA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-email" class="hidden-view">
+                    <div class="input-group">
+                        <label id="lbl-recovery-email">أدخل بريدك الإلكتروني المسجل</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="recovery-email-input" placeholder="name@example.com">
+                            <span class="input-icon">✉️</span>
+                        </div>
+                    </div>
+                    <button class="action-btn" id="btn-send-code" onclick="sendVerificationCode()">إرسال رمز التحقق</button>
+                </div>
+
+                <div id="step-otp" class="hidden-view">
+                    <div class="input-group">
+                        <label id="lbl-otp">أدخل الرمز المكون من 4 أرقام المرسل لبريدك</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="otp-input" placeholder="1234" maxlength="4">
+                            <span class="input-icon">🔑</span>
+                        </div>
+                    </div>
+                    <button class="action-btn" id="btn-verify-otp" onclick="verifyOtpCode()">التحقق من الرمز</button>
+                </div>
+
+                <div id="step-newpass" class="hidden-view">
+                    <div class="input-group">
+                        <label id="lbl-new-pass">كلمة المرور الجديدة</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="new-pass-input" placeholder="••••••••">
+                            <span class="input-icon">🔒</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-confirm-new-pass">تأكيد كلمة المرور الجديدة</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="confirm-new-pass-input" placeholder="••••••••">
+                            <span class="input-icon">🔒</span>
+                        </div>
+                    </div>
+                    <button class="action-btn" id="btn-save-pass" onclick="saveNewPassword()">إعادة تعيين كلمة المرور</button>
+                </div>
+
+                <div class="switch-mode" style="margin-top: 15px;">
+                    <a id="back-to-login" onclick="backToLogin()">العودة لتسجيل الدخول</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="lab.js"></script>
+</body>
+</html>

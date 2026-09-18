@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تقانة المعلومات - جامعة النيل الأبيض</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: #f8f9fa; color: #333; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header .logo-area h1 { font-size: 1.1rem; font-weight: 700; }
+        header .logo-area span { font-size: 0.8rem; color: #ffd700; }
+        .main-container { flex: 1; max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; width: 100%; }
+        .hero-section { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; margin-bottom: 1.5rem; }
+        .hero-section h2 { font-size: 1.6rem; color: #1e3c72; margin-bottom: 0.8rem; }
+        .hero-section p { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.2rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+        .feature-card { background: white; padding: 1.2rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid #2a5298; }
+        .feature-card h3 { font-size: 1.1rem; color: #1e3c72; margin-bottom: 0.4rem; }
+        .feature-card p { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+        .btn { display: inline-block; background: #2a5298; color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: background 0.3s; }
+        .btn:hover { background: #1e3c72; }
+        footer { text-align: center; padding: 1rem; background: #fff; color: #777; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: auto; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <h1>جامعة النيل الأبيض - كوستي</h1>
+            <span>كلية علوم الحاسوب وتقانة المعلومات (IT)</span>
+        </div>
+        <div>
+            <a href="login.html" class="btn" style="background: #ffd700; color: #1e3c72;">تسجيل الدخول</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="hero-section">
+            <h2>مرحباً بك في البوابة الذكية لطلاب الـ IT</h2>
+            <p>منصة طلابية متكاملة تهدف لتسهيل الوصول إلى المحاضرات الأكاديمية، الجداول الدراسية، ومتابعة المشاريع والابتكارات التقنية الخاصة بطلاب السمستر الثالث والمستويات المختلفة.</p>
+            <a href="#services" class="btn">استعرض الخدمات</a>
+        </div>
+
+        <div class="features-grid" id="services">
+            <div class="feature-card">
+                <h3>المحاضرات والمقررات</h3>
+                <p>تصفح مواد السمستر الثالث، وملخصات المحاضرات بصيغة PDF لتسهيل التحصيل الأكاديمي.</p>
+                <a href="#" class="btn" onclick="alert('قريباً: قسم المقررات الدراسية')">عرض المواد</a>
+            </div>
+
+            <div class="feature-card">
+                <h3>الجداول والامتحانات</h3>
+                <p>متابعة جداول المحاضرات اليومية، قاعات المحاضرات، ومواعيد الامتحانات الفصلية بدقة.</p>
+                <a href="#" class="btn" onclick="alert('قريباً: جدول المحاضرات')">عرض الجداول</a>
+            </div>
+
+            <div class="feature-card">
+                <h3>معرض مشاريع الطلاب</h3>
+                <p>نافذة لعرض ومشاركة التطبيقات، مشاريع الـ Web، وتطبيقات الـ APK المصنوعة بأيدي طلاب الكلية.</p>
+                <a href="#" class="btn" onclick="alert('قريباً: مشاريع الطلاب المبتكرة')">استعرض المشاريع</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © جامعة النيل الأبيض - كوستي | قسم تقانة المعلومات 2026</p>
+    </footer>
+</body>
+</html>
