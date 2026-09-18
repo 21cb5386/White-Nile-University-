@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الذكية - بوابة تقانة المعلومات</title>
+    <title>لوحة التحكم - بوابة تقانة المعلومات</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script>
@@ -15,18 +15,12 @@
 </head>
 <body class="dashboard-body">
 
-    <!-- تأثير خلفية متحركة عصرية -->
-    <div class="bg-glow-shape shape-1"></div>
-    <div class="bg-glow-shape shape-2"></div>
-
     <div class="dashboard-wrapper" id="main-container">
         
-        <!-- الشريط العلوي الاحترافي (Modern Glass Header) -->
+        <!-- الشريط العلوي -->
         <header class="dash-top-bar">
             <div class="student-profile-summary">
-                <div class="avatar-ring">
-                    <span id="student-initials">M</span>
-                </div>
+                <div class="avatar-ring" id="student-initials">M</div>
                 <div class="student-titles">
                     <h2 id="welcome-user">مرحباً، جاري التحميل...</h2>
                     <div class="meta-badges">
@@ -36,24 +30,17 @@
                 </div>
             </div>
 
-            <!-- أزرار التحكم العلوية (الرئيسية + تسجيل الخروج) -->
             <div class="dash-actions-header">
-                <a href="index.html" class="nav-home-btn" title="العودة للرئيسية">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    <span>الرئيسية</span>
-                </a>
-                <button onclick="logoutUser()" class="logout-btn-modern" title="تسجيل الخروج">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    <span>خروج</span>
-                </button>
+                <a href="index.html" class="nav-home-btn">الرئيسية</a>
+                <button onclick="logoutUser()" class="logout-btn-modern">خروج</button>
             </div>
         </header>
 
-        <!-- شبكة البطاقات التفاعلية (Grid System) -->
+        <!-- شبكة البطاقات -->
         <div class="dashboard-grid">
             
-            <!-- بطاقة الجدول الدراسي -->
-            <div class="glass-card card-schedule">
+            <!-- بطاقة الجدول -->
+            <div class="glass-card">
                 <div class="card-icon-title">
                     <div class="icon-box">📚</div>
                     <h3>الجدول الدراسي والمقررات</h3>
@@ -62,40 +49,38 @@
                 <ul class="styled-list">
                     <li><span>هياكل البيانات والخوارزميات المتقدمة</span> <span class="code-badge">IT-301</span></li>
                     <li><span>شبكات الحاسوب وتوجيه البيانات</span> <span class="code-badge">IT-302</span></li>
-                    <li><span>تطوير واجهات الويب التفاعلية (Frontend)</span> <span class="code-badge">IT-303</span></li>
+                    <li><span>تطوير واجهات الويب (Frontend)</span> <span class="code-badge">IT-303</span></li>
                     <li><span>أنظمة قواعد البيانات المتقدمة</span> <span class="code-badge">IT-304</span></li>
                 </ul>
             </div>
 
-            <!-- بطاقة المساعد الأكاديمي والواتساب -->
-            <div class="glass-card card-whatsapp">
+            <!-- بطاقة الواتساب برقمك الجديد -->
+            <div class="glass-card">
                 <div class="card-icon-title">
-                    <div class="icon-box wa-icon">💬</div>
+                    <div class="icon-box">💬</div>
                     <h3>الدعم الفني والمساعد</h3>
                 </div>
-                <p class="card-subtitle">تواصل فوري مع الإدارة الأكاديمية عبر الواتساب للاستفسارات والحلول:</p>
+                <p class="card-subtitle">تواصل فوري مع الإدارة الأكاديمية للاستفسارات والحلول:</p>
                 <a id="whatsapp-btn" href="#" target="_blank" class="wa-action-btn">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                    <span>التواصل عبر واتساب الكلية</span>
+                    <span>التواصل عبر واتساب</span>
                 </a>
             </div>
 
-            <!-- بطاقة الخدمات الأكاديمية -->
-            <div class="glass-card card-services">
+            <!-- بطاقة الخدمات -->
+            <div class="glass-card">
                 <div class="card-icon-title">
                     <div class="icon-box">⚡</div>
                     <h3>الخدمات الأكاديمية السريعة</h3>
                 </div>
-                <p class="card-subtitle">يمكنك تقديم الطلبات الإدارية بضغطة زر واحدة:</p>
+                <p class="card-subtitle">يمكنك تقديم الطلبات الإدارية بضغطة زر:</p>
                 <div class="services-actions-grid">
                     <button onclick="showServiceNotice('إفادة قيد دراسي')" class="service-chip">📄 طلب إفادة قيد</button>
                     <button onclick="showServiceNotice('شهادة إثبات قيد للرئاسة')" class="service-chip">🎓 شهادة لمن يهمه الأمر</button>
-                    <button onclick="showServiceNotice('إشعار الرسوم الدراسية')" class="service-chip">💰 كشف الرسوم</button>
                 </div>
             </div>
 
-            <!-- بطاقة المكتبة الرقمية -->
-            <div class="glass-card card-library full-width">
+            <!-- المكتبة الرقمية -->
+            <div class="glass-card full-width">
                 <div class="card-icon-title">
                     <div class="icon-box">📖</div>
                     <h3>المكتبة البرمجية والمراجع الرقمية</h3>
@@ -113,12 +98,7 @@
                             <tr>
                                 <td><strong>مقدمة في هياكل البيانات والخوارزميات</strong></td>
                                 <td><span class="file-tag pdf">PDF مرجع</span></td>
-                                <td><button onclick="downloadFile('Structures')" class="dl-btn">تحميل الملف</button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>دليل تطوير واجهات الويب الحديثة (JavaScript & UI)</strong></td>
-                                <td><span class="file-tag code">دليل عملي</span></td>
-                                <td><button onclick="downloadFile('WebUI')" class="dl-btn">تحميل الملف</button></td>
+                                <td><button onclick="downloadFile('Structures')" class="dl-btn">تحميل</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -128,7 +108,6 @@
         </div>
     </div>
 
-    <!-- إشعار تفاعلي منبثق (Toast Notification) -->
     <div id="toast-notification" class="toast-notification">
         <span id="toast-msg">تم تنفيذ الطلب بنجاح</span>
     </div>
