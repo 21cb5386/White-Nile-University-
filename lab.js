@@ -1,3 +1,22 @@
+// استيراد مكتبات فايربيس المطلوبة
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+// إعدادات الاتصال بقاعدة البيانات الخاصة بك
+const firebaseConfig = {
+  apiKey: "AIzaSyBjaaE-C8LzunKLjlULujL--0c_Cd1fA94",
+  authDomain: "kosti-university-it.firebaseapp.com",
+  databaseURL: "https://kosti-university-it-default-rtdb.firebaseio.com",
+  projectId: "kosti-university-it",
+  storageBucket: "kosti-university-it.firebasestorage.app",
+  messagingSenderId: "364361272352",
+  appId: "1:364361272352:web:56953086b49cb2e0a6c045"
+};
+
+// تهيئة Firebase و Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 document.addEventListener('DOMContentLoaded', () => {
     const loggedUser = localStorage.getItem('it_logged_user');
     if (loggedUser && window.location.pathname.includes('login.html')) {
@@ -45,10 +64,11 @@ const translationsLogin = {
         errNotFound: "الحساب غير موجود، يرجى إنشاء حساب جديد!",
         errWrongPass: "كلمة المرور غير صحيحة!",
         errAlreadyExists: "هذا البريد مسجل مسبقاً!",
+        errInvalidStudentId: "عذراً، الرقم الجامعي غير مسجل في قاعدة بيانات الجامعة الرسمية!",
         succSignup: "تم إنشاء الحساب الأكاديمي بنجاح!",
         loadLogin: "جاري التحقق من الاعتماد الأكاديمي...",
         loadRedirect: "تم بنجاح! جاري تحويلك لوحة التحكم...",
-        loadSignup: "جاري إنشاء الحساب الأكاديمي..."
+        loadSignup: "جاري التحقق من الرقم الجامعي وإنشاء الحساب..."
     },
     en: {
         miniTitle: "White Nile Univ",
@@ -75,10 +95,11 @@ const translationsLogin = {
         errNotFound: "Account not found, please sign up!",
         errWrongPass: "Incorrect password!",
         errAlreadyExists: "This email is already registered!",
+        errInvalidStudentId: "Sorry, this University ID is not registered in the official database!",
         succSignup: "Account created successfully!",
         loadLogin: "Verifying academic credentials...",
         loadRedirect: "Success! Redirecting to dashboard...",
-        loadSignup: "Creating academic account..."
+        loadSignup: "Verifying student ID and creating account..."
     }
 };
 
@@ -109,8 +130,6 @@ function toggleMode() {
     isLogin = !isLogin;
     const signupFields = document.querySelectorAll('.signup-field');
     const loginExtras = document.getElementById('login-extras');
-    const lang = localStorage.getItem('it_lang') || 'ar';
-    const t = translationsLogin[lang] || translationsLogin.ar;
 
     signupFields.forEach(field => {
         if (isLogin) {
@@ -140,7 +159,6 @@ function hidePassword(inputId, event) {
     if(input) input.type = 'password';
 }
 
-// دالة فحص قوة كلمة المرور الحقيقية
 function checkPasswordStrength(password) {
     const bars = [
         document.getElementById('s-bar-1'),
@@ -177,7 +195,6 @@ function checkPasswordStrength(password) {
     }
 }
 
-// دالة التأكد التلقائي من تطابق كلمتي المرور
 function checkPasswordMatch() {
     const pass = document.getElementById('pass-input').value;
     const confirmPass = document.getElementById('confirm-pass-input').value;
@@ -237,7 +254,8 @@ function hideLoadingOverlay() {
     if(overlay) overlay.style.display = 'none';
 }
 
-function handleSubmit() {
+// دالة التحقق من الرقم الجامعي في فايربيس وإنشاء/تسجيل الدخول
+async function handleSubmit() {
     const email = document.getElementById('email-input').value.trim();
     const pass = document.getElementById('pass-input').value;
     const lang = localStorage.getItem('it_lang') || 'ar';
@@ -286,13 +304,32 @@ function handleSubmit() {
         }
 
         showLoadingOverlay(t.loadSignup);
-        setTimeout(() => {
-            users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
-            localStorage.setItem('it_platform_users', JSON.stringify(users));
+
+        try {
+            // التحقق مما إذا كان الرقم الجامعي موجوداً في مجموعة students بـ Firestore
+            const studentDocRef = doc(db, "students", studentId);
+            const studentSnap = await getDoc(studentDocRef);
+
+            if (!studentSnap.exists()) {
+                hideLoadingOverlay();
+                alert(t.errInvalidStudentId);
+                return;
+            }
+
+            // إذا كان الرقم موجوداً، نكمل عملية إنشاء الحساب بنجاح
+            setTimeout(() => {
+                users[email] = { name: name, studentId: studentId, semester: semester, pass: pass };
+                localStorage.setItem('it_platform_users', JSON.stringify(users));
+                hideLoadingOverlay();
+                alert(t.succSignup);
+                toggleMode();
+            }, 1000);
+
+        } catch (error) {
             hideLoadingOverlay();
-            alert(t.succSignup);
-            toggleMode();
-        }, 1000);
+            console.error("Firebase Error:", error);
+            alert("حدث خطأ أثناء الاتصال بقاعدة البيانات، يرجى المحاولة لاحقاً.");
+        }
     }
 }
 
@@ -373,3 +410,18 @@ function backToLogin() {
     const check = document.getElementById('captcha-check');
     if(check) check.style.display = 'none';
 }
+
+// ربط دالة التسجيل بالنافذة العامة لضمان عملها مع الـ HTML
+window.handleSubmit = handleSubmit;
+window.toggleMode = toggleMode;
+window.changeLanguage = changeLanguage;
+window.showPassword = showPassword;
+window.hidePassword = hidePassword;
+window.checkPasswordStrength = checkPasswordStrength;
+window.checkPasswordMatch = checkPasswordMatch;
+window.startForgotPassword = startForgotPassword;
+window.triggerRealCaptcha = triggerRealCaptcha;
+window.sendVerificationCode = sendVerificationCode;
+window.verifyOtpCode = verifyOtpCode;
+window.saveNewPassword = saveNewPassword;
+window.backToLogin = backToLogin;
